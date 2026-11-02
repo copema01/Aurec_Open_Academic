@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterClass Cap. 5: Entorno Competitivo & Gráficas de Riesgos | AUREC S.A.S.</title>
+    <style>
+        :root {
+            --bg-main: #0b1329;
+            --bg-card: #152238;
+            --bg-dark: #070d19;
+            --accent-gold: #f59e0b;
+            --accent-gold-hover: #d97706;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        header { background-color: #070d19; border-bottom: 2px solid var(--accent-gold); position: sticky; top: 0; z-index: 100; }
+        .header-container { max-width: 1400px; margin: 0 auto; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+        
+        .brand-aurec {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+        .brand-aurec:hover { transform: scale(1.02); }
+
+        .brand-ejma {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+        .brand-ejma:hover { transform: scale(1.02); }
+
+        nav { background-color: #040814; border-top: 1px solid var(--border-color); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; gap: 0.5rem; padding: 0.5rem 1.5rem; overflow-x: auto; }
+        .tab-btn {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { background-color: var(--bg-card); color: var(--text-main); }
+        .tab-btn.active-gold { background-color: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border-color: var(--accent-gold); }
+        .tab-btn.active-blue { background-color: rgba(59, 130, 246, 0.2); color: #60a5fa; border-color: var(--accent-blue); }
+        .tab-btn.active-green { background-color: rgba(16, 185, 129, 0.2); color: #34d399; border-color: var(--accent-green); }
+
+        main { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem; flex: 1; width: 100%; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
+        .card-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; color: var(--accent-gold); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
+
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.3rem; }
+        .input-group select, .input-group input { width: 100%; background-color: var(--bg-dark); border: 1px solid var(--border-color); color: var(--accent-gold); padding: 0.6rem; border-radius: 6px; font-size: 0.9rem; outline: none; }
+
+        .kpi-card { background-color: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center; }
+        .kpi-title { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 0.5rem; }
+        .kpi-value { font-size: 1.5rem; font-weight: bold; font-family: monospace; }
+        .kpi-blue { color: #60a5fa; }
+        .kpi-gold { color: var(--accent-gold); }
+        .kpi-green { color: #34d399; }
+        .kpi-red { color: var(--accent-red); }
+
+        .console-box { background-color: var(--bg-dark); border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 0.85rem; margin-top: 1rem; }
+        .console-ok { color: #34d399; border-color: #065f46; background-color: rgba(6, 95, 70, 0.2); }
+        .console-alert { color: var(--accent-red); border-color: #991b1b; background-color: rgba(153, 27, 27, 0.2); }
+
+        .risk-matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            background: var(--bg-dark);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .matrix-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 4px;
+            color: #ffffff;
+            transition: transform 0.2s;
+        }
+        .matrix-cell:hover { transform: scale(1.05); }
+        .cell-low { background-color: rgba(16, 185, 129, 0.3); border: 1px solid #10b981; }
+        .cell-med { background-color: rgba(245, 158, 11, 0.3); border: 1px solid #f59e0b; }
+        .cell-high { background-color: rgba(239, 68, 68, 0.4); border: 1px solid #ef4444; }
+        .cell-active { outline: 3px solid #ffffff; box-shadow: 0 0 12px #ffffff; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background-color: var(--bg-dark); color: var(--accent-gold); }
+
+        .resource-link { display: inline-flex; align-items: center; gap: 0.5rem; color: #60a5fa; text-decoration: none; font-weight: 600; font-size: 0.9rem; margin-top: 0.25rem; }
+        .resource-link:hover { text-decoration: underline; color: var(--accent-gold); }
+
+        .btn-print { background-color: var(--accent-gold); color: #000; font-weight: bold; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; float: right; }
+        .btn-print:hover { background-color: var(--accent-gold-hover); }
+
+        footer { text-align: center; padding: 1rem; background-color: #070d19; border-top: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted); }
+
+        @media print {
+            body { background-color: #ffffff !important; color: #000000 !important; }
+            header, footer, nav, .btn-print { display: none !important; }
+            main { max-width: 100% !important; padding: 0 !important; }
+            .tab-content { display: block !important; page-break-after: always; margin-bottom: 2rem; }
+            .card { background-color: #ffffff !important; border: 1px solid #cbd5e1 !important; color: #000000 !important; box-shadow: none !important; }
+            .card-title { color: #b45309 !important; border-bottom: 2px solid #b45309 !important; }
+            table th { background-color: #e2e8f0 !important; color: #0f172a !important; }
+            table td { border-bottom: 1px solid #cbd5e1 !important; color: #000000 !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            
+            <!-- EXTREMA IZQUIERDA: LOGO AUREC S.A.S. -->
+            <a href="https://www.aurec.com.co" target="_blank" title="Visitar AUREC S.A.S." class="brand-aurec">
+                <div style="position: relative; font-family: 'Arial Black', sans-serif; font-weight: 900; font-size: 1.3rem; color: #00758A; letter-spacing: -0.5px; line-height: 1;">
+                    <span style="position: absolute; left: 10px; top: -5px; font-size: 1.6rem; color: #F5A623; opacity: 0.85; pointer-events: none;">O</span>
+                    AUREC <span style="font-size: 0.95rem; font-weight: bold; color: #00758A;">S.A.S.</span>
+                    <div style="font-family: Arial, sans-serif; font-size: 0.4rem; font-weight: 700; color: #00758A; letter-spacing: 0.5px; border-top: 1.5px solid #00758A; margin-top: 2px; padding-top: 1px; white-space: nowrap;">
+                        AUDITORES, REVISORES & CONSULTORES
+                    </div>
+                </div>
+            </a>
+
+            <!-- CENTRO: MASTERCLASS EXECUTIVE -->
+            <div style="text-align: center; border-left: 2px solid var(--accent-gold); border-right: 2px solid var(--accent-gold); padding: 0 1.2rem;">
+                <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px;">MasterClass Executive</div>
+                <div style="font-size: 0.75rem; color: var(--accent-gold); font-weight: 600;">Gerencia Financiera & Diagnóstico Estratégico — Cap. 5</div>
+            </div>
+
+            <!-- EXTREMA DERECHA: DOCENTE + LOGO EJMA -->
+            <div style="display: flex; align-items: center; gap: 0.8rem;">
+                <div style="text-align: right;">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #ffffff; display: block;">C.P. Edgar J. Martínez A.</span>
+                    <span style="font-size: 0.7rem; color: #60a5fa; display: block; font-weight: 600;">Docente de Posgrado / Consultor</span>
+                </div>
+
+                <a href="https://www.edgarjulianmartinez.com" target="_blank" title="Visitar perfil de Edgar Julián Martínez" class="brand-ejma">
+                    <div style="display: flex; align-items: center; gap: 0.4rem; font-family: Arial, sans-serif;">
+                        <div style="font-size: 1.2rem; font-weight: 900; color: #10b981; letter-spacing: -1px; line-height: 1;">
+                            EJMA
+                            <div style="font-size: 0.35rem; font-weight: 700; color: #475569; letter-spacing: 0.2px;">CONSULTOR IFRS - NAI</div>
+                        </div>
+                        <div style="border-left: 1.5px solid #94a3b8; padding-left: 0.3rem; font-size: 0.45rem; font-weight: 700; color: #334155; line-height: 1.1; text-align: left;">
+                            EDGAR<br>JULIÁN<br>MARTÍNEZ
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <nav>
+            <div class="nav-container">
+                <button onclick="switchTab('tab1', 'active-gold')" id="btn-tab1" class="tab-btn active-gold">
+                    📘 1. Entorno Competitivo
+                </button>
+                <button onclick="switchTab('tab2', 'active-blue')" id="btn-tab2" class="tab-btn">
+                    🧮 2. Matriz & Gráficas de Riesgos
+                </button>
+                <button onclick="switchTab('tab3', 'active-green')" id="btn-tab3" class="tab-btn">
+                    🌐 3. Biblioteca de Recursos
+                </button>
+                <button onclick="switchTab('tab4', 'active-blue')" id="btn-tab4" class="tab-btn">
+                    📝 4. Autoevaluación
+                </button>
+                <button onclick="switchTab('tab5', 'active-gold')" id="btn-tab5" class="tab-btn">
+                    📋 5. Checklist Dictamen
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <section id="tab1" class="tab-content active">
+            <div class="card">
+                <div class="card-title">1. Diagnóstico del Entorno Competitivo & Evaluación Externa</div>
+                <p style="line-height: 1.6; margin-bottom: 1.5rem; text-align: justify;">
+                    El Capítulo 5 examina cómo la dirección estratégica y la evaluación del entorno externo condicionan la estabilidad financiera de la empresa. La identificación oportuna de las amenazas del mercado y los factores de riesgo operativo asegura la sostenibilidad del modelo de negocio.
+                </p>
+                <div class="grid-3">
+                    <div style="padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-dark);">
+                        <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem; font-size: 0.95rem;">1. Dirección Estratégica</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Alineación del plan corporativo con las oportunidades y amenazas del sector industrial.</p>
+                    </div>
+                    <div style="padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-dark);">
+                        <h4 style="color: #60a5fa; margin-bottom: 0.5rem; font-size: 0.95rem;">2. Evaluación Externa (MEFE)</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Monitoreo constante de variables macroeconómicas, normativas y competitivas.</p>
+                    </div>
+                    <div style="padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-dark);">
+                        <h4 style="color: #34d399; margin-bottom: 0.5rem; font-size: 0.95rem;">3. Gerenciamiento de Riesgos</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Mitigación proactiva de riesgos de crédito, liquidez, tasa de cambio y mercado.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab2" class="tab-content">
+            <div class="card">
+                <div class="card-title">2. Simulador & Dashboard Gráfico de Matriz de Riesgos Corporativos</div>
+                <div class="grid-2">
+                    <div>
+                        <div class="input-group">
+                            <label>Categoría del Riesgo Evaluado</label>
+                            <select id="tipo-riesgo" onchange="evaluarRiesgo()">
+                                <option value="financiero">Riesgo Financiero (Tasa de Interés / Iliquidez)</option>
+                                <option value="operativo">Riesgo Operativo (Fallas de Procesos / Sistemas)</option>
+                                <option value="credito">Riesgo de Crédito (Cuentas Incobrables)</option>
+                                <option value="mercado">Riesgo de Mercado (Caída de Demanda)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Probabilidad de Ocurrencia (1: Raro a 5: Casi Seguro)</label>
+                            <input type="number" id="probabilidad" min="1" max="5" value="4" oninput="evaluarRiesgo()">
+                        </div>
+                        <div class="input-group">
+                            <label>Impacto Financiero Estimado (1: Insignificante a 5: Catastrófico)</label>
+                            <input type="number" id="impacto" min="1" max="5" value="4" oninput="evaluarRiesgo()">
+                        </div>
+                        <div class="input-group">
+                            <label>Exposición Financiera Estimada ($)</label>
+                            <input type="number" id="exposicion" value="350000000" oninput="evaluarRiesgo()">
+                        </div>
+
+                        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-top: 1.5rem; margin-bottom: 0.5rem; text-transform: uppercase;">
+                            Mapa de Calor de Severidad (Probabilidad vs. Impacto)
+                        </span>
+                        <div class="risk-matrix-grid" id="matrix-grid">
+                            <!-- Celdas generadas por JS -->
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                            <div class="kpi-card">
+                                <span class="kpi-title">Puntaje de Severidad</span>
+                                <span id="kpi-puntaje" class="kpi-value kpi-red">16 / 25</span>
+                            </div>
+                            <div class="kpi-card">
+                                <span class="kpi-title">Nivel de Riesgo</span>
+                                <span id="kpi-nivel" class="kpi-value kpi-red">CRÍTICO</span>
+                            </div>
+                            <div class="kpi-card">
+                                <span class="kpi-title">Pérdida Esperada ($)</span>
+                                <span id="kpi-perdida" class="kpi-value kpi-gold">$ 224.000.000</span>
+                            </div>
+                            <div class="kpi-card">
+                                <span class="kpi-title">Acción Directiva</span>
+                                <span id="kpi-accion" class="kpi-value kpi-blue">Mitigación Urgente</span>
+                            </div>
+                        </div>
+
+                        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Consola de Dictamen de Riesgo</span>
+                        <div id="consola-riesgo" class="console-box console-alert">
+                            [ALERTA] El nivel de exposición requiere la creación inmediata de una reserva de contingencia.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab3" class="tab-content">
+            <div class="card">
+                <div class="card-title">3. Biblioteca de Recursos Técnicos & Enlaces de Referencia</div>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    Repositorio de artículos de consulta y materiales oficiales del curso de Gerencia Financiera:
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Eje Temático</th>
+                            <th>Título del Recurso Técnico</th>
+                            <th>Enlace Directo & Estado de Fuente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Entorno Competitivo</td>
+                            <td>Dirección Estratégica y Modelos de Competencia</td>
+                            <td><a href="https://www.aurec.com.co" target="_blank" class="resource-link">🌐 AUREC S.A.S. - Artículos de Consultoría</a></td>
+                        </tr>
+                        <tr>
+                            <td>Entorno Competitivo</td>
+                            <td>Evaluación Externa y Análisis del Sector</td>
+                            <td><a href="#" onclick="switchTab('tab2', 'active-blue'); return false;" class="resource-link">📊 Ver Gráficas Interactivas (Dashboard SPA)</a></td>
+                        </tr>
+                        <tr>
+                            <td>Riesgos Empresariales</td>
+                            <td>Los Riesgos Financieros en la Empresa</td>
+                            <td><a href="https://www.edgarjulianmartinez.com" target="_blank" class="resource-link">🌐 Portal EJMA - Análisis de Riesgos</a></td>
+                        </tr>
+                        <tr>
+                            <td>Riesgos Empresariales</td>
+                            <td>Administración Integrada y Coberturas</td>
+                            <td><a href="SIMULADORES%20EXCEL%20LIBRO%20GERENCIA%20FINANCIERA.xls" download class="resource-link">📊 Excel - Simuladores del Libro</a></td>
+                        </tr>
+                        <tr>
+                            <td>Eficiencia Operativa</td>
+                            <td>Presentación Oficial Capítulo 5</td>
+                            <td><a href="GRAFICAS%20POWER%20POINT%20CAPITULO%205.pps" download class="resource-link">📄 Descargar Presentación (PPS)</a></td>
+                        </tr>
+                        <tr>
+                            <td>Eficiencia Operativa</td>
+                            <td>Taller Práctico Capítulo 5</td>
+                            <td><a href="TALLERES%20CAPITULO%205.pps" download class="resource-link">📄 Descargar Taller Práctico (PPS)</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="tab4" class="tab-content">
+            <div class="card">
+                <div class="card-title">4. Autoevaluación Diagnóstica</div>
+                <div style="padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-dark);">
+                    <p style="font-size: 0.9rem; font-weight: 600; margin-bottom: 0.75rem;">1. ¿Cuál es la principal ventaja de realizar una adecuada Evaluación Externa y Gerenciamiento del Riesgo en la empresa?</p>
+                    <label style="display: block; font-size: 0.85rem; margin-bottom: 0.5rem; cursor: pointer;"><input type="radio" name="q1"> Evitar la presentación de informes financieros periódicos.</label>
+                    <label style="display: block; font-size: 0.85rem; margin-bottom: 0.5rem; cursor: pointer;"><input type="radio" name="q1" checked> Anticipar amenazas del mercado, proteger la liquidez y minimizar el impacto de eventos adversos sobre la rentabilidad.</label>
+                    <label style="display: block; font-size: 0.85rem; cursor: pointer;"><input type="radio" name="q1"> Garantizar ventas crecientes sin importar la competencia.</label>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab5" class="tab-content">
+            <div class="card">
+                <button class="btn-print" onclick="window.print()">🖨️ Imprimir PDF Completo</button>
+                <div class="card-title">5. Checklist de Verificación de Gestión del Riesgo y Entorno Competitivo</div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                    <label style="padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);"><input type="checkbox" checked> Evaluación periódica de las variables del entorno competitivo y matriz externa.</label>
+                    <label style="padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);"><input type="checkbox" checked> Clasificación y cuantificación del nivel de severidad de los riesgos financieros y operativos.</label>
+                    <label style="padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);"><input type="checkbox" checked> Definición de políticas directivas de mitigación, coberturas y fondos de reserva.</label>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        AUREC S.A.S. — Asesoría y Consultoría Contable y Tributaria | Posgrados en Gerencia Financiera
+    </footer>
+
+    <script>
+        function switchTab(tabId, colorClass) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(el => el.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.className = 'tab-btn');
+
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add(colorClass);
+        }
+
+        function renderMatrix(activeProb, activeImp) {
+            const container = document.getElementById('matrix-grid');
+            container.innerHTML = '';
+
+            for (let p = 5; p >= 1; p--) {
+                for (let i = 1; i <= 5; i++) {
+                    const score = p * i;
+                    const cell = document.createElement('div');
+                    cell.className = 'matrix-cell ';
+                    
+                    if (score >= 15) cell.className += 'cell-high';
+                    else if (score >= 8) cell.className += 'cell-med';
+                    else cell.className += 'cell-low';
+
+                    if (p === activeProb && i === activeImp) {
+                        cell.className += ' cell-active';
+                        cell.innerText = score + ' ★';
+                    } else {
+                        cell.innerText = score;
+                    }
+
+                    cell.title = 'Probabilidad: ' + p + ' | Impacto: ' + i + ' | Puntaje: ' + score;
+                    container.appendChild(cell);
+                }
+            }
+        }
+
+        function evaluarRiesgo() {
+            let prob = parseInt(document.getElementById('probabilidad').value) || 1;
+            let imp = parseInt(document.getElementById('impacto').value) || 1;
+            
+            if (prob > 5) prob = 5; if (prob < 1) prob = 1;
+            if (imp > 5) imp = 5; if (imp < 1) imp = 1;
+
+            const exp = parseFloat(document.getElementById('exposicion').value) || 0;
+
+            const puntaje = prob * imp;
+            const perdidaEsperada = exp * (puntaje / 25);
+
+            document.getElementById('kpi-puntaje').innerText = puntaje + ' / 25';
+            document.getElementById('kpi-perdida').innerText = '$ ' + Math.round(perdidaEsperada).toLocaleString('es-CO');
+
+            const kpiNivel = document.getElementById('kpi-nivel');
+            const kpiAccion = document.getElementById('kpi-accion');
+            const consola = document.getElementById('consola-riesgo');
+
+            if (puntaje >= 15) {
+                kpiNivel.innerText = 'CRÍTICO';
+                kpiNivel.className = 'kpi-value kpi-red';
+                kpiAccion.innerText = 'Mitigación Urgente';
+                consola.className = 'console-box console-alert';
+                consola.innerText = '[ALERTA] Exposición severa. Implementar coberturas e intervenir procesos operativos inmediatamente.';
+            } else if (puntaje >= 8) {
+                kpiNivel.innerText = 'MODERADO';
+                kpiNivel.className = 'kpi-value kpi-gold';
+                kpiAccion.innerText = 'Monitoreo Activo';
+                consola.className = 'console-box';
+                consola.style.color = 'var(--accent-gold)';
+                consola.innerText = '[PRECAUCIÓN] Mantener supervisión de indicadores clave y ajustar contingencias de liquidez.';
+            } else {
+                kpiNivel.innerText = 'BAJO';
+                kpiNivel.className = 'kpi-value kpi-green';
+                kpiAccion.innerText = 'Aceptar / Monitorear';
+                consola.className = 'console-box console-ok';
+                consola.innerText = '[OK] Nivel de riesgo dentro de los umbrales tolerables por la organización.';
+            }
+
+            renderMatrix(prob, imp);
+        }
+
+        evaluarRiesgo();
+    </script>
+</body>
+</html>
