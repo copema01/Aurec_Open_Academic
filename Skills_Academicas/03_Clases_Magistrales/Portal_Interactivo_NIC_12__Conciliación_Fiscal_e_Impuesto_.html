@@ -1,0 +1,2717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>Articulación NIIF y Régimen Tributario Colombiano bajo NIC 12</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: warm stone-white paper */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --tertiary: #785008;
+      --error: #b42318;
+      --on-error: #ffffff;
+
+      /* Data series, in order of use */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Semantic */
+      --positive: #2b6e52;
+      --positive-bg: #e7f2ec;
+      --warning: #785008;
+      --warning-bg: #f5ecd6;
+      --error-bg: #fbeae8;
+      --info-bg: #e8f0f3;
+      --focus: #1f4e5f;
+
+      /* Fonts */
+      --font-headline: 'Source Serif 4', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Geist Mono', monospace;
+
+      /* Type scale - Narrative */
+      --display-size:  clamp(2.25rem, 1.4rem + 3.4vw, 3.75rem);
+      --headline-size: clamp(1.65rem, 1.2rem + 1.8vw, 2.35rem);
+      --subhead-size:  clamp(1.18rem, 1.05rem + 0.5vw, 1.42rem);
+      --body-size:     clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+      --label-size:    clamp(0.75rem, 0.72rem + 0.1vw, 0.8125rem);
+
+      /* Shape */
+      --rounded: 0.25rem;
+      --rounded-lg: 0.375rem;
+      --rounded-full: 0.25rem;
+
+      /* Style effects */
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --badge-radius: 2px;
+      --heading-tracking: -0.02em;
+      --label-tracking: 0.08em;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 5.5rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-2xl);
+      padding: var(--space-lg) var(--space-lg) var(--space-3xl);
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2.5px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Typography helpers */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      letter-spacing: var(--heading-tracking);
+      color: var(--on-surface);
+      margin: 0;
+    }
+    h1 {
+      font-size: var(--display-size);
+      line-height: 1.08;
+    }
+    h2 {
+      font-size: var(--headline-size);
+      line-height: 1.14;
+    }
+    h3 {
+      font-size: var(--subhead-size);
+      line-height: 1.25;
+    }
+    p {
+      margin: 0 0 var(--space-md);
+      max-width: 68ch;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    .mono {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+    }
+    .tabular {
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    /* Dossier Header & Section Bar (Briefing Treatment 1 & 2) */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    .dossier-bar-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: var(--label-tracking);
+      text-transform: uppercase;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .standfirst {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+      color: var(--secondary);
+      line-height: 1.45;
+      margin-top: var(--space-md);
+      max-width: 66ch;
+    }
+
+    /* Navigation strip */
+    .dossier-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      padding: var(--space-sm) 0;
+      border-top: var(--card-border);
+      border-bottom: var(--card-border);
+      margin-top: var(--space-lg);
+    }
+    .nav-anchor {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--on-surface);
+      text-decoration: none;
+      border-radius: var(--rounded);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .nav-anchor:hover {
+      background-color: var(--surface-container-high);
+      color: var(--secondary);
+    }
+    .nav-index {
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    /* Cards & Layout Grids */
+    .figure-card {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .figure-card-compact {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    .figure-card .value {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums lining-nums;
+      font-size: clamp(1.5rem, 1.25rem + 1vw, 2.05rem);
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin-top: var(--space-xs);
+    }
+    .figure-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--on-surface-variant);
+      display: block;
+    }
+    .figure-sub {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      margin-top: var(--space-xs);
+    }
+
+    .aside-box {
+      background: var(--surface-container);
+      border-top: var(--section-rule);
+      padding: var(--space-lg);
+      border-radius: 0 0 var(--rounded-lg) var(--rounded-lg);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .split-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.35fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Section spacing & reveals */
+    .dossier-section {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .reveal-item {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity var(--dur-long) var(--ease-out), transform var(--dur-long) var(--ease-out);
+    }
+    .reveal-item.will-animate {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Index badges & tags */
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      background: var(--surface-container);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--badge-radius);
+    }
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.15rem 0.5rem;
+      border-radius: var(--rounded);
+      background: var(--warning-bg);
+      color: var(--tertiary);
+    }
+    .tag-positive {
+      background: var(--positive-bg);
+      color: var(--positive);
+    }
+    .tag-error {
+      background: var(--error-bg);
+      color: var(--error);
+    }
+    .tag-info {
+      background: var(--info-bg);
+      color: var(--secondary);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: var(--rounded);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background-color: var(--secondary);
+    }
+    .btn-secondary {
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-secondary:hover {
+      background-color: var(--surface-container);
+    }
+    .btn-secondary.is-active {
+      background-color: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .btn-gold {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn-gold:hover {
+      box-shadow: inset 0 0 0 1px var(--outline);
+    }
+    .btn-danger-outline {
+      background-color: var(--surface-container-low);
+      color: var(--error);
+      border-color: var(--outline-variant);
+    }
+    .btn-danger-outline:hover {
+      background-color: var(--error-bg);
+    }
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+    thead th {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--on-surface-variant);
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container);
+      border-bottom: var(--section-rule);
+    }
+    tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--card-border);
+      vertical-align: top;
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    tbody tr.row-highlight {
+      background: var(--surface-container);
+      font-weight: 600;
+    }
+    tbody tr.row-total td {
+      border-top: var(--section-rule);
+      background: var(--surface-container);
+      font-weight: 700;
+    }
+    .num-col {
+      text-align: right;
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    /* Interactive Balance Matrix */
+    .matrix-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+      gap: var(--space-md);
+      align-items: end;
+    }
+
+    /* Process Stepper (Conciliación Fiscal & Control de Detalle) */
+    .stepper-rail {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(135px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-body);
+      color: var(--on-surface);
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .step-node:hover {
+      background: var(--surface-container);
+    }
+    .step-node.is-active {
+      background: var(--surface-container);
+      box-shadow: inset 0 3px 0 var(--primary-container), 0 0 0 1px var(--outline);
+    }
+    .step-node-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    /* Form Controls */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--on-surface);
+    }
+    .field-hint {
+      font-size: 0.8125rem;
+      color: var(--on-surface-variant);
+    }
+    .input-box, .select-box {
+      width: 100%;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      font-family: var(--font-label);
+      font-size: 0.9375rem;
+      color: var(--on-surface);
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      transition: box-shadow var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+    }
+    .select-box {
+      font-family: var(--font-body);
+      padding-right: var(--space-xl);
+    }
+    .input-box:focus, .select-box:focus {
+      box-shadow: 0 0 0 2px var(--secondary);
+      outline: none;
+    }
+    .input-box.is-invalid {
+      box-shadow: 0 0 0 2px var(--error);
+      background-color: var(--error-bg);
+    }
+    .slider-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 115px;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    input[type="range"] {
+      width: 100%;
+      min-height: 44px;
+      accent-color: var(--secondary);
+      cursor: pointer;
+    }
+    .field-error {
+      font-size: 0.8125rem;
+      color: var(--error);
+      font-weight: 500;
+      min-height: 1.2em;
+    }
+
+    /* Simulator Case Cards */
+    .case-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .case-tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-xs);
+      padding: var(--space-md);
+      min-height: 44px;
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      text-align: left;
+      cursor: pointer;
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .case-tab-btn:hover {
+      background: var(--surface-container);
+    }
+    .case-tab-btn.is-active {
+      background: var(--surface-container-low);
+      box-shadow: inset 4px 0 0 var(--secondary), 0 0 0 1px var(--secondary);
+    }
+    .case-tab-title {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: 1.08rem;
+    }
+    .case-tab-desc {
+      font-size: 0.875rem;
+      color: var(--on-surface-variant);
+      line-height: 1.4;
+    }
+
+    /* Chart containers */
+    .chart-wrap {
+      position: relative;
+      min-height: 300px;
+      height: 320px;
+      width: 100%;
+      margin-top: var(--space-md);
+    }
+
+    /* Journal entry box */
+    .journal-box {
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .journal-title {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--secondary);
+      margin-bottom: var(--space-sm);
+      font-weight: 600;
+    }
+
+    /* Status banner */
+    .status-banner {
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      border-left: 4px solid var(--secondary);
+      background: var(--info-bg);
+      color: var(--on-surface);
+    }
+    .status-banner.is-positive {
+      border-left-color: var(--positive);
+      background: var(--positive-bg);
+    }
+    .status-banner.is-warning {
+      border-left-color: var(--warning);
+      background: var(--warning-bg);
+    }
+    .status-banner.is-error {
+      border-left-color: var(--error);
+      background: var(--error-bg);
+    }
+
+    /* Year projection grid */
+    .year-inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+
+    /* Glossary details */
+    details.glossary-item {
+      background: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+    }
+    details.glossary-item summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-family: var(--font-headline);
+      font-size: 1.05rem;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+    }
+    details.glossary-item summary::-webkit-details-marker { display: none; }
+    details.glossary-item[open] summary {
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--card-border);
+      margin-bottom: var(--space-sm);
+      color: var(--secondary);
+    }
+
+    /* Footer */
+    .dossier-footer {
+      border-top: var(--section-rule);
+      padding-top: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    /* Container queries for adaptive split interiors */
+    .card-wrapper { container-type: inline-size; }
+    @container (min-width: 560px) {
+      .kpi-subgrid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-md);
+      }
+    }
+    @container (max-width: 559px) {
+      .kpi-subgrid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-md);
+      }
+    }
+
+    /* Responsive mobile rules */
+    @media (max-width: 860px) {
+      .split-layout, .tool-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-xl);
+      }
+      .figure-card {
+        padding: var(--space-md);
+      }
+      .slider-pair {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+    <!-- PORTADA DOSSIER -->
+    <header>
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill">Dossier Técnico · NIC 12</span>
+          <span class="dossier-meta">Colombia · Ley 1314 de 2009 · Estatuto Tributario</span>
+        </div>
+        <div class="btn-row">
+          <span class="dossier-meta" id="persistence-status">Estado sincronizado</span>
+          <button type="button" class="btn btn-danger-outline" id="btn-reset-all" onclick="handleResetAll(this)">Restablecer simulaciones</button>
+        </div>
+      </div>
+
+      <h1>Articulación entre las NIIF y el Régimen Tributario Colombiano</h1>
+      <p class="standfirst">Guía interactiva sobre conciliación fiscal, control de detalle y determinación del impuesto corriente y diferido bajo la NIC 12.</p>
+
+      <nav class="dossier-nav" aria-label="Navegación del dossier">
+        <a class="nav-anchor" href="#fundamentos"><span class="nav-index">01</span> Fundamentos y NIC 12</a>
+        <a class="nav-anchor" href="#conciliacion"><span class="nav-index">02</span> Conciliación y Control de Detalle</a>
+        <a class="nav-anchor" href="#simuladores"><span class="nav-index">03</span> Simulador NIIF 9 · 16 · VNR</a>
+        <a class="nav-anchor" href="#etr"><span class="nav-index">04</span> Calculadora ETR</a>
+        <a class="nav-anchor" href="#recuperabilidad"><span class="nav-index">05</span> Recuperabilidad AID</a>
+        <a class="nav-anchor" href="#referencias"><span class="nav-index">06</span> Glosario y Fuentes</a>
+      </nav>
+
+      <div class="kpi-grid">
+        <div class="figure-card-compact">
+          <span class="figure-label">Enfoque NIC 12</span>
+          <div class="value">Método del Balance</div>
+          <p class="figure-sub">Compara el importe en libros NIIF frente a la base fiscal de cada activo y pasivo.</p>
+        </div>
+        <div class="figure-card-compact">
+          <span class="figure-label">Soporte Legal en Colombia</span>
+          <div class="value">DUR 1625 / 2016</div>
+          <p class="figure-sub">Incorpora el Decreto 1998 de 2017 sobre conciliación fiscal y control de detalle.</p>
+        </div>
+        <div class="figure-card-compact">
+          <span class="figure-label">Efecto en Tasa Efectiva</span>
+          <div class="value">ETR vs. Nominal</div>
+          <p class="figure-sub">Las diferencias permanentes alteran la ETR; las temporarias difieren el pago.</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- SECCIÓN 01: FUNDAMENTOS Y MÉTODO DEL BALANCE -->
+    <section id="fundamentos" class="dossier-section reveal-item">
+      <div>
+        <div class="dossier-bar">
+          <div class="dossier-bar-left">
+            <span class="index-num">01</span>
+            <span class="dossier-meta">Marco Conceptual y Constitucional</span>
+          </div>
+          <span class="tag-chip tag-info">NIC 12 · Párr. 5–10</span>
+        </div>
+        <h2>Dos lógicas distintas sobre un mismo hecho económico</h2>
+        <p class="standfirst">La contabilidad bajo NIIF privilegia la realidad económica para decidir; el Estatuto Tributario exige certeza jurídica para recaudar.</p>
+      </div>
+
+      <div class="split-layout">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Criterio</th>
+                <th>Contabilidad bajo NIIF (Ley 1314/2009)</th>
+                <th>Régimen Tributario Colombiano (E.T.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Finalidad principal</strong></td>
+                <td>Información útil, pertinente y comparable para inversionistas y acreedores.</td>
+                <td>Recaudo oportuno, control fiscal, equidad y progresividad (Art. 363 C.P.).</td>
+              </tr>
+              <tr>
+                <td><strong>Reconocimiento</strong></td>
+                <td>Principio de devengo y esencia económica sobre la forma jurídica.</td>
+                <td>Reglas legales estrictas (Art. 338 C.P.) y realización fiscal específica.</td>
+              </tr>
+              <tr>
+                <td><strong>Medición</strong></td>
+                <td>Costo amortizado, valor razonable, deterioro esperado y estimaciones.</td>
+                <td>Costo fiscal histórico, vidas útiles fiscales y deducciones taxativas.</td>
+              </tr>
+              <tr>
+                <td><strong>Juicio profesional</strong></td>
+                <td>Alto: requiere evaluar vidas útiles, VNR, probabilidad de cobro.</td>
+                <td>Limitado por la ley tributaria para evitar discrecionalidad.</td>
+              </tr>
+              <tr>
+                <td><strong>Impuesto resultante</strong></td>
+                <td>Gasto por impuesto a las ganancias (corriente + diferido) en resultados u ORI.</td>
+                <td>Impuesto corriente liquidado sobre la Renta Líquida Gravable.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="aside-box">
+          <h3>Clasificación de diferencias fiscales</h3>
+          <p>Al comparar el resultado contable y el valor en libros frente a la base tributaria surgen dos categorías con impactos opuestos:</p>
+          <p><strong>Diferencias Temporarias:</strong> discrepancias entre el importe en libros de un activo o pasivo y su base fiscal que se revertirán en períodos futuros. Originan <em>Pasivos por Impuestos Diferidos (PID)</em> si son imponibles (DTI) o <em>Activos por Impuestos Diferidos (AID)</em> si son deducibles (DTD).</p>
+          <p><strong>Diferencias Permanentes:</strong> partidas sin reversión futura (multas, sanciones no deducibles o ingresos exentos). No generan impuesto diferido; afectan únicamente el impuesto corriente y la Tasa Efectiva (ETR).</p>
+          <p><strong>Excepciones NIC 12 (párr. 15 y 22):</strong> se prohíbe reconocer impuesto diferido en el reconocimiento inicial de la plusvalía (<em>goodwill</em>) o en transacciones que no son combinación de negocios y no afectan ni la ganancia contable ni la fiscal.</p>
+        </aside>
+      </div>
+
+      <!-- Explorador interactivo de la Regla del Balance NIC 12 -->
+      <div class="figure-card card-wrapper">
+        <div class="dossier-bar">
+          <div class="dossier-bar-left">
+            <span class="dossier-pill">Laboratorio de Regla</span>
+            <span class="dossier-meta">Método del Balance · Activo vs. Pasivo</span>
+          </div>
+          <span class="tag-chip tag-info" id="matrix-badge">DTI · Genera PID</span>
+        </div>
+        <h3>Explorador de diferencias temporarias: Base Contable vs. Base Fiscal</h3>
+        <p>Ajusta la naturaleza de la partida y compara su importe en libros bajo NIIF contra su base fiscal para comprobar de inmediato si genera un derecho futuro (AID) o una obligación futura (PID).</p>
+
+        <div class="matrix-controls" style="margin-top: var(--space-md);">
+          <div class="field-group">
+            <label class="field-label" for="matrix-type">Tipo de partida</label>
+            <select class="select-box" id="matrix-type" onchange="updateBalanceMatrix()">
+              <option value="asset">Activo (ej. PPE, Cartera, Inventario)</option>
+              <option value="liability">Pasivo (ej. Provisión, Ingreso Diferido)</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="matrix-book">Base Contable NIIF (M COP)</label>
+            <input type="number" class="input-box" id="matrix-book" value="150" min="0" max="5000" step="5" oninput="updateBalanceMatrix()">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="matrix-tax">Base Fiscal E.T. (M COP)</label>
+            <input type="number" class="input-box" id="matrix-tax" value="100" min="0" max="5000" step="5" oninput="updateBalanceMatrix()">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="matrix-rate">Tarifa futura (%)</label>
+            <input type="number" class="input-box" id="matrix-rate" value="35" min="0" max="60" step="1" oninput="updateBalanceMatrix()">
+          </div>
+        </div>
+
+        <div class="kpi-subgrid" style="margin-top: var(--space-lg);">
+          <div class="status-banner" id="matrix-result-banner">
+            <strong id="matrix-result-title">Diferencia Temporaria Imponible (DTI): $50,00 M</strong>
+            <p id="matrix-result-desc" style="margin-top: var(--space-xs);">Cuando la Base Contable de un activo supera su Base Fiscal, se recuperarán beneficios económicos gravables por encima del costo deducible futuro. Se reconoce un Pasivo por Impuesto Diferido (PID) de $17,50 M.</p>
+          </div>
+          <div class="figure-card-compact">
+            <span class="figure-label">Impuesto Diferido Resultante</span>
+            <div class="value" id="matrix-deferred-val">$17,50 M</div>
+            <p class="figure-sub" id="matrix-example-ref">Ejemplo típico: depreciación fiscal acelerada o revaluación de activos (NIC 16).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 02: CONCILIACIÓN FISCAL Y CONTROL DE DETALLE -->
+    <section id="conciliacion" class="dossier-section reveal-item">
+      <div>
+        <div class="dossier-bar">
+          <div class="dossier-bar-left">
+            <span class="index-num">02</span>
+            <span class="dossier-meta">Decreto 1998 de 2017 · DUR 1625 de 2016</span>
+          </div>
+          <span class="tag-chip">Trazabilidad Obligatoria</span>
+        </div>
+        <h2>Conciliación fiscal y control de detalle: el puente técnico ante la DIAN</h2>
+        <p class="standfirst">La contabilidad NIIF es el punto de partida, nunca el resultado tributario directo. El control de detalle garantiza la trazabilidad partida por partida y previene sanciones por irregularidades contables.</p>
+      </div>
+
+      <div class="figure-card">
+        <div class="dossier-bar">
+          <div class="dossier-bar-left">
+            <span class="dossier-pill">Flujo Secuencial</span>
+            <span class="dossier-meta">Selecciona cada etapa para inspeccionar su mecánica</span>
+          </div>
+          <span class="tag-chip tag-info" id="step-counter">Etapa 1 de 6</span>
+        </div>
+
+        <div class="stepper-rail" role="tablist" aria-label="Etapas del proceso de conciliación fiscal">
+          <button type="button" class="step-node is-active" onclick="selectConciliationStep(0)" id="cstep-0">
+            <span class="index-num">01</span>
+            <span class="step-node-title">Utilidad Contable NIIF</span>
+          </button>
+          <button type="button" class="step-node" onclick="selectConciliationStep(1)" id="cstep-1">
+            <span class="index-num">02</span>
+            <span class="step-node-title">Control de Detalle</span>
+          </button>
+          <button type="button" class="step-node" onclick="selectConciliationStep(2)" id="cstep-2">
+            <span class="index-num">03</span>
+            <span class="step-node-title">Diferencias Permanentes</span>
+          </button>
+          <button type="button" class="step-node" onclick="selectConciliationStep(3)" id="cstep-3">
+            <span class="index-num">04</span>
+            <span class="step-node-title">Renta Líquida e Imp. Corriente</span>
+          </button>
+          <button type="button" class="step-node" onclick="selectConciliationStep(4)" id="cstep-4">
+            <span class="index-num">05</span>
+            <span class="step-node-title">Cálculo Impuesto Diferido</span>
+          </button>
+          <button type="button" class="step-node" onclick="selectConciliationStep(5)" id="cstep-5">
+            <span class="index-num">06</span>
+            <span class="step-node-title">Gasto Total y Revelación</span>
+          </button>
+        </div>
+
+        <div class="split-layout" style="margin-top: var(--space-lg);">
+          <div class="aside-box" id="cstep-detail-panel">
+            <span class="figure-label" id="cstep-norma">Base normativa: Ley 1314 de 2009 · Marco Técnico NIIF</span>
+            <h3 id="cstep-title" style="margin-top: var(--space-xs);">1. Punto de partida: Resultado Contable antes de Impuestos</h3>
+            <p id="cstep-body" style="margin-top: var(--space-sm);">Los estados financieros preparados bajo NIIF registran ingresos, costos y gastos atendiendo al principio de devengo y a la esencia económica (valor razonable, deterioros esperados, NIIF 16). Este resultado antes de impuestos (UCAI) constituye el insumo inicial obligatorio de la conciliación fiscal.</p>
+            <div class="status-banner" style="margin-top: var(--space-md);" id="cstep-key-takeaway">
+              <strong>Clave operativa:</strong> No se lleva una contabilidad paralela independiente sin vínculo; toda diferencia frente a la declaración de renta debe conciliarse desde los saldos NIIF.
+            </div>
+          </div>
+
+          <div class="figure-card-compact">
+            <span class="figure-label">Ejemplo ilustrativo en el flujo (M COP)</span>
+            <div class="table-wrap" style="margin-top: var(--space-sm);">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Concepto de Conciliación</th>
+                    <th class="num-col">Valor</th>
+                  </tr>
+                </thead>
+                <tbody id="cstep-mini-table">
+                  <tr class="row-highlight">
+                    <td>Utilidad Contable NIIF (UCAI)</td>
+                    <td class="num-col">$1.000,0</td>
+                  </tr>
+                  <tr>
+                    <td>(+) Gastos no deducibles (multas)</td>
+                    <td class="num-col">$40,0</td>
+                  </tr>
+                  <tr>
+                    <td>(−) Ingresos no gravados (dividendos)</td>
+                    <td class="num-col">($60,0)</td>
+                  </tr>
+                  <tr>
+                    <td>(+) Deterioro NIIF 9 / VNR no deducible aún</td>
+                    <td class="num-col">$120,0</td>
+                  </tr>
+                  <tr>
+                    <td>(−) Mayor depreciación fiscal acelerada</td>
+                    <td class="num-col">($80,0)</td>
+                  </tr>
+                  <tr class="row-total">
+                    <td>Renta Líquida Gravable (Base Fiscal)</td>
+                    <td class="num-col">$1.020,0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="figure-sub" id="cstep-footnote">El Control de Detalle documenta cada ajuste con su soporte contable, norma tributaria aplicable y efecto en períodos futuros.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="figure-card-compact">
+          <span class="figure-label">¿Qué exige el Control de Detalle?</span>
+          <p style="margin-top: var(--space-xs);">Registrar de manera sistemática y verificable las diferencias entre las bases contables NIIF y las bases fiscales, permitiendo reconstruir el origen de cada partida declarada ante la DIAN.</p>
+        </div>
+        <div class="figure-card-compact">
+          <span class="figure-label">Reporte de Conciliación Fiscal</span>
+          <p style="margin-top: var(--space-xs);">Se materializa en el anexo de conciliación fiscal (Formato 2516 para obligados a llevar contabilidad), articulando Estado de Situación Financiera y Estado de Resultados con la declaración de renta.</p>
+        </div>
+        <div class="figure-card-compact">
+          <span class="figure-label">Riesgo de Incumplimiento</span>
+          <p style="margin-top: var(--space-xs);">La omisión o inconsistencia del control de detalle constituye irregularidad en la contabilidad para efectos sancionatorios y compromete el soporte probatorio de deducciones y costos fiscales.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 03: SIMULADOR DE CASOS PRÁCTICOS -->
+    <section id="simuladores" class="dossier-section reveal-item">
+      <div>
+        <div class="dossier-bar">
+          <div class="dossier-bar-left">
+            <span class="index-num">03</span>
+            <span class="dossier-meta">Simulador Interactivo NIC 12</span>
+          </div>
+          <span class="tag-chip tag-positive">Casos Aplicados en Colombia</span>
+        </div>
+        <h2>Simulador de casos prácticos: NIIF 9, NIIF 16 y VNR (NIC 2)</h2>
+        <p class="standfirst">Selecciona un caso empresarial, modifica los parámetros contables y fiscales, y observa cómo cambian la base fiscal, el activo o pasivo por impuesto diferido y su registro contable.</p>
+      </div>
+
+      <div class="case-selector-grid" role="tablist" aria-label="Selector de caso práctico">
+        <button type="button" class="case-tab-btn is-active" id="btn-case-niif9" onclick="selectSimCase('niif9')">
+          <span class="tag-chip tag-info">Caso A · NIIF 9</span>
+          <span class="case-tab-title">Deterioro de Cartera</span>
+          <span class="case-tab-desc">Pérdida crediticia esperada vs. deducción fiscal restringida en el Estatuto Tributario.</span>
+        </button>
+        <button type="button" class="case-tab-btn" id="btn-case-niif16" onclick="selectSimCase('niif16')">
+          <span class="tag-chip tag-info">Caso B · NIIF 16</span>
+          <span class="case-tab-title">Arrendamientos (Art. 127-1 E.T.)</span>
+          <span class="case-tab-desc">Activo por derecho de uso y pasivo financiero frente a deducción fiscal por canon pagado.</span>
+        </button>
+        <button type="button" class="case-tab-btn" id="btn-case-vnr" onclick="selectSimCase('vnr')">
+          <span class="tag-chip tag-info">Caso C · NIC 2</span>
+          <span class="case-tab-title">Deterioro de Inventarios (VNR)</span>
+          <span class="case-tab-desc">Medición al Valor Neto de Realización frente al costo fiscal hasta la venta o destrucción.</span>
+        </button>
+      </div>
+
+      <!-- PANEL DEL SIMULADOR -->
+      <div class="figure-card">
+        <!-- CASO A: NIIF 9 -->
+        <div id="sim-panel-niif9">
+          <div class="dossier-bar">
+            <div class="dossier-bar-left">
+              <span class="dossier-pill">Caso A · NIIF 9</span>
+              <span class="dossier-meta">Cuentas por cobrar y deterioro esperado</span>
+            </div>
+            <span class="tag-chip tag-positive" id="n9-badge">DTD · Activo por Impuesto Diferido</span>
+          </div>
+          <div class="tool-grid">
+            <div class="aside-box">
+              <h3>Parámetros del caso (COP Millones)</h3>
+              <p class="field-hint" style="margin-bottom: var(--space-md);">El deterioro NIIF 9 reduce el valor en libros contable. Fiscalmente solo es deducible el porcentaje permitido por las reglas de provisión de cartera del E.T.</p>
+
+              <div class="field-group" style="margin-bottom: var(--space-md);">
+                <label class="field-label" for="n9-gross-num">Cartera bruta al cierre (M COP)</label>
+                <div class="slider-pair">
+                  <input type="range" id="n9-gross-range" min="100" max="5000" step="50" value="1200" oninput="syncN9GrossFromSlider(this.value)">
+                  <input type="number" class="input-box" id="n9-gross-num" min="100" max="5000" step="50" value="1200" oninput="syncN9GrossFromNumber(this.value)">
+                </div>
+              </div>
+
+              <div class="field-group" style="margin-bottom: var(--space-md);">
+                <label class="field-label" for="n9-ifrs-pct-num">Deterioro contable NIIF 9 (%)</label>
+                <div class="slider-pair">
+                  <input type="range" id="n9-ifrs-pct-range" min="0" max="60" step="1" value="18" oninput="syncN9IfrsFromSlider(this.value)">
+                  <input type="number" class="input-box" id="n9-ifrs-pct-num" min="0" max="60" step="1" value="18" oninput="syncN9IfrsFromNumber(this.value)">
+                </div>
+              </div>
+
+              <div class="field-group" style="margin-bottom: var(--space-md);">
+                <label class="field-label" for="n9-tax-pct-num">Provisión aceptada fiscalmente (%)</label>
+                <div class="slider-pair">
+                  <input type="range" id="n9-tax-pct-range" min="0" max="60" step="1" value="5" oninput="syncN9TaxFromSlider(this.value)">
+                  <input type="number" class="input-box" id="n9-tax-pct-num" min="0" max="60" step="1" value="5" oninput="syncN9TaxFromNumber(this.value)">
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="n9-rate-num">Tarifa esperada de reversión (%)</label>
+                <div class="slider-pair">
+                  <input type="range" id="n9-rate-range" min="15" max="45" step="1" value="35" oninput="syncN9RateFromSlider(this.value)">
+                  <input type="number" class="input-box" id="n9-rate-num" min="15" max="45" step="1" value="35" oninput="syncN9RateFromNumber(this.value)">
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="kpi-grid" style="margin-top: 0;">
+                <div class="figure-card-compact">
+                  <span class="figure-label">Base Contable Neta</span>
+                  <div class="value" id="n9-out-book">$984,00 M</div>
+                  <p class="figure-sub" id="n9-out-ifrs-imp">Deterioro NIIF: $216,00 M</p>
+                </div>
+                <div class="figure-card-compact">
+                  <span class="figure-label">Base Fiscal Neta</span>
+                  <div class="value" id="n9-out-tax">$1.140,00 M</div>
+                  <p class="figure-sub" id="n9-out-tax-imp">Deducible fiscal: $60,00 M</p>
+                </div>
+                <div class="figure-card-compact">
+                  <span class="figure-label" id="n9-out-diff-label">Diferencia Temporaria (DTD)</span>
+                  <div class="value" id="n9-out-diff">$156,00 M</div>
+                  <p class="figure-sub" id="n9-out-id-label">AID (35%): <strong>$54,60 M</strong></p>
+                </div>
+              </div>
+
+              <div class="chart-wrap">
+                <canvas id="chart-niif9"></canvas>
+              </div>
+
+              <div class="journal-box">
+                <div class="journal-title">Registro Contable NIC 12 al cierre del período</div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Cuenta Contable</th>
+                        <th class="num-col">Débito (M)</th>
+                        <th class="num-col">Crédito (M)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="n9-journal-body"></tbody>
+                  </table>
+                </div>
+                <p class="figure-sub" id="n9-explanation" style="margin-top: var(--space-sm);"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CASO B: NIIF 16 -->
+        <div id="sim-panel-niif16" style="display: none;">
+          <div class="dossier-bar">
+            <div class="dossier-bar-left">
+              <span class="dossier-pill">Caso B · NIIF 16</span>
+              <span class="dossier-meta">Arrendamiento operativo fiscal · Art. 127-1 E.T.</span>
+            </div>
+            <span class="tag-chip tag-positive" id="n16-badge">Diferencia Neta Pasivo &gt; ADU</span>
+          </div>
+          <div class="tool-grid">
+            <div class="aside-box">
+              <h3>Parámetros del contrato (COP Millones)</h3>
+              <p class="field-hint" style="margin-bottom: var(--space-md);">Contablemente se reconoce un Activo por Derecho de Uso (ADU) y un Pasivo por Arrendamiento. Fiscalmente (Art. 127-1 E.T.) se deduce el canon anual pagado; por ello, la base fiscal de ambos saldos es cero.</p>
+
+              <div class="field-group" style="margin-bottom: var(--space-md);">
+                <label class="field-label" for="n16-canon-num">Canon anual de arrendamiento (M COP)</label>
+                <div class="slider-pair">
+                  <input type="range" id="n16-canon-range" min="50" max="1000" step="10" value="240" oninput="syncN16CanonFromSlider(this.value)">
+                  <input type="number" class="input-box" id="n16-canon-num" min="50" max="1000" step="10" value="240" oninput="syncN16CanonFromNumber(this.value)">
+                </div>
+              </div>
+
+              <div class="field-group" style="margin-bottom: var(--space-md);">
+                <label class="field-label" for="n16-years-num">Plazo del contrato (años)</label>
+                <div class="slider-pair">
+                  <input type="range" id="n16-years-range" min="2" max="10" step="1" value="5" oninput="syncN16YearsFromSlider(this.value)">
+                  <input type="number" class="input-box" id="n16-years-num" min="2" max="10" step="1" value="5" oninput="syncN16YearsFromNumber(this.value)">
+                </div>
+              </div>
+
+              <div class="field-group" style="margin-bottom: var(--space-md);">
+                <label class="field-label" for="n16-disc-num">Tasa de descuento incremental (%)</label>
+                <div class="slider-pair">
+                  <input type="range" id="n16-disc-range" min="4" max="20" step="0.5" value="10" oninput="syncN16DiscFromSlider(this.value)">
+                  <input type="number" class="input-box" id="n16-disc-num" min="4" max="20" step="0.5" value="10" oninput="syncN16DiscFromNumber(this.value)">
+                </div>
+              </div>
+
+              <div class="field-group" style="margin-bottom: var(--space-md);">
+                <label class="field-label" for="n16-eval-year">Año de corte a inspeccionar</label>
+                <select class="select-box" id="n16-eval-year" onchange="updateNiif16Sim()"></select>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="n16-tax-num">Tarifa de renta aplicable (%)</label>
+                <div class="slider-pair">
+                  <input type="range" id="n16-tax-range" min="15" max="45" step="1" value="35" oninput="syncN16TaxFromSlider(this.value)">
+                  <input type="number" class="input-box" id="n16-tax-num" min="15" max="45" step="1" value="35" oninput="syncN16TaxFromNumber(this.value)">
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="kpi-grid" style="margin-top: 0;">
+                <div class="figure-card-compact">
+                  <span class="figure-label">ADU Neto (Año seleccionado)</span>
+                  <div class="value" id="n16-out-adu">$727,83 M</div>
+                  <p class="figure-sub">Base fiscal = $0 (origina PID bruto)</p>
+                </div>
+                <div class="figure-card-compact">
+                  <span class="figure-label">Pasivo Arrendamiento</span>
+                  <div class="value" id="n16-out-liab">$760,76 M</div>
+                  <p class="figure-sub">Base fiscal = $0 (origina AID bruto)</p>
+                </div>
+                <div class="figure-card-compact">
+                  <span class="figure-label">Impuesto Diferido Neto</span>
+                  <div class="value" id="n16-out-netid">$11,53 M</div>
+                  <p class="figure-sub" id="n16-out-net-type">AID neto (DTD neta de $32,93 M)</p>
+                </div>
+              </div>
+
+              <div class="chart-wrap">
+                <canvas id="chart-niif16"></canvas>
+              </div>
+
+              <div class="journal-box">
+                <div class="journal-title">Evolución anual del contrato y posición neta NIC 12</div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Año</th>
+                        <th class="num-col">ADU Contable</th>
+                        <th class="num-col">Pasivo NIIF 16</th>
+                        <th class="num-col">Dif. Neta</th>
+                        <th class="num-col">AID / (PID) Neto</th>
+                      </tr>
+                    </thead>
+                    <tbody id="n16-table-body"></tbody>
+                  </table>
+                </div>
+                <p class="figure-sub" id="n16-explanation" style="margin-top: var(--space-sm);"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CASO C: VNR NIC 2 -->
+        <div id="sim-panel-vnr" style="display: none;">
+          <div class="dossier-bar">
+            <div class="dossier-bar-left">
+              <span class="dossier-pill">Caso C · NIC 2</span>
+              <span class="dossier-meta">Deterioro de inventarios al Valor Neto de Realización (VNR)</span>
+            </div>
+            <span class="tag-chip tag-positive" id="vnr-badge">DTD · Activo por Impuesto Diferido</span>
+          </div>
+          <div class="tool-grid">
+            <div class="aside-box">
+              <h3>Parámetros del inventario (COP Millones)</h3>
+              <p class="field-hint" style="margin-bottom: var(--space-md);">Bajo NIC 2 los inventarios se miden al menor entre el costo y el VNR. El deterioro a VNR no es deducible fiscalmente hasta la venta efectiva o la destrucción certificada.</p>
+
+              <div class="field-group" style="margin-bottom: var(--space-md);">
+                <label class="field-label" for="vnr-cost-num">Costo histórico y fiscal (M COP)</label>
+                <div class="slider-pair">
+                  <input type="range" id="vnr-cost-range" min="100" max="4000" step="25" value="850" oninput="syncVnrCostFromSlider(this.value)">
+                  <input type="number" class="input-box" id="vnr-cost-num" min="100" max="4000" step="25" value="850" oninput="syncVnrCostFromNumber(this.value)">
+                </div>
+              </div>
+
+              <div class="field-group" style="margin-bottom: var(--space-md);">
+                <label class="field-label" for="vnr-val-num">Valor Neto de Realización - VNR (M COP)</label>
+                <div class="slider-pair">
+                  <input type="range" id="vnr-val-range" min="50" max="4000" step="25" value="680" oninput="syncVnrValFromSlider(this.value)">
+                  <input type="number" class="input-box" id="vnr-val-num" min="50" max="4000" step="25" value="680" oninput="syncVnrValFromNumber(this.value)">
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="vnr-tax-num">Tarifa de renta aplicable (%)</label>
+                <div class="slider-pair">
+                  <input type="range" id="vnr-tax-range" min="15" max="45" step="1" value="35" oninput="syncVnrTaxFromSlider(this.value)">
+                  <input type="number" class="input-box" id="vnr-tax-num" min="15" max="45" step="1" value="35" oninput="syncVnrTaxFromNumber(this.value)">
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="kpi-grid" style="margin-top: 0;">
+                <div class="figure-card-compact">
+                  <span class="figure-label">Valor en Libros NIC 2</span>
+                  <div class="value" id="vnr-out-book">$680,00 M</div>
+                  <p class="figure-sub" id="vnr-out-loss">Pérdida por VNR: $170,00 M</p>
+                </div>
+                <div class="figure-card-compact">
+                  <span class="figure-label">Base Fiscal (Costo)</span>
+                  <div class="value" id="vnr-out-tax">$850,00 M</div>
+                  <p class="figure-sub">Costo fiscal deducible al vender</p>
+                </div>
+                <div class="figure-card-compact">
+                  <span class="figure-label">Diferencia Temporaria (DTD)</span>
+                  <div class="value" id="vnr-out-diff">$170,00 M</div>
+                  <p class="figure-sub" id="vnr-out-aid">AID (35%): <strong>$59,50 M</strong></p>
+                </div>
+              </div>
+
+              <div class="chart-wrap">
+                <canvas id="chart-vnr"></canvas>
+              </div>
+
+              <div class="journal-box">
+                <div class="journal-title">Registro Contable NIC 12 por deterioro a VNR</div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Cuenta Contable</th>
+                        <th class="num-col">Débito (M)</th>
+                        <th class="num-col">Crédito (M)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="vnr-journal-body"></tbody>
+                  </table>
+                </div>
+                <p class="figure-sub" id="vnr-explanation" style="margin-top: var(--space-sm);"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 04: CALCULADORA DIDÁCTICA DE TASA EFECTIVA DE IMPUESTO (ETR) -->
+    <section id="etr" class="dossier-section reveal-item">
+      <div>
+        <div class="dossier-bar">
+          <div class="dossier-bar-left">
+            <span class="index-num">04</span>
+            <span class="dossier-meta">Conciliación Numérica · NIC 12 Párr. 81(c) y 85–86</span>
+          </div>
+          <span class="tag-chip tag-info">Revelación Obligatoria en Notas</span>
+        </div>
+        <h2>Calculadora didáctica de Tasa Efectiva de Impuesto (ETR)</h2>
+        <p class="standfirst">Comprueba cómo las diferencias permanentes desvían la Tasa Efectiva frente a la tarifa nominal, mientras que las diferencias temporarias desplazan el impuesto entre corriente y diferido sin alterar el gasto total.</p>
+      </div>
+
+      <div class="btn-row" aria-label="Escenarios preconfigurados ETR">
+        <span class="figure-label" style="margin-right: var(--space-xs);">Escenarios guía:</span>
+        <button type="button" class="btn btn-secondary" onclick="applyEtrPreset('gastos_nd')">Multas y gastos no deducibles</button>
+        <button type="button" class="btn btn-secondary" onclick="applyEtrPreset('rentas_exentas')">Ingresos exentos y dividendos</button>
+        <button type="button" class="btn btn-secondary" onclick="applyEtrPreset('temporarias_puras')">Solo diferencias temporarias</button>
+        <button type="button" class="btn btn-secondary" onclick="applyEtrPreset('ganancia_ocasional')">Efecto ganancia ocasional (15%)</button>
+      </div>
+
+      <div class="tool-grid">
+        <div class="aside-box">
+          <h3>Variables de la conciliación (M COP)</h3>
+          <div class="field-group" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+            <label class="field-label" for="etr-ucai">Utilidad Contable Antes de Impuestos (UCAI)</label>
+            <input type="number" class="input-box" id="etr-ucai" value="2000" min="1" max="100000" step="50" oninput="updateEtrCalculator()">
+            <span class="field-error" id="err-etr-ucai"></span>
+          </div>
+
+          <div class="field-group" style="margin-bottom: var(--space-md);">
+            <label class="field-label" for="etr-nom-rate">Tarifa nominal de renta (%)</label>
+            <input type="number" class="input-box" id="etr-nom-rate" value="35" min="1" max="60" step="0.5" oninput="updateEtrCalculator()">
+            <span class="field-error" id="err-etr-rate"></span>
+          </div>
+
+          <div class="field-group" style="margin-bottom: var(--space-md);">
+            <label class="field-label" for="etr-perm-add">Diferencias permanentes (+) Gastos no deducibles</label>
+            <input type="number" class="input-box" id="etr-perm-add" value="180" min="0" max="50000" step="10" oninput="updateEtrCalculator()">
+            <span class="field-hint">Ej.: multas, sanciones, donaciones sin beneficio, 50% GMF no deducible.</span>
+          </div>
+
+          <div class="field-group" style="margin-bottom: var(--space-md);">
+            <label class="field-label" for="etr-perm-sub">Diferencias permanentes (−) Ingresos no gravados / exentos</label>
+            <input type="number" class="input-box" id="etr-perm-sub" value="80" min="0" max="50000" step="10" oninput="updateEtrCalculator()">
+            <span class="field-hint">Ej.: dividendos no constitutivos de renta o rentas exentas.</span>
+          </div>
+
+          <div class="field-group" style="margin-bottom: var(--space-md);">
+            <label class="field-label" for="etr-temp-net">Diferencia temporaria neta del año (M COP)</label>
+            <input type="number" class="input-box" id="etr-temp-net" value="250" min="-20000" max="20000" step="10" oninput="updateEtrCalculator()">
+            <span class="field-hint">Positivo = gasto contable aún no deducible (aumenta renta líquida actual y genera AID). Negativo = deducción fiscal anticipada (genera PID).</span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="etr-go-amount">Utilidad gravada a tarifa diferencial / ganancia ocasional (M COP)</label>
+            <input type="number" class="input-box" id="etr-go-amount" value="0" min="0" max="50000" step="10" oninput="updateEtrCalculator()">
+            <span class="field-hint">Fracción de la UCAI sujeta a tarifa de ganancia ocasional (15% en vez de tarifa general).</span>
+          </div>
+        </div>
+
+        <div class="figure-card">
+          <div class="kpi-grid" style="margin-top: 0;">
+            <div class="figure-card-compact">
+              <span class="figure-label">Tasa Efectiva (ETR)</span>
+              <div class="value" id="etr-out-pct">36,75%</div>
+              <p class="figure-sub" id="etr-out-delta">+1,75 pp frente a tarifa nominal</p>
+            </div>
+            <div class="figure-card-compact">
+              <span class="figure-label">Impuesto Corriente</span>
+              <div class="value" id="etr-out-current">$822,50 M</div>
+              <p class="figure-sub" id="etr-out-taxbase">Renta líquida: $2.350,00 M</p>
+            </div>
+            <div class="figure-card-compact">
+              <span class="figure-label">Impuesto Diferido Neto</span>
+              <div class="value" id="etr-out-deferred">($87,50 M)</div>
+              <p class="figure-sub" id="etr-out-total">Gasto total NIC 12: <strong>$735,00 M</strong></p>
+            </div>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="chart-etr"></canvas>
+          </div>
+
+          <div class="table-wrap" style="margin-top: var(--space-md);">
+            <table>
+              <thead>
+                <tr>
+                  <th>Conciliación Numérica (NIC 12, párr. 85)</th>
+                  <th class="num-col">Valor (M COP)</th>
+                  <th class="num-col">% s/ UCAI</th>
+                </tr>
+              </thead>
+              <tbody id="etr-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 05: PRUEBA DE RECUPERABILIDAD DE ACTIVOS POR IMPUESTO DIFERIDO -->
+    <section id="recuperabilidad" class="dossier-section reveal-item">
+      <div>
+        <div class="dossier-bar">
+          <div class="dossier-bar-left">
+            <span class="index-num">05</span>
+            <span class="dossier-meta">Prudencia y Evidencia Objetiva · NIC 12 Párr. 24–36 · Sec. 1.9.1</span>
+          </div>
+          <span class="tag-chip" id="rec-status-chip">Recuperabilidad Evaluada</span>
+        </div>
+        <h2>Prueba de recuperabilidad de Activos por Impuesto Diferido (AID)</h2>
+        <p class="standfirst">Un AID por pérdidas fiscales o diferencias deducibles solo puede reconocerse en la medida en que sea probable disponer de ganancias fiscales futuras suficientes para compensarlo.</p>
+      </div>
+
+      <div class="tool-grid">
+        <div class="aside-box">
+          <h3>Insumos de la prueba (M COP)</h3>
+
+          <div class="field-group" style="margin-top: var(--space-md); margin-bottom: var(--space-md);">
+            <label class="field-label" for="rec-framework">Marco Técnico Contable</label>
+            <select class="select-box" id="rec-framework" onchange="updateRecoverability()">
+              <option value="full">NIIF Plenas — NIC 12 (Reconocimiento neto directo)</option>
+              <option value="sme">NIIF para PYMES — Sección 29 (100% + Corrección valorativa)</option>
+            </select>
+          </div>
+
+          <div class="field-group" style="margin-bottom: var(--space-md);">
+            <label class="field-label" for="rec-losses">Pérdidas fiscales acumuladas no utilizadas</label>
+            <input type="number" class="input-box" id="rec-losses" value="1400" min="0" max="50000" step="50" oninput="updateRecoverability()">
+          </div>
+
+          <div class="field-group" style="margin-bottom: var(--space-md);">
+            <label class="field-label" for="rec-dtd">Otras Diferencias Temporarias Deducibles (DTD)</label>
+            <input type="number" class="input-box" id="rec-dtd" value="400" min="0" max="50000" step="50" oninput="updateRecoverability()">
+          </div>
+
+          <div class="field-group" style="margin-bottom: var(--space-md);">
+            <label class="field-label" for="rec-dti">DTI existentes que revierten en el horizonte</label>
+            <input type="number" class="input-box" id="rec-dti" value="350" min="0" max="50000" step="50" oninput="updateRecoverability()">
+            <span class="field-hint">Las DTI de igual autoridad fiscal garantizan base imponible automática al revertirse.</span>
+          </div>
+
+          <div class="field-group" style="margin-bottom: var(--space-md);">
+            <label class="field-label" for="rec-rate">Tarifa fiscal esperada de compensación (%)</label>
+            <input type="number" class="input-box" id="rec-rate" value="35" min="1" max="60" step="1" oninput="updateRecoverability()">
+          </div>
+
+          <span class="field-label" style="display: block; margin-bottom: var(--space-xs);">Rentas líquidas gravables proyectadas (Año 1 a 5)</span>
+          <div class="year-inputs-grid">
+            <div class="field-group">
+              <label class="field-label" for="rec-y1">Año 1</label>
+              <input type="number" class="input-box" id="rec-y1" value="120" min="0" max="20000" step="20" oninput="updateRecoverability()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="rec-y2">Año 2</label>
+              <input type="number" class="input-box" id="rec-y2" value="220" min="0" max="20000" step="20" oninput="updateRecoverability()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="rec-y3">Año 3</label>
+              <input type="number" class="input-box" id="rec-y3" value="300" min="0" max="20000" step="20" oninput="updateRecoverability()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="rec-y4">Año 4</label>
+              <input type="number" class="input-box" id="rec-y4" value="350" min="0" max="20000" step="20" oninput="updateRecoverability()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="rec-y5">Año 5</label>
+              <input type="number" class="input-box" id="rec-y5" value="250" min="0" max="20000" step="20" oninput="updateRecoverability()">
+            </div>
+          </div>
+        </div>
+
+        <div class="figure-card">
+          <div class="kpi-grid" style="margin-top: 0;">
+            <div class="figure-card-compact">
+              <span class="figure-label">AID Potencial Bruto</span>
+              <div class="value" id="rec-out-gross">$630,00 M</div>
+              <p class="figure-sub" id="rec-out-base-total">Base deducible: $1.800,00 M</p>
+            </div>
+            <div class="figure-card-compact">
+              <span class="figure-label">AID Reconocible en Balance</span>
+              <div class="value" id="rec-out-rec">$556,50 M</div>
+              <p class="figure-sub" id="rec-out-cov">Cobertura: 88,3%</p>
+            </div>
+            <div class="figure-card-compact">
+              <span class="figure-label" id="rec-out-unrec-label">AID No Reconocido (Revelación)</span>
+              <div class="value" id="rec-out-unrec">$73,50 M</div>
+              <p class="figure-sub" id="rec-out-unrec-base">Base sin soporte: $210,00 M</p>
+            </div>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="chart-rec"></canvas>
+          </div>
+
+          <div class="status-banner" id="rec-diagnosis-banner" style="margin-top: var(--space-md);">
+            <strong id="rec-diagnosis-title">Reconocimiento Parcial por Límite de Evidencia Objetiva</strong>
+            <p id="rec-diagnosis-text" style="margin-top: var(--space-xs);"></p>
+          </div>
+
+          <div class="journal-box">
+            <div class="journal-title">Revelación sugerida para Notas a los Estados Financieros</div>
+            <p id="rec-note-text" style="font-size: 0.9375rem;"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 06: GLOSARIO TÉCNICO Y FUENTES -->
+    <section id="referencias" class="dossier-section reveal-item">
+      <div>
+        <div class="dossier-bar">
+          <div class="dossier-bar-left">
+            <span class="index-num">06</span>
+            <span class="dossier-meta">Glosario y Síntesis Normativa</span>
+          </div>
+          <span class="tag-chip tag-info">Consulta Rápida</span>
+        </div>
+        <h2>Glosario esencial de tributación e impuesto a las ganancias</h2>
+      </div>
+
+      <div class="kpi-grid" style="margin-top: 0;">
+        <details class="glossary-item">
+          <summary>Base Fiscal de un Activo o Pasivo</summary>
+          <p>Importe atribuido para fines tributarios conforme al Estatuto Tributario. En activos corresponde al monto deducible en el futuro contra beneficios económicos gravables; en pasivos equivale al importe en libros menos cualquier valor deducible en períodos futuros.</p>
+        </details>
+        <details class="glossary-item">
+          <summary>Impuesto Corriente vs. Impuesto Diferido</summary>
+          <p>El impuesto corriente es el valor a pagar o recuperar en el período actual sobre la renta líquida fiscal. El impuesto diferido refleja las consecuencias fiscales futuras de recuperar activos o liquidar pasivos según su valor contable NIIF.</p>
+        </details>
+        <details class="glossary-item">
+          <summary>Control de Detalle (DUR 1625 / 2016)</summary>
+          <p>Herramienta obligatoria de conciliación fiscal incorporada por el Decreto 1998 de 2017 que enlaza las cifras contables bajo NIIF con las declaraciones tributarias, garantizando trazabilidad y soporte técnico frente a la DIAN.</p>
+        </details>
+        <details class="glossary-item">
+          <summary>Activos Revaluados y ORI (NIC 16 / NIC 12)</summary>
+          <p>Cuando se revalúa un activo contablemente sin ajuste en su base fiscal, surge una DTI y un Pasivo por Impuesto Diferido que se reconoce en el Otro Resultado Integral (ORI) o patrimonio, respetando el principio de correspondencia.</p>
+        </details>
+      </div>
+
+      <footer class="dossier-footer">
+        <div class="dossier-bar" style="margin-bottom: 0;">
+          <div class="dossier-bar-left">
+            <span class="dossier-pill">Fuentes del Dossier</span>
+            <span class="dossier-meta">Material académico y marco normativo consultado</span>
+          </div>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--on-surface-variant); max-width: 100%;">
+          Contenido técnico fundamentado en: <em>Tributación y su relación con la NIIF/IFRS — Impuesto de Renta e Impuestos Diferidos (Capítulo 1: Régimen tributario colombiano y su articulación con las NIIF)</em>; <em>Ruta de Aprendizaje Sección 1 — Régimen tributario colombiano y su articulación con las NIIF</em>; <em>Norma Internacional de Contabilidad 12 (NIC 12) — Impuesto a las Ganancias</em> (IASB); <em>Estatuto Tributario Colombiano y Decreto Único Reglamentario 1625 de 2016 (Decreto 1998 de 2017)</em>; y las guías doctrinales <em>El Impuesto Diferido bajo IFRS</em>. Valores monetarios expresados en millones de pesos colombianos (M COP) con fines pedagógicos.
+        </p>
+      </footer>
+    </section>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    /* =========================================================================
+       1. ESTADO GLOBAL Y PERSISTENCIA (notebookAppApi)
+       ========================================================================= */
+    const DEFAULT_STATE = {
+      activeConciliationStep: 0,
+      activeSimCase: 'niif9',
+      matrix: { type: 'asset', book: 150, tax: 100, rate: 35 },
+      niif9: { gross: 1200, ifrsPct: 18, taxPct: 5, rate: 35 },
+      niif16: { canon: 240, years: 5, disc: 10, evalYear: 2, tax: 35 },
+      vnr: { cost: 850, val: 680, tax: 35 },
+      etr: { ucai: 2000, nomRate: 35, permAdd: 180, permSub: 80, tempNet: 250, goAmount: 0 },
+      rec: { framework: 'full', losses: 1400, dtd: 400, dti: 350, rate: 35, y1: 120, y2: 220, y3: 300, y4: 350, y5: 250 }
+    };
+
+    let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    let charts = { niif9: null, niif16: null, vnr: null, etr: null, rec: null };
+    let persistTimer = null;
+
+    function getToken(name) {
+      const val = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return val || '#1f4e5f';
+    }
+
+    function formatCOP(val) {
+      const n = Number(val) || 0;
+      const abs = Math.abs(n).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return n < 0 ? `($${abs} M)` : `$${abs} M`;
+    }
+
+    function formatPct(val) {
+      const n = Number(val) || 0;
+      return `${n.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
+    }
+
+    function schedulePersist() {
+      const statusEl = document.getElementById('persistence-status');
+      if (statusEl) statusEl.textContent = `Guardando cambios…`;
+      if (persistTimer) clearTimeout(persistTimer);
+      persistTimer = setTimeout(async function () {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          try {
+            await window.notebookAppApi.setAppState(appState);
+            if (statusEl) statusEl.textContent = `Estado guardado`;
+          } catch (e) {
+            if (statusEl) statusEl.textContent = `Sesión local activa`;
+          }
+        }
+      }, 250);
+    }
+
+    function handleResetAll(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== 'true') {
+        btn.dataset.armed = 'true';
+        btn.textContent = `Confirmar restablecer`;
+        setTimeout(function () {
+          if (btn.dataset.armed === 'true') {
+            btn.dataset.armed = 'false';
+            btn.textContent = `Restablecer simulaciones`;
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = 'false';
+      btn.textContent = `Restablecer simulaciones`;
+      appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      applyStateToInputs();
+      renderAllViews();
+      schedulePersist();
+    }
+
+    /* =========================================================================
+       2. LABORATORIO DE REGLA DEL BALANCE (SECCIÓN 01)
+       ========================================================================= */
+    function updateBalanceMatrix() {
+      const typeEl = document.getElementById('matrix-type');
+      const bookEl = document.getElementById('matrix-book');
+      const taxEl = document.getElementById('matrix-tax');
+      const rateEl = document.getElementById('matrix-rate');
+      if (!typeEl || !bookEl || !taxEl || !rateEl) return;
+
+      const type = typeEl.value;
+      const book = Math.max(0, parseFloat(bookEl.value) || 0);
+      const tax = Math.max(0, parseFloat(taxEl.value) || 0);
+      const rate = Math.min(100, Math.max(0, parseFloat(rateEl.value) || 0));
+
+      appState.matrix = { type: type, book: book, tax: tax, rate: rate };
+
+      const diff = book - tax;
+      const absDiff = Math.abs(diff);
+      const deferred = absDiff * (rate / 100);
+
+      const badgeEl = document.getElementById('matrix-badge');
+      const bannerEl = document.getElementById('matrix-result-banner');
+      const titleEl = document.getElementById('matrix-result-title');
+      const descEl = document.getElementById('matrix-result-desc');
+      const valEl = document.getElementById('matrix-deferred-val');
+      const exEl = document.getElementById('matrix-example-ref');
+
+      if (!badgeEl || !bannerEl || !titleEl || !descEl || !valEl || !exEl) return;
+
+      if (Math.abs(diff) < 0.001) {
+        badgeEl.textContent = `Sin diferencia temporaria`;
+        badgeEl.className = `tag-chip tag-info`;
+        bannerEl.className = `status-banner`;
+        titleEl.textContent = `Base Contable = Base Fiscal (${formatCOP(book)})`;
+        descEl.textContent = `No existe discrepancia entre el importe en libros NIIF y su base tributaria. También ocurre con partidas permanentes como multas o sanciones (NIC 12, párr. 8, ejemplo 4).`;
+        valEl.textContent = formatCOP(0);
+        exEl.textContent = `Ejemplo: cuentas por cobrar cuya venta ya tributó y no tienen deterioro.`;
+      } else if ((type === 'asset' && diff > 0) || (type === 'liability' && diff < 0)) {
+        badgeEl.textContent = `DTI · Genera Pasivo (PID)`;
+        badgeEl.className = `tag-chip tag-error`;
+        bannerEl.className = `status-banner is-warning`;
+        titleEl.textContent = `Diferencia Temporaria Imponible (DTI): ${formatCOP(absDiff)}`;
+        descEl.textContent = type === 'asset'
+          ? `Para un activo, Base Contable > Base Fiscal significa que los ingresos futuros gravables al recuperar el activo superarán la deducción fiscal remanente. Se reconoce un Pasivo por Impuesto Diferido (PID).`
+          : `Para un pasivo, Base Contable < Base Fiscal implica que al liquidarlo habrá un pago tributario mayor en el futuro. Se reconoce un Pasivo por Impuesto Diferido (PID).`;
+        valEl.textContent = `${formatCOP(deferred)} (PID)`;
+        exEl.textContent = type === 'asset'
+          ? `Ejemplos típicos: depreciación fiscal acelerada, activos revaluados bajo NIC 16 o inversiones medidas al valor razonable por encima del costo.`
+          : `Ejemplo típico: pasivo reconocido fiscalmente por un valor superior al contable o costos capitalizados deducidos anticipadamente.`;
+      } else {
+        badgeEl.textContent = `DTD · Genera Activo (AID)`;
+        badgeEl.className = `tag-chip tag-positive`;
+        bannerEl.className = `status-banner is-positive`;
+        titleEl.textContent = `Diferencia Temporaria Deducible (DTD): ${formatCOP(absDiff)}`;
+        descEl.textContent = type === 'asset'
+          ? `Para un activo, Base Contable < Base Fiscal indica que en el futuro se podrá deducir fiscalmente un monto superior al valor contable recuperable. Origina un Activo por Impuesto Diferido (AID) sujeto a recuperabilidad.`
+          : `Para un pasivo, Base Contable > Base Fiscal significa que al pagar o liquidar el pasivo el contribuyente obtendrá una deducción fiscal futura (o ingresos ya gravados al cobro). Origina un AID.`;
+        valEl.textContent = `${formatCOP(deferred)} (AID)`;
+        exEl.textContent = type === 'asset'
+          ? `Ejemplos típicos: deterioro de cartera NIIF 9 no deducible aún, ajuste de inventarios a VNR (NIC 2) o depreciación contable acelerada.`
+          : `Ejemplos típicos: provisiones por garantías o litigios deducibles al pago, o ingresos recibidos por anticipado ya gravados en el cobro.`;
+      }
+      schedulePersist();
+    }
+
+    /* =========================================================================
+       3. STEPPER DE CONCILIACIÓN FISCAL Y CONTROL DE DETALLE (SECCIÓN 02)
+       ========================================================================= */
+    const CONCILIATION_STEPS = [
+      {
+        norma: `Base normativa: Ley 1314 de 2009 · Marco Técnico NIIF`,
+        title: `1. Punto de partida: Resultado Contable antes de Impuestos`,
+        body: `Los estados financieros preparados bajo NIIF registran ingresos, costos y gastos atendiendo al principio de devengo y a la esencia económica (valor razonable, deterioros esperados, NIIF 16). Este resultado antes de impuestos (UCAI) constituye el insumo inicial obligatorio de la conciliación fiscal.`,
+        takeaway: `Clave operativa: No se lleva una contabilidad paralela independiente sin vínculo; toda diferencia frente a la declaración de renta debe conciliarse desde los saldos NIIF.`,
+        highlightRow: 0,
+        footnote: `La UCAI se extrae del Estado de Resultados Integral antes de contabilizar el gasto por impuesto corriente y diferido.`
+      },
+      {
+        norma: `Base normativa: Decreto Reglamentario 1998 de 2017 (DUR 1625 de 2016)`,
+        title: `2. Control de Detalle: puente técnico de trazabilidad`,
+        body: `El Control de Detalle es el sistema obligatorio que vincula los registros contables bajo NIIF con los valores fiscales declarados. Permite rastrear partida por partida las mediciones contables, los ajustes fiscales, las fechas de origen y la reversión esperada de cada diferencia.`,
+        takeaway: `Riesgo sancionatorio: La ausencia o falla del control de detalle se considera irregularidad contable para efectos tributarios ante la DIAN.`,
+        highlightRow: 3,
+        footnote: `El Control de Detalle alimenta el Formato de Conciliación Fiscal (Formato 2516) y sustenta el cálculo del impuesto diferido.`
+      },
+      {
+        norma: `Base normativa: Estatuto Tributario · NIC 12 (conciliación de tarifa)`,
+        title: `3. Depuración de Diferencias Permanentes`,
+        body: `Se identifican partidas reconocidas en contabilidad que nunca tendrán efecto fiscal en el futuro: gastos no deducibles (multas, sanciones, donaciones no calificadas) e ingresos no gravados o rentas exentas (dividendos no gravados). Estas partidas se suman o restan definitivamente.`,
+        takeaway: `Efecto NIC 12: Las diferencias permanentes NO generan activos ni pasivos por impuesto diferido; impactan directamente el impuesto corriente y la Tasa Efectiva (ETR).`,
+        highlightRow: 1,
+        footnote: `Sumar $40 M no deducibles y restar $60 M exentos ajusta la base en -$20 M de manera definitiva.`
+      },
+      {
+        norma: `Base normativa: Estatuto Tributario Colombiano · Tarifa Vigente`,
+        title: `4. Renta Líquida Gravable e Impuesto Corriente`,
+        body: `Tras incorporar también las diferencias temporales del período (sumar gastos contables aún no deducibles como deterioros o provisiones, y restar deducciones fiscales anticipadas como depreciación acelerada), se obtiene la Renta Líquida Gravable y se aplica la tarifa legal para liquidar el Impuesto Corriente a pagar.`,
+        takeaway: `Impacto financiero: El impuesto corriente afecta directamente el flujo de caja del período y constituye el pasivo (o saldo a favor) fiscal ante la DIAN.`,
+        highlightRow: 5,
+        footnote: `En el ejemplo ilustrativo, $1.020 M de renta líquida al 35% generan un impuesto corriente de $357 M.`
+      },
+      {
+        norma: `Base normativa: NIC 12 / Sección 29 PYMES (Método del Balance)`,
+        title: `5. Recálculo de saldos de Impuesto Diferido al cierre`,
+        body: `Al cierre del ejercicio se comparan las bases contables y fiscales acumuladas de todos los activos y pasivos para hallar el saldo esperado de AID y PID utilizando la tarifa vigente al momento de reversión. El ajuste contable del período es la variación entre el saldo requerido al cierre y el saldo inicial en libros.`,
+        takeaway: `Principio de correspondencia: El gasto o ingreso por impuesto diferido va a Resultados, salvo cuando la partida subyacente se reconoció en ORI (ej. revaluación NIC 16) o Patrimonio.`,
+        highlightRow: 4,
+        footnote: `No se calcula el impuesto diferido multiplicando flujos del estado de resultados sin validar el balance acumulado.`
+      },
+      {
+        norma: `Base normativa: NIC 12 Párr. 81(c) y 85 · Notas a los Estados Financieros`,
+        title: `6. Gasto Total por Impuesto y Revelación de Tasa Efectiva`,
+        body: `El gasto (ingreso) por impuesto a las ganancias combina el impuesto corriente y la variación neta del impuesto diferido. Finalmente, la entidad debe revelar la conciliación numérica entre la ganancia contable por la tarifa nominal y el gasto total registrado, explicando la Tasa Efectiva (ETR).`,
+        takeaway: `Transparencia: Una conciliación fiscal sólida alinea el cumplimiento tributario ante la DIAN con la calidad y fiabilidad de los reportes NIIF.`,
+        highlightRow: 5,
+        footnote: `La conciliación de tasa efectiva permite a los usuarios evaluar la sostenibilidad de la carga tributaria empresarial.`
+      }
+    ];
+
+    function selectConciliationStep(idx) {
+      const safeIdx = Math.max(0, Math.min(CONCILIATION_STEPS.length - 1, idx));
+      appState.activeConciliationStep = safeIdx;
+      const step = CONCILIATION_STEPS[safeIdx];
+
+      for (let i = 0; i < CONCILIATION_STEPS.length; i++) {
+        const btn = document.getElementById(`cstep-${i}`);
+        if (btn) {
+          if (i === safeIdx) btn.classList.add('is-active');
+          else btn.classList.remove('is-active');
+        }
+      }
+
+      const counterEl = document.getElementById('step-counter');
+      const normaEl = document.getElementById('cstep-norma');
+      const titleEl = document.getElementById('cstep-title');
+      const bodyEl = document.getElementById('cstep-body');
+      const takeawayEl = document.getElementById('cstep-key-takeaway');
+      const footEl = document.getElementById('cstep-footnote');
+      const tableEl = document.getElementById('cstep-mini-table');
+
+      if (counterEl) counterEl.textContent = `Etapa ${safeIdx + 1} de ${CONCILIATION_STEPS.length}`;
+      if (normaEl) normaEl.textContent = step.norma;
+      if (titleEl) titleEl.textContent = step.title;
+      if (bodyEl) bodyEl.textContent = step.body;
+      if (takeawayEl) {
+        const parts = step.takeaway.split(':');
+        takeawayEl.innerHTML = `<strong>${parts[0]}:</strong>${parts.slice(1).join(':')}`;
+      }
+      if (footEl) footEl.textContent = step.footnote;
+
+      if (tableEl) {
+        const rows = tableEl.querySelectorAll('tr');
+        rows.forEach(function (tr, rIdx) {
+          if (rIdx === rows.length - 1) return;
+          if (rIdx === step.highlightRow) tr.classList.add('row-highlight');
+          else tr.classList.remove('row-highlight');
+        });
+      }
+      schedulePersist();
+    }
+
+    /* =========================================================================
+       4. SIMULADOR DE CASOS PRÁCTICOS (NIIF 9, NIIF 16, NIC 2 VNR)
+       ========================================================================= */
+    function selectSimCase(caseId) {
+      appState.activeSimCase = caseId;
+      const cases = ['niif9', 'niif16', 'vnr'];
+      cases.forEach(function (c) {
+        const btn = document.getElementById(`btn-case-${c}`);
+        const panel = document.getElementById(`sim-panel-${c}`);
+        if (btn) {
+          if (c === caseId) btn.classList.add('is-active');
+          else btn.classList.remove('is-active');
+        }
+        if (panel) {
+          panel.style.display = c === caseId ? 'block' : 'none';
+        }
+      });
+      if (caseId === 'niif9') updateNiif9Sim();
+      if (caseId === 'niif16') updateNiif16Sim();
+      if (caseId === 'vnr') updateVnrSim();
+      schedulePersist();
+    }
+
+    /* --- Caso A: NIIF 9 (Dedicated handlers per input direction) --- */
+    function syncN9GrossFromSlider(v) {
+      const el = document.getElementById('n9-gross-num');
+      if (el) el.value = v;
+      updateNiif9Sim();
+    }
+    function syncN9GrossFromNumber(v) {
+      const el = document.getElementById('n9-gross-range');
+      if (el) el.value = v;
+      updateNiif9Sim();
+    }
+    function syncN9IfrsFromSlider(v) {
+      const el = document.getElementById('n9-ifrs-pct-num');
+      if (el) el.value = v;
+      updateNiif9Sim();
+    }
+    function syncN9IfrsFromNumber(v) {
+      const el = document.getElementById('n9-ifrs-pct-range');
+      if (el) el.value = v;
+      updateNiif9Sim();
+    }
+    function syncN9TaxFromSlider(v) {
+      const el = document.getElementById('n9-tax-pct-num');
+      if (el) el.value = v;
+      updateNiif9Sim();
+    }
+    function syncN9TaxFromNumber(v) {
+      const el = document.getElementById('n9-tax-pct-range');
+      if (el) el.value = v;
+      updateNiif9Sim();
+    }
+    function syncN9RateFromSlider(v) {
+      const el = document.getElementById('n9-rate-num');
+      if (el) el.value = v;
+      updateNiif9Sim();
+    }
+    function syncN9RateFromNumber(v) {
+      const el = document.getElementById('n9-rate-range');
+      if (el) el.value = v;
+      updateNiif9Sim();
+    }
+
+    function updateNiif9Sim() {
+      const grossEl = document.getElementById('n9-gross-num');
+      const ifrsEl = document.getElementById('n9-ifrs-pct-num');
+      const taxEl = document.getElementById('n9-tax-pct-num');
+      const rateEl = document.getElementById('n9-rate-num');
+      if (!grossEl || !ifrsEl || !taxEl || !rateEl) return;
+
+      const gross = Math.max(0, parseFloat(grossEl.value) || 0);
+      const ifrsPct = Math.min(100, Math.max(0, parseFloat(ifrsEl.value) || 0));
+      const taxPct = Math.min(100, Math.max(0, parseFloat(taxEl.value) || 0));
+      const rate = Math.min(100, Math.max(0, parseFloat(rateEl.value) || 0));
+
+      appState.niif9 = { gross: gross, ifrsPct: ifrsPct, taxPct: taxPct, rate: rate };
+
+      const ifrsImp = gross * (ifrsPct / 100);
+      const taxImp = gross * (taxPct / 100);
+      const bookNet = gross - ifrsImp;
+      const taxNet = gross - taxImp;
+      const diff = taxNet - bookNet; // positive => Base Fiscal > Base Contable => DTD
+      const idVal = Math.abs(diff) * (rate / 100);
+      const isDTD = diff >= 0;
+
+      const outBook = document.getElementById('n9-out-book');
+      const outIfrsImp = document.getElementById('n9-out-ifrs-imp');
+      const outTax = document.getElementById('n9-out-tax');
+      const outTaxImp = document.getElementById('n9-out-tax-imp');
+      const outDiffLabel = document.getElementById('n9-out-diff-label');
+      const outDiff = document.getElementById('n9-out-diff');
+      const outIdLabel = document.getElementById('n9-out-id-label');
+      const badge = document.getElementById('n9-badge');
+      const jBody = document.getElementById('n9-journal-body');
+      const expEl = document.getElementById('n9-explanation');
+
+      if (outBook) outBook.textContent = formatCOP(bookNet);
+      if (outIfrsImp) outIfrsImp.textContent = `Deterioro NIIF: ${formatCOP(ifrsImp)}`;
+      if (outTax) outTax.textContent = formatCOP(taxNet);
+      if (outTaxImp) outTaxImp.textContent = `Deducible fiscal: ${formatCOP(taxImp)}`;
+      if (outDiffLabel) outDiffLabel.textContent = isDTD ? `Diferencia Temporaria (DTD)` : `Diferencia Temporaria (DTI)`;
+      if (outDiff) outDiff.textContent = formatCOP(Math.abs(diff));
+      if (outIdLabel) outIdLabel.innerHTML = `${isDTD ? 'AID' : 'PID'} (${rate}%): <strong>${formatCOP(idVal)}</strong>`;
+
+      if (badge) {
+        if (Math.abs(diff) < 0.01) {
+          badge.textContent = `Sin Diferencia Temporaria`;
+          badge.className = `tag-chip tag-info`;
+        } else if (isDTD) {
+          badge.textContent = `DTD · Activo por Impuesto Diferido`;
+          badge.className = `tag-chip tag-positive`;
+        } else {
+          badge.textContent = `DTI · Pasivo por Impuesto Diferido`;
+          badge.className = `tag-chip tag-error`;
+        }
+      }
+
+      if (jBody) {
+        if (Math.abs(diff) < 0.01) {
+          jBody.innerHTML = `<tr><td colspan="3">Base Contable y Base Fiscal coinciden: no procede asiento por impuesto diferido.</td></tr>`;
+        } else if (isDTD) {
+          jBody.innerHTML = `
+            <tr><td>Activo por Impuesto Diferido (AID)</td><td class="num-col">${formatCOP(idVal)}</td><td class="num-col">—</td></tr>
+            <tr><td>Ingreso (menor gasto) por Impuesto Diferido</td><td class="num-col">—</td><td class="num-col">${formatCOP(idVal)}</td></tr>
+          `;
+        } else {
+          jBody.innerHTML = `
+            <tr><td>Gasto por Impuesto Diferido</td><td class="num-col">${formatCOP(idVal)}</td><td class="num-col">—</td></tr>
+            <tr><td>Pasivo por Impuesto Diferido (PID)</td><td class="num-col">—</td><td class="num-col">${formatCOP(idVal)}</td></tr>
+          `;
+        }
+      }
+
+      if (expEl) {
+        expEl.textContent = Math.abs(diff) < 0.01
+          ? `Al coincidir el deterioro NIIF 9 con la provisión fiscal aceptada, no surge diferencia temporaria.`
+          : isDTD
+            ? `El deterioro NIIF 9 excede la deducción fiscal permitida en ${formatCOP(diff)}. Cuando la cartera sea castigada o cumpla los requisitos fiscales, la entidad recuperará un menor impuesto por ${formatCOP(idVal)}.`
+            : `La provisión fiscal supera el deterioro contable NIIF 9 en ${formatCOP(Math.abs(diff))}, originando una obligación tributaria futura (PID) de ${formatCOP(idVal)}.`;
+      }
+
+      renderBarComparisonChart('niif9', 'chart-niif9',
+        ['Base Contable NIIF 9', 'Base Fiscal (E.T.)', isDTD ? 'AID Generado' : 'PID Generado'],
+        [bookNet, taxNet, idVal],
+        [getToken('--data-1'), getToken('--data-2'), isDTD ? getToken('--data-3') : getToken('--data-4')]
+      );
+      schedulePersist();
+    }
+
+    /* --- Caso B: NIIF 16 --- */
+    function syncN16CanonFromSlider(v) { const el = document.getElementById('n16-canon-num'); if (el) el.value = v; updateNiif16Sim(); }
+    function syncN16CanonFromNumber(v) { const el = document.getElementById('n16-canon-range'); if (el) el.value = v; updateNiif16Sim(); }
+    function syncN16YearsFromSlider(v) { const el = document.getElementById('n16-years-num'); if (el) el.value = v; updateNiif16Sim(); }
+    function syncN16YearsFromNumber(v) { const el = document.getElementById('n16-years-range'); if (el) el.value = v; updateNiif16Sim(); }
+    function syncN16DiscFromSlider(v) { const el = document.getElementById('n16-disc-num'); if (el) el.value = v; updateNiif16Sim(); }
+    function syncN16DiscFromNumber(v) { const el = document.getElementById('n16-disc-range'); if (el) el.value = v; updateNiif16Sim(); }
+    function syncN16TaxFromSlider(v) { const el = document.getElementById('n16-tax-num'); if (el) el.value = v; updateNiif16Sim(); }
+    function syncN16TaxFromNumber(v) { const el = document.getElementById('n16-tax-range'); if (el) el.value = v; updateNiif16Sim(); }
+
+    function updateNiif16Sim() {
+      const canonEl = document.getElementById('n16-canon-num');
+      const yearsEl = document.getElementById('n16-years-num');
+      const discEl = document.getElementById('n16-disc-num');
+      const evalEl = document.getElementById('n16-eval-year');
+      const taxEl = document.getElementById('n16-tax-num');
+      if (!canonEl || !yearsEl || !discEl || !evalEl || !taxEl) return;
+
+      const canon = Math.max(10, parseFloat(canonEl.value) || 240);
+      const years = Math.min(10, Math.max(2, Math.round(parseFloat(yearsEl.value) || 5)));
+      const disc = Math.min(35, Math.max(1, parseFloat(discEl.value) || 10)) / 100;
+      const taxRate = Math.min(60, Math.max(1, parseFloat(taxEl.value) || 35)) / 100;
+
+      // Populate year selector safely preserving selection
+      const prevYear = parseInt(evalEl.value, 10) || appState.niif16.evalYear || 1;
+      const clampedYear = Math.min(years, Math.max(1, prevYear));
+      let opts = '';
+      for (let y = 1; y <= years; y++) {
+        opts += `<option value="${y}"${y === clampedYear ? ' selected' : ''}>Cierre Año ${y} de ${years}</option>`;
+      }
+      evalEl.innerHTML = opts;
+
+      appState.niif16 = { canon: canon, years: years, disc: disc * 100, evalYear: clampedYear, tax: taxRate * 100 };
+
+      // Present value of annuity (ordinary)
+      const pvFactor = (1 - Math.pow(1 + disc, -years)) / disc;
+      const initialVal = canon * pvFactor;
+      const annualDep = initialVal / years;
+
+      const schedule = [];
+      let liab = initialVal;
+      let adu = initialVal;
+
+      for (let y = 1; y <= years; y++) {
+        const interest = liab * disc;
+        liab = Math.max(0, liab + interest - canon);
+        adu = Math.max(0, adu - annualDep);
+        const netDiff = liab - adu; // >0 means Pasivo > ADU => DTD neta => AID neto
+        const netID = netDiff * taxRate;
+        schedule.push({ year: y, adu: adu, liab: liab, netDiff: netDiff, netID: netID });
+      }
+
+      const activeRow = schedule[clampedYear - 1] || schedule[0];
+      const outAdu = document.getElementById('n16-out-adu');
+      const outLiab = document.getElementById('n16-out-liab');
+      const outNetId = document.getElementById('n16-out-netid');
+      const outNetType = document.getElementById('n16-out-net-type');
+      const badge = document.getElementById('n16-badge');
+      const tBody = document.getElementById('n16-table-body');
+      const expEl = document.getElementById('n16-explanation');
+
+      if (outAdu) outAdu.textContent = formatCOP(activeRow.adu);
+      if (outLiab) outLiab.textContent = formatCOP(activeRow.liab);
+      if (outNetId) outNetId.textContent = formatCOP(Math.abs(activeRow.netID));
+      if (outNetType) {
+        outNetType.textContent = Math.abs(activeRow.netDiff) < 0.01
+          ? `Al finalizar el contrato el saldo contable y fiscal es cero`
+          : activeRow.netDiff > 0
+            ? `AID neto (DTD neta de ${formatCOP(activeRow.netDiff)})`
+            : `PID neto (DTI neta de ${formatCOP(Math.abs(activeRow.netDiff))})`;
+      }
+      if (badge) {
+        badge.textContent = Math.abs(activeRow.netDiff) < 0.01
+          ? `Contrato liquidado · Dif. $0`
+          : `Año ${clampedYear}: AID neto ${formatCOP(activeRow.netID)}`;
+      }
+
+      if (tBody) {
+        let html = '';
+        schedule.forEach(function (r) {
+          const cls = r.year === clampedYear ? ' class="row-highlight"' : '';
+          html += `<tr${cls}>
+            <td>Año ${r.year}</td>
+            <td class="num-col">${formatCOP(r.adu)}</td>
+            <td class="num-col">${formatCOP(r.liab)}</td>
+            <td class="num-col">${formatCOP(r.netDiff)}</td>
+            <td class="num-col">${formatCOP(r.netID)}</td>
+          </tr>`;
+        });
+        tBody.innerHTML = html;
+      }
+
+      if (expEl) {
+        expEl.textContent = `Valor presente inicial del contrato: ${formatCOP(initialVal)}. En los primeros años el gasto contable (depreciación + interés) supera el canon pagado deducible fiscalmente, por lo que el Pasivo excede al ADU y genera un AID neto que se revierte a cero al término del año ${years}.`;
+      }
+
+      renderNiif16Chart(schedule);
+      schedulePersist();
+    }
+
+    function renderNiif16Chart(schedule) {
+      const ctxEl = document.getElementById('chart-niif16');
+      if (!ctxEl || typeof Chart === 'undefined') return;
+      if (charts.niif16) charts.niif16.destroy();
+
+      charts.niif16 = new Chart(ctxEl, {
+        type: 'line',
+        data: {
+          labels: schedule.map(function (r) { return `Año ${r.year}`; }),
+          datasets: [
+            {
+              label: 'Pasivo por Arrendamiento (NIIF 16)',
+              data: schedule.map(function (r) { return Number(r.liab.toFixed(2)); }),
+              borderColor: getToken('--data-1'),
+              backgroundColor: getToken('--data-1'),
+              borderWidth: 2.5,
+              tension: 0.15
+            },
+            {
+              label: 'Activo Derecho de Uso (ADU)',
+              data: schedule.map(function (r) { return Number(r.adu.toFixed(2)); }),
+              borderColor: getToken('--data-2'),
+              backgroundColor: getToken('--data-2'),
+              borderWidth: 2.5,
+              tension: 0.15
+            },
+            {
+              label: 'AID Neto NIC 12',
+              data: schedule.map(function (r) { return Number(r.netID.toFixed(2)); }),
+              borderColor: getToken('--data-3'),
+              backgroundColor: getToken('--data-3'),
+              borderWidth: 2,
+              borderDash: [5, 4],
+              tension: 0.15
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { family: 'Plus Jakarta Sans', size: 12 } } }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: getToken('--outline-variant') },
+              ticks: { font: { family: 'Geist Mono', size: 11 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { family: 'Geist Mono', size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    /* --- Caso C: VNR (NIC 2) --- */
+    function syncVnrCostFromSlider(v) { const el = document.getElementById('vnr-cost-num'); if (el) el.value = v; updateVnrSim(); }
+    function syncVnrCostFromNumber(v) { const el = document.getElementById('vnr-cost-range'); if (el) el.value = v; updateVnrSim(); }
+    function syncVnrValFromSlider(v) { const el = document.getElementById('vnr-val-num'); if (el) el.value = v; updateVnrSim(); }
+    function syncVnrValFromNumber(v) { const el = document.getElementById('vnr-val-range'); if (el) el.value = v; updateVnrSim(); }
+    function syncVnrTaxFromSlider(v) { const el = document.getElementById('vnr-tax-num'); if (el) el.value = v; updateVnrSim(); }
+    function syncVnrTaxFromNumber(v) { const el = document.getElementById('vnr-tax-range'); if (el) el.value = v; updateVnrSim(); }
+
+    function updateVnrSim() {
+      const costEl = document.getElementById('vnr-cost-num');
+      const valEl = document.getElementById('vnr-val-num');
+      const taxEl = document.getElementById('vnr-tax-num');
+      if (!costEl || !valEl || !taxEl) return;
+
+      const cost = Math.max(0, parseFloat(costEl.value) || 0);
+      const vnr = Math.max(0, parseFloat(valEl.value) || 0);
+      const rate = Math.min(60, Math.max(1, parseFloat(taxEl.value) || 35));
+
+      appState.vnr = { cost: cost, val: vnr, tax: rate };
+
+      // NIC 2: menor entre costo y VNR
+      const bookVal = Math.min(cost, vnr);
+      const loss = Math.max(0, cost - vnr);
+      const taxBase = cost;
+      const dtd = taxBase - bookVal;
+      const aid = dtd * (rate / 100);
+
+      const outBook = document.getElementById('vnr-out-book');
+      const outLoss = document.getElementById('vnr-out-loss');
+      const outTax = document.getElementById('vnr-out-tax');
+      const outDiff = document.getElementById('vnr-out-diff');
+      const outAid = document.getElementById('vnr-out-aid');
+      const badge = document.getElementById('vnr-badge');
+      const jBody = document.getElementById('vnr-journal-body');
+      const expEl = document.getElementById('vnr-explanation');
+
+      if (outBook) outBook.textContent = formatCOP(bookVal);
+      if (outLoss) outLoss.textContent = loss > 0 ? `Deterioro NIC 2: ${formatCOP(loss)}` : `VNR >= Costo (sin deterioro)`;
+      if (outTax) outTax.textContent = formatCOP(taxBase);
+      if (outDiff) outDiff.textContent = formatCOP(dtd);
+      if (outAid) outAid.innerHTML = `AID (${rate}%): <strong>${formatCOP(aid)}</strong>`;
+
+      if (badge) {
+        if (dtd > 0) {
+          badge.textContent = `DTD · Activo por Impuesto Diferido`;
+          badge.className = `tag-chip tag-positive`;
+        } else {
+          badge.textContent = `Sin deterioro VNR · Dif. $0`;
+          badge.className = `tag-chip tag-info`;
+        }
+      }
+
+      if (jBody) {
+        if (dtd > 0) {
+          jBody.innerHTML = `
+            <tr><td>Activo por Impuesto Diferido (AID)</td><td class="num-col">${formatCOP(aid)}</td><td class="num-col">—</td></tr>
+            <tr><td>Ingreso (menor gasto) por Impuesto Diferido</td><td class="num-col">—</td><td class="num-col">${formatCOP(aid)}</td></tr>
+          `;
+        } else {
+          jBody.innerHTML = `<tr><td colspan="3">Dado que VNR ≥ Costo, el inventario permanece medido al costo y no genera impuesto diferido.</td></tr>`;
+        }
+      }
+
+      if (expEl) {
+        expEl.textContent = dtd > 0
+          ? `Al reducir el inventario contablemente en ${formatCOP(loss)}, la base fiscal permanece en el costo histórico de ${formatCOP(taxBase)}. Cuando el inventario se venda o se certifique su destrucción ante autoridad fiscal, se deducirán los ${formatCOP(dtd)} generando un ahorro tributario futuro de ${formatCOP(aid)}.`
+          : `Según la NIC 2, los inventarios no se revalúan por encima del costo aunque el VNR sea superior; por tanto, Base Contable = Base Fiscal.`;
+      }
+
+      renderBarComparisonChart('vnr', 'chart-vnr',
+        ['Valor en Libros NIC 2', 'Base Fiscal (Costo)', 'AID Generado'],
+        [bookVal, taxBase, aid],
+        [getToken('--data-1'), getToken('--data-2'), getToken('--data-3')]
+      );
+      schedulePersist();
+    }
+
+    function renderBarComparisonChart(key, canvasId, labels, values, colors) {
+      const ctxEl = document.getElementById(canvasId);
+      if (!ctxEl || typeof Chart === 'undefined') return;
+      if (charts[key]) charts[key].destroy();
+
+      charts[key] = new Chart(ctxEl, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Millones COP',
+            data: values.map(function (v) { return Number(v.toFixed(2)); }),
+            backgroundColor: colors,
+            borderRadius: 2,
+            barPercentage: 0.55
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: getToken('--outline-variant') },
+              ticks: { font: { family: 'Geist Mono', size: 11 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' } }
+            }
+          }
+        }
+      });
+    }
+
+    /* =========================================================================
+       5. CALCULADORA DIDÁCTICA DE TASA EFECTIVA DE IMPUESTO (ETR)
+       ========================================================================= */
+    const ETR_PRESETS = {
+      gastos_nd: { ucai: 2000, nomRate: 35, permAdd: 260, permSub: 40, tempNet: 150, goAmount: 0 },
+      rentas_exentas: { ucai: 2000, nomRate: 35, permAdd: 50, permSub: 450, tempNet: 100, goAmount: 0 },
+      temporarias_puras: { ucai: 2000, nomRate: 35, permAdd: 0, permSub: 0, tempNet: 400, goAmount: 0 },
+      ganancia_ocasional: { ucai: 2000, nomRate: 35, permAdd: 60, permSub: 0, tempNet: 0, goAmount: 500 }
+    };
+
+    function applyEtrPreset(presetKey) {
+      const p = ETR_PRESETS[presetKey];
+      if (!p) return;
+      appState.etr = JSON.parse(JSON.stringify(p));
+      const ids = {
+        'etr-ucai': p.ucai,
+        'etr-nom-rate': p.nomRate,
+        'etr-perm-add': p.permAdd,
+        'etr-perm-sub': p.permSub,
+        'etr-temp-net': p.tempNet,
+        'etr-go-amount': p.goAmount
+      };
+      Object.keys(ids).forEach(function (id) {
+        const el = document.getElementById(id);
+        if (el) el.value = ids[id];
+      });
+      updateEtrCalculator();
+    }
+
+    function updateEtrCalculator() {
+      const ucaiEl = document.getElementById('etr-ucai');
+      const rateEl = document.getElementById('etr-nom-rate');
+      const addEl = document.getElementById('etr-perm-add');
+      const subEl = document.getElementById('etr-perm-sub');
+      const tempEl = document.getElementById('etr-temp-net');
+      const goEl = document.getElementById('etr-go-amount');
+      const errUcai = document.getElementById('err-etr-ucai');
+      const errRate = document.getElementById('err-etr-rate');
+      if (!ucaiEl || !rateEl || !addEl || !subEl || !tempEl || !goEl) return;
+
+      const ucai = parseFloat(ucaiEl.value);
+      const nomRate = parseFloat(rateEl.value);
+      const permAdd = Math.max(0, parseFloat(addEl.value) || 0);
+      const permSub = Math.max(0, parseFloat(subEl.value) || 0);
+      const tempNet = parseFloat(tempEl.value) || 0;
+      const goAmount = Math.max(0, Math.min(isNaN(ucai) ? 0 : ucai, parseFloat(goEl.value) || 0));
+
+      let valid = true;
+      if (isNaN(ucai) || ucai <= 0) {
+        if (errUcai) errUcai.textContent = `Ingresa una UCAI positiva mayor a cero para calcular la ETR.`;
+        ucaiEl.classList.add('is-invalid');
+        valid = false;
+      } else {
+        if (errUcai) errUcai.textContent = ``;
+        ucaiEl.classList.remove('is-invalid');
+      }
+
+      if (isNaN(nomRate) || nomRate <= 0 || nomRate > 60) {
+        if (errRate) errRate.textContent = `La tarifa nominal debe estar entre 1% y 60%.`;
+        rateEl.classList.add('is-invalid');
+        valid = false;
+      } else {
+        if (errRate) errRate.textContent = ``;
+        rateEl.classList.remove('is-invalid');
+      }
+      if (!valid) return;
+
+      appState.etr = { ucai: ucai, nomRate: nomRate, permAdd: permAdd, permSub: permSub, tempNet: tempNet, goAmount: goAmount };
+
+      const r = nomRate / 100;
+      const goRate = 0.15; // Ganancia ocasional en Colombia 15%
+      const nomTax = ucai * r;
+      const effPermAdd = permAdd * r;
+      const effPermSub = -permSub * r;
+      const effGoDiff = -goAmount * (r - goRate); // menor tributación por tarifa diferencial 15% vs nominal
+
+      const rentaOrdinaria = Math.max(0, (ucai - goAmount) + permAdd - permSub + tempNet);
+      const currentTax = (rentaOrdinaria * r) + (goAmount * goRate);
+      // Impuesto diferido del periodo compensa la diferencia temporaria neta (si tempNet > 0, se pagó corriente anticipado -> ingreso por AID que reduce gasto)
+      const deferredTax = -tempNet * r;
+      const totalTax = Math.max(0, currentTax + deferredTax);
+      const etrPct = (totalTax / ucai) * 100;
+      const deltaPP = etrPct - nomRate;
+
+      const outPct = document.getElementById('etr-out-pct');
+      const outDelta = document.getElementById('etr-out-delta');
+      const outCur = document.getElementById('etr-out-current');
+      const outBase = document.getElementById('etr-out-taxbase');
+      const outDef = document.getElementById('etr-out-deferred');
+      const outTotal = document.getElementById('etr-out-total');
+      const tBody = document.getElementById('etr-table-body');
+
+      if (outPct) outPct.textContent = formatPct(etrPct);
+      if (outDelta) {
+        const sign = deltaPP > 0 ? '+' : '';
+        outDelta.textContent = `${sign}${deltaPP.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} pp frente a tarifa nominal (${formatPct(nomRate)})`;
+      }
+      if (outCur) outCur.textContent = formatCOP(currentTax);
+      if (outBase) outBase.textContent = `Renta ordinaria: ${formatCOP(rentaOrdinaria)}`;
+      if (outDef) outDef.textContent = formatCOP(deferredTax);
+      if (outTotal) outTotal.innerHTML = `Gasto total NIC 12: <strong>${formatCOP(totalTax)}</strong>`;
+
+      if (tBody) {
+        tBody.innerHTML = `
+          <tr>
+            <td>Impuesto teórico a tarifa nominal (${formatPct(nomRate)} sobre ${formatCOP(ucai)})</td>
+            <td class="num-col">${formatCOP(nomTax)}</td>
+            <td class="num-col">${formatPct(nomRate)}</td>
+          </tr>
+          <tr>
+            <td>(+) Efecto fiscal gastos no deducibles (${formatCOP(permAdd)})</td>
+            <td class="num-col">${formatCOP(effPermAdd)}</td>
+            <td class="num-col">${formatPct((effPermAdd / ucai) * 100)}</td>
+          </tr>
+          <tr>
+            <td>(−) Efecto fiscal ingresos no gravados / exentos (${formatCOP(permSub)})</td>
+            <td class="num-col">${formatCOP(effPermSub)}</td>
+            <td class="num-col">${formatPct((effPermSub / ucai) * 100)}</td>
+          </tr>
+          <tr>
+            <td>(−) Diferencial tarifa ganancia ocasional 15% (${formatCOP(goAmount)})</td>
+            <td class="num-col">${formatCOP(effGoDiff)}</td>
+            <td class="num-col">${formatPct((effGoDiff / ucai) * 100)}</td>
+          </tr>
+          <tr class="row-total">
+            <td>Gasto total por impuesto a las ganancias (Corriente + Diferido)</td>
+            <td class="num-col">${formatCOP(totalTax)}</td>
+            <td class="num-col">${formatPct(etrPct)}</td>
+          </tr>
+          <tr>
+            <td>Nota de desglose: Impuesto Corriente (${formatCOP(currentTax)}) + Impuesto Diferido (${formatCOP(deferredTax)})</td>
+            <td class="num-col" colspan="2">Las dif. temporarias (${formatCOP(tempNet)}) son neutras en ETR</td>
+          </tr>
+        `;
+      }
+
+      renderEtrChart(nomRate, (effPermAdd / ucai) * 100, (effPermSub / ucai) * 100, (effGoDiff / ucai) * 100, etrPct);
+      schedulePersist();
+    }
+
+    function renderEtrChart(nomRate, addPP, subPP, goPP, etrPct) {
+      const ctxEl = document.getElementById('chart-etr');
+      if (!ctxEl || typeof Chart === 'undefined') return;
+      if (charts.etr) charts.etr.destroy();
+
+      charts.etr = new Chart(ctxEl, {
+        type: 'bar',
+        data: {
+          labels: ['Tarifa Nominal', '+ Gastos No Ded.', '− Ing. Exentos', '− Tarifa Dif. G.O.', 'Tasa Efectiva (ETR)'],
+          datasets: [{
+            label: 'Puntos Porcentuales (%)',
+            data: [
+              Number(nomRate.toFixed(2)),
+              Number(addPP.toFixed(2)),
+              Number(subPP.toFixed(2)),
+              Number(goPP.toFixed(2)),
+              Number(etrPct.toFixed(2))
+            ],
+            backgroundColor: [
+              getToken('--data-context'),
+              getToken('--data-4'),
+              getToken('--data-3'),
+              getToken('--data-2'),
+              getToken('--data-1')
+            ],
+            borderRadius: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              grid: { color: getToken('--outline-variant') },
+              ticks: {
+                font: { family: 'Geist Mono', size: 11 },
+                callback: function (v) { return `${v}%`; }
+              }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { family: 'Plus Jakarta Sans', size: 11, weight: '600' } }
+            }
+          }
+        }
+      });
+    }
+
+    /* =========================================================================
+       6. PRUEBA DE RECUPERABILIDAD DE ACTIVOS POR IMPUESTO DIFERIDO (AID)
+       ========================================================================= */
+    function updateRecoverability() {
+      const fwEl = document.getElementById('rec-framework');
+      const lossEl = document.getElementById('rec-losses');
+      const dtdEl = document.getElementById('rec-dtd');
+      const dtiEl = document.getElementById('rec-dti');
+      const rateEl = document.getElementById('rec-rate');
+      const yEls = [1, 2, 3, 4, 5].map(function (i) { return document.getElementById(`rec-y${i}`); });
+
+      if (!fwEl || !lossEl || !dtdEl || !dtiEl || !rateEl || yEls.some(function (x) { return !x; })) return;
+
+      const framework = fwEl.value;
+      const losses = Math.max(0, parseFloat(lossEl.value) || 0);
+      const dtd = Math.max(0, parseFloat(dtdEl.value) || 0);
+      const dti = Math.max(0, parseFloat(dtiEl.value) || 0);
+      const rate = Math.min(60, Math.max(1, parseFloat(rateEl.value) || 35));
+      const proj = yEls.map(function (el) { return Math.max(0, parseFloat(el.value) || 0); });
+
+      appState.rec = {
+        framework: framework, losses: losses, dtd: dtd, dti: dti, rate: rate,
+        y1: proj[0], y2: proj[1], y3: proj[2], y4: proj[3], y5: proj[4]
+      };
+
+      const totalBase = losses + dtd;
+      const sumProj = proj.reduce(function (a, b) { return a + b; }, 0);
+      const totalCapacity = dti + sumProj;
+      const recoverableBase = Math.min(totalBase, totalCapacity);
+      const unrecoverableBase = Math.max(0, totalBase - recoverableBase);
+
+      const r = rate / 100;
+      const grossAid = totalBase * r;
+      const recAid = recoverableBase * r;
+      const unrecAid = unrecoverableBase * r;
+      const covPct = totalBase > 0 ? (recoverableBase / totalBase) * 100 : 100;
+
+      // Year-by-year absorption simulation
+      let remaining = totalBase;
+      const dtiAbsorbed = Math.min(remaining, dti);
+      remaining -= dtiAbsorbed;
+
+      const yearlyAbsorbed = [];
+      const yearlyRemaining = [];
+      proj.forEach(function (p) {
+        const abs = Math.min(remaining, p);
+        remaining -= abs;
+        yearlyAbsorbed.push(abs);
+        yearlyRemaining.push(remaining);
+      });
+
+      const outGross = document.getElementById('rec-out-gross');
+      const outBaseTot = document.getElementById('rec-out-base-total');
+      const outRec = document.getElementById('rec-out-rec');
+      const outCov = document.getElementById('rec-out-cov');
+      const outUnrecLbl = document.getElementById('rec-out-unrec-label');
+      const outUnrec = document.getElementById('rec-out-unrec');
+      const outUnrecBase = document.getElementById('rec-out-unrec-base');
+      const statusChip = document.getElementById('rec-status-chip');
+      const banner = document.getElementById('rec-diagnosis-banner');
+      const diagTitle = document.getElementById('rec-diagnosis-title');
+      const diagText = document.getElementById('rec-diagnosis-text');
+      const noteText = document.getElementById('rec-note-text');
+
+      if (outGross) outGross.textContent = formatCOP(grossAid);
+      if (outBaseTot) outBaseTot.textContent = `Base deducible total: ${formatCOP(totalBase)}`;
+      if (outRec) outRec.textContent = formatCOP(recAid);
+      if (outCov) outCov.textContent = `Cobertura soportada: ${formatPct(covPct)}`;
+      if (outUnrecLbl) {
+        outUnrecLbl.textContent = framework === 'sme'
+          ? `Corrección Valorativa (Sec. 29 PYMES)`
+          : `AID No Reconocido (NIC 12)`;
+      }
+      if (outUnrec) outUnrec.textContent = formatCOP(unrecAid);
+      if (outUnrecBase) outUnrecBase.textContent = `Base sin soporte: ${formatCOP(unrecoverableBase)}`;
+
+      if (banner && diagTitle && diagText && statusChip) {
+        if (totalBase === 0) {
+          banner.className = `status-banner`;
+          statusChip.className = `tag-chip tag-info`;
+          statusChip.textContent = `Sin partidas por evaluar`;
+          diagTitle.textContent = `No existen pérdidas fiscales ni DTD acumuladas`;
+          diagText.textContent = `Ingresa un saldo de pérdidas fiscales trasladables o diferencias temporarias deducibles para ejecutar la prueba de probabilidad.`;
+        } else if (unrecoverableBase === 0) {
+          banner.className = `status-banner is-positive`;
+          statusChip.className = `tag-chip tag-positive`;
+          statusChip.textContent = `Recuperabilidad Total (100%)`;
+          diagTitle.textContent = `Evidencia objetiva suficiente: se reconoce el 100% del AID (${formatCOP(recAid)})`;
+          diagText.textContent = `La reversión de DTI (${formatCOP(dti)}) sumada a las rentas proyectadas (${formatCOP(sumProj)}) cubre íntegramente la base deducible de ${formatCOP(totalBase)}.`;
+        } else if (recoverableBase > 0) {
+          banner.className = `status-banner is-warning`;
+          statusChip.className = `tag-chip`;
+          statusChip.textContent = `Recuperabilidad Parcial (${formatPct(covPct)})`;
+          diagTitle.textContent = framework === 'sme'
+            ? `Se reconoce AID bruto de ${formatCOP(grossAid)} menos corrección valorativa de ${formatCOP(unrecAid)}`
+            : `Reconocimiento limitado a ${formatCOP(recAid)} (Principio de Prudencia NIC 12)`;
+          diagText.textContent = `Con base en las proyecciones aprobadas y las DTI existentes, la entidad soporta ${formatCOP(recoverableBase)} de base deducible. La fracción excedente (${formatCOP(unrecoverableBase)}) no cumple el criterio de probabilidad.`;
+        } else {
+          banner.className = `status-banner is-error`;
+          statusChip.className = `tag-chip tag-error`;
+          statusChip.textContent = `Sin soporte de recuperabilidad`;
+          diagTitle.textContent = `No procede el reconocimiento neto de AID en el balance`;
+          diagText.textContent = `No existen DTI reversibles ni ganancias fiscales futuras proyectadas que permitan compensar las pérdidas o DTD acumuladas.`;
+        }
+      }
+
+      if (noteText) {
+        if (framework === 'sme') {
+          noteText.textContent = `Bajo la Sección 29 (NIIF para PYMES), la entidad registra el 100% del AID por ${formatCOP(grossAid)} y constituye simultáneamente una cuenta de corrección valorativa por ${formatCOP(unrecAid)}, presentando un valor neto realizable en libros de ${formatCOP(recAid)}.`;
+        } else {
+          noteText.textContent = unrecoverableBase > 0
+            ? `De conformidad con el párrafo 34 y 81(e) de la NIC 12, la entidad reconoce un AID neto de ${formatCOP(recAid)} respaldado en proyecciones financieras a 5 años y DTI reversibles. No se ha reconocido activo por impuesto diferido sobre pérdidas/DTD de ${formatCOP(unrecoverableBase)} (efecto fiscal no reconocido de ${formatCOP(unrecAid)}), monto que se revela en notas y se reevalúa en cada cierre.`
+            : `Conforme a la NIC 12, la entidad ha reconocido el 100% del AID (${formatCOP(recAid)}), sustentado en evidencia objetiva de ganancias fiscales futuras y reversión de DTI existentes.`;
+        }
+      }
+
+      renderRecChart(dtiAbsorbed, yearlyAbsorbed, yearlyRemaining);
+      schedulePersist();
+    }
+
+    function renderRecChart(dtiAbsorbed, yearlyAbsorbed, yearlyRemaining) {
+      const ctxEl = document.getElementById('chart-rec');
+      if (!ctxEl || typeof Chart === 'undefined') return;
+      if (charts.rec) charts.rec.destroy();
+
+      const labels = ['Rev. DTI', 'Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'];
+      const absorbed = [dtiAbsorbed].concat(yearlyAbsorbed);
+      const rem = [yearlyAbsorbed.reduce(function (a, b) { return a + b; }, yearlyRemaining[yearlyRemaining.length - 1] || 0)].concat(yearlyRemaining);
+
+      charts.rec = new Chart(ctxEl, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Base Deducible Compensada (M COP)',
+              data: absorbed.map(function (v) { return Number(v.toFixed(2)); }),
+              backgroundColor: getToken('--data-3'),
+              borderRadius: 2
+            },
+            {
+              label: 'Saldo Remanente sin Absorber (M COP)',
+              data: rem.map(function (v) { return Number(v.toFixed(2)); }),
+              backgroundColor: getToken('--data-context'),
+              borderRadius: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { family: 'Plus Jakarta Sans', size: 12 } } }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: getToken('--outline-variant') },
+              ticks: { font: { family: 'Geist Mono', size: 11 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { family: 'Geist Mono', size: 11 } }
+            }
+          }
+        }
+      });
+    }
+
+    /* =========================================================================
+       7. SINCRONIZACIÓN DE ESTADO Y ARRANQUE
+       ========================================================================= */
+    function setVal(id, val) {
+      const el = document.getElementById(id);
+      if (el && val !== undefined && val !== null) el.value = val;
+    }
+
+    function applyStateToInputs() {
+      // Matrix
+      setVal('matrix-type', appState.matrix.type);
+      setVal('matrix-book', appState.matrix.book);
+      setVal('matrix-tax', appState.matrix.tax);
+      setVal('matrix-rate', appState.matrix.rate);
+
+      // NIIF 9
+      setVal('n9-gross-range', appState.niif9.gross);
+      setVal('n9-gross-num', appState.niif9.gross);
+      setVal('n9-ifrs-pct-range', appState.niif9.ifrsPct);
+      setVal('n9-ifrs-pct-num', appState.niif9.ifrsPct);
+      setVal('n9-tax-pct-range', appState.niif9.taxPct);
+      setVal('n9-tax-pct-num', appState.niif9.taxPct);
+      setVal('n9-rate-range', appState.niif9.rate);
+      setVal('n9-rate-num', appState.niif9.rate);
+
+      // NIIF 16
+      setVal('n16-canon-range', appState.niif16.canon);
+      setVal('n16-canon-num', appState.niif16.canon);
+      setVal('n16-years-range', appState.niif16.years);
+      setVal('n16-years-num', appState.niif16.years);
+      setVal('n16-disc-range', appState.niif16.disc);
+      setVal('n16-disc-num', appState.niif16.disc);
+      setVal('n16-tax-range', appState.niif16.tax);
+      setVal('n16-tax-num', appState.niif16.tax);
+
+      // VNR
+      setVal('vnr-cost-range', appState.vnr.cost);
+      setVal('vnr-cost-num', appState.vnr.cost);
+      setVal('vnr-val-range', appState.vnr.val);
+      setVal('vnr-val-num', appState.vnr.val);
+      setVal('vnr-tax-range', appState.vnr.tax);
+      setVal('vnr-tax-num', appState.vnr.tax);
+
+      // ETR
+      setVal('etr-ucai', appState.etr.ucai);
+      setVal('etr-nom-rate', appState.etr.nomRate);
+      setVal('etr-perm-add', appState.etr.permAdd);
+      setVal('etr-perm-sub', appState.etr.permSub);
+      setVal('etr-temp-net', appState.etr.tempNet);
+      setVal('etr-go-amount', appState.etr.goAmount);
+
+      // Recoverability
+      setVal('rec-framework', appState.rec.framework);
+      setVal('rec-losses', appState.rec.losses);
+      setVal('rec-dtd', appState.rec.dtd);
+      setVal('rec-dti', appState.rec.dti);
+      setVal('rec-rate', appState.rec.rate);
+      setVal('rec-y1', appState.rec.y1);
+      setVal('rec-y2', appState.rec.y2);
+      setVal('rec-y3', appState.rec.y3);
+      setVal('rec-y4', appState.rec.y4);
+      setVal('rec-y5', appState.rec.y5);
+    }
+
+    function renderAllViews() {
+      updateBalanceMatrix();
+      selectConciliationStep(appState.activeConciliationStep || 0);
+      selectSimCase(appState.activeSimCase || 'niif9');
+      updateEtrCalculator();
+      updateRecoverability();
+    }
+
+    function initScrollReveals() {
+      const items = document.querySelectorAll('.reveal-item');
+      if (!('IntersectionObserver' in window)) return;
+      items.forEach(function (el) { el.classList.add('will-animate'); });
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            entry.target.classList.remove('will-animate');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      items.forEach(function (el) { observer.observe(el); });
+    }
+
+    window.addEventListener('DOMContentLoaded', async function () {
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
+      initScrollReveals();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === 'object') {
+            appState = Object.assign({}, JSON.parse(JSON.stringify(DEFAULT_STATE)), saved);
+          }
+        } catch (e) {
+          // fallback to defaults
+        }
+      }
+
+      applyStateToInputs();
+      renderAllViews();
+
+      const statusEl = document.getElementById('persistence-status');
+      if (statusEl) statusEl.textContent = `Listo`;
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    });
+  </script>
+</body>
+</html>

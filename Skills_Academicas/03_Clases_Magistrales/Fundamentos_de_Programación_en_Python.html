@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="bauhaus">
+  <title>Fundamentos de Python desde Cero — Guía Interactiva</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Bauhaus style tokens */
+      --background: #f5f0e8;
+      --surface-container-low: #f2ede5;
+      --surface-container: #eee9e0;
+      --surface-container-high: #e8e3da;
+
+      --on-surface: #1a1a1a;
+      --on-surface-variant: #4a4a4a;
+
+      --outline: #1a1a1a;
+      --outline-variant: #d0cbc3;
+
+      --primary: #1a1a1a;
+      --on-primary: #ffffff;
+      --primary-container: #ffcc00;
+      --on-primary-container: #1a1a1a;
+      --secondary: #e63b2e;
+      --tertiary: #0055ff;
+      --on-tertiary: #ffffff;
+      --error: #cc0000;
+      --on-error: #ffffff;
+
+      --data-1: #e63b2e;
+      --data-2: #0055ff;
+      --data-3: #1a1a1a;
+      --data-4: #9a7300;
+      --data-context: #b5afa5;
+
+      --font-headline: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-label: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      --border-thick: 3px solid var(--outline);
+      --border-medium: 2px solid var(--outline);
+      --offset-shadow: 5px 5px 0 var(--outline);
+      --offset-shadow-sm: 3px 3px 0 var(--outline);
+      --rule-heavy: 6px solid var(--outline);
+
+      /* 3. Shared semantic, scale, spacing, motion tokens */
+      --positive: #137333;
+      --on-positive: #ffffff;
+      --warning: #9a7300;
+      --focus: #0055ff;
+
+      --display-size: clamp(2.65rem, 1.5rem + 4.2vw, 5.25rem);
+      --headline-size: clamp(1.85rem, 1.2rem + 2.1vw, 2.75rem);
+      --subhead-size: clamp(1.2rem, 1.05rem + 0.55vw, 1.45rem);
+      --body-size: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem);
+
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 5.5rem;
+
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 65ch;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    .title {
+      font-size: var(--display-size);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      max-width: 16ch;
+    }
+    .title mark {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      padding-inline: var(--space-xs);
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+
+    .section-title {
+      font-size: var(--headline-size);
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+      margin-top: var(--space-sm);
+      margin-bottom: var(--space-md);
+      max-width: 24ch;
+    }
+
+    .subhead {
+      font-size: var(--subhead-size);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-sm);
+    }
+
+    .lede {
+      font-size: clamp(1.125rem, 1.02rem + 0.45vw, 1.35rem);
+      line-height: 1.45;
+      color: var(--on-surface-variant);
+      max-width: 58ch;
+      margin-top: var(--space-md);
+    }
+
+    .kicker {
+      display: inline-block;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-xs) var(--space-sm);
+    }
+    .kicker--yellow {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border: var(--border-medium);
+    }
+    .kicker--blue {
+      background: var(--tertiary);
+      color: var(--on-tertiary);
+    }
+
+    .label-caps {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface-variant);
+    }
+
+    /* Inline code & pre blocks */
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      padding: 0.1em 0.35em;
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+    }
+
+    .code-console {
+      background: var(--primary);
+      color: var(--on-primary);
+      border: var(--border-thick);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      overflow-x: auto;
+    }
+    .code-console code {
+      background: transparent;
+      color: var(--on-primary);
+      border: 0;
+      padding: 0;
+      font-size: inherit;
+    }
+    .code-line {
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .code-muted {
+      color: var(--outline-variant);
+    }
+    .code-tag {
+      display: inline-block;
+      font-family: var(--font-label);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      padding: 0.1rem 0.45rem;
+      margin-bottom: var(--space-sm);
+    }
+
+    /* Blocks & structural rules */
+    .block {
+      border: var(--border-thick);
+      border-radius: var(--rounded);
+      box-shadow: var(--offset-shadow);
+      background: var(--surface-container-low);
+      padding: var(--space-lg);
+    }
+    .block--paper {
+      background: var(--background);
+    }
+    .block--yellow {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .block--blue {
+      background: var(--tertiary);
+      color: var(--on-tertiary);
+    }
+    .block--blue h3,
+    .block--blue p,
+    .block--blue .label-caps {
+      color: var(--on-tertiary);
+    }
+
+    .divider {
+      border: 0;
+      border-top: var(--rule-heavy);
+      margin-block: var(--space-lg);
+      width: 100%;
+    }
+
+    .section-open {
+      --accent: var(--tertiary);
+      border-top: var(--space-sm) solid var(--accent);
+      padding-top: var(--space-lg);
+      margin-top: var(--space-md);
+    }
+    .section-open--blue { --accent: var(--tertiary); }
+    .section-open--yellow { --accent: var(--primary-container); }
+    .section-open--red { --accent: var(--secondary); }
+    .section-open--black { --accent: var(--primary); }
+
+    /* Hero & layout grids */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .asymmetric-2-1 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .asymmetric-1-1 {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+
+    .figure-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-lg);
+      border-top: var(--border-thick);
+      padding-top: var(--space-lg);
+    }
+
+    .key-figure-val {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      margin: var(--space-xs) 0;
+    }
+
+    /* Navigation roadmap strip */
+    .roadmap-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .roadmap-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      color: var(--on-surface);
+      background: var(--surface-container-low);
+      border: var(--border-medium);
+      border-radius: var(--rounded);
+      box-shadow: var(--offset-shadow-sm);
+      transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .roadmap-link:hover {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      transform: translate(-2px, -2px);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: var(--border-thick);
+      border-radius: var(--rounded);
+      box-shadow: var(--offset-shadow-sm);
+      cursor: pointer;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .btn--primary {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn--blue {
+      background: var(--tertiary);
+      color: var(--on-tertiary);
+    }
+    .btn:hover:not(:disabled) {
+      background: var(--primary);
+      color: var(--on-primary);
+      transform: translate(-2px, -2px);
+      box-shadow: var(--offset-shadow);
+    }
+    .btn:active:not(:disabled) {
+      transform: translate(3px, 3px);
+      box-shadow: none;
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .btn.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    /* Form inputs & labels */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface);
+    }
+    .input-bauhaus {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-sm);
+      background: transparent;
+      color: var(--on-surface);
+      border: 0;
+      border-bottom: var(--border-thick);
+      border-radius: 0;
+      width: 100%;
+    }
+    .input-bauhaus:focus-visible {
+      border-bottom-color: var(--tertiary);
+    }
+    .select-bauhaus {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-lg) var(--space-xs) var(--space-sm);
+      background: var(--background);
+      color: var(--on-surface);
+      border: var(--border-thick);
+      border-radius: var(--rounded);
+      width: 100%;
+    }
+    .input-row-aligned {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-sm);
+      align-items: end;
+    }
+
+    input[type="range"].range-bauhaus {
+      width: 100%;
+      accent-color: var(--tertiary);
+      min-height: 44px;
+      cursor: pointer;
+    }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: var(--border-medium);
+      border-radius: var(--rounded);
+      padding: 0.15rem 0.5rem;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .tag--blue {
+      background: var(--tertiary);
+      color: var(--on-tertiary);
+    }
+    .tag--black {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border: var(--border-thick);
+      background: var(--background);
+    }
+    table.bauhaus-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    .bauhaus-table th {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--border-thick);
+    }
+    .bauhaus-table td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+    .bauhaus-table tr:last-child td {
+      border-bottom: 0;
+    }
+    .num-cell {
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    /* Quizzes / Preguntas rápidas */
+    .quiz-box {
+      border: var(--border-thick);
+      background: var(--background);
+      padding: var(--space-lg);
+      box-shadow: var(--offset-shadow);
+    }
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .quiz-opt {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      text-align: left;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: var(--border-medium);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+    }
+    .quiz-opt:hover {
+      background: var(--surface-container-high);
+      transform: translate(-1px, -1px);
+    }
+    .quiz-opt.is-correct {
+      background: var(--positive);
+      color: var(--on-positive);
+      border-color: var(--outline);
+    }
+    .quiz-opt.is-wrong {
+      background: var(--error);
+      color: var(--on-error);
+      border-color: var(--outline);
+    }
+    .quiz-feedback {
+      margin-top: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      border-left: 5px solid var(--primary);
+      background: var(--surface-container);
+      font-size: 0.95rem;
+      display: none;
+    }
+    .quiz-feedback.is-visible { display: block; }
+    .quiz-feedback.is-ok { border-left-color: var(--positive); }
+    .quiz-feedback.is-err { border-left-color: var(--error); }
+
+    /* Interactive String Grid */
+    .char-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-block: var(--space-md);
+    }
+    .char-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 44px;
+      border: var(--border-medium);
+      background: var(--background);
+      cursor: pointer;
+      padding: 0;
+      transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+    }
+    .char-cell:hover { transform: translateY(-2px); }
+    .char-cell.is-selected {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      box-shadow: var(--offset-shadow-sm);
+    }
+    .char-cell.is-sliced {
+      background: var(--tertiary);
+      color: var(--on-tertiary);
+    }
+    .char-cell.is-stop-edge {
+      border-style: dashed;
+    }
+    .char-glyph {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.15rem;
+      padding: var(--space-xs) var(--space-sm);
+    }
+    .char-idx {
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      font-weight: 700;
+      width: 100%;
+      text-align: center;
+      padding: 2px 4px;
+      border-top: 1px solid var(--outline);
+      background: var(--surface-container-high);
+      color: var(--on-surface);
+    }
+
+    /* Status banner */
+    .status-strip {
+      padding: var(--space-sm) var(--space-md);
+      border: var(--border-medium);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .status-strip--ok {
+      border-left: 6px solid var(--positive);
+    }
+    .status-strip--err {
+      border-left: 6px solid var(--error);
+      color: var(--error);
+      font-weight: 600;
+    }
+    .status-strip--yellow {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+
+    /* Conditional visualizer branches */
+    .branch-step {
+      padding: var(--space-sm) var(--space-md);
+      border: var(--border-medium);
+      background: var(--background);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      margin-bottom: var(--space-sm);
+      transition: background-color var(--dur-short) var(--ease-out);
+    }
+    .branch-step.is-taken {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      box-shadow: var(--offset-shadow-sm);
+    }
+    .branch-step.is-skipped {
+      opacity: 0.55;
+    }
+
+    /* Container queries for lab cards */
+    .lab-wrapper { container-type: inline-size; }
+    .lab-split {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+    @container (min-width: 620px) {
+      .lab-split {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+        align-items: start;
+      }
+    }
+
+    /* SVG tree container */
+    .svg-frame {
+      border: var(--border-thick);
+      background: var(--background);
+      padding: var(--space-md);
+      overflow-x: auto;
+      min-height: 260px;
+    }
+
+    /* Progressive disclosure */
+    details.bauhaus-details {
+      border: var(--border-medium);
+      background: var(--surface-container);
+      padding: var(--space-sm) var(--space-md);
+    }
+    details.bauhaus-details summary {
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    details.bauhaus-details[open] summary {
+      margin-bottom: var(--space-sm);
+      border-bottom: 2px solid var(--outline);
+      padding-bottom: var(--space-xs);
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal.is-pending {
+      opacity: 0;
+      transform: translateX(-14px);
+    }
+    .reveal.is-shown {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+    }
+
+    /* Mobile rules */
+    @media (max-width: 780px) {
+      .hero-grid,
+      .asymmetric-2-1,
+      .asymmetric-1-1,
+      .figure-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .page-grid {
+        padding: var(--space-md);
+        gap: var(--space-lg);
+      }
+      .block { padding: var(--space-md); }
+      .input-row-aligned { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-grid">
+    <!-- HERO -->
+    <header class="hero-grid">
+      <div>
+        <span class="kicker">Guía interactiva del curso</span>
+        <h1 class="title" style="margin-top: var(--space-sm);">
+          Fundamentos de <mark>Python</mark> desde cero
+        </h1>
+        <p class="lede">
+          Un recorrido estructurado y práctico para aprender a pensar como programador: desde tu primera línea en IDLE hasta ciclos, recursión, archivos, manejo de excepciones y programación orientada a objetos.
+        </p>
+        <nav class="roadmap-nav" aria-label="Mapa de módulos del curso">
+          <a class="roadmap-link" href="#mod-1">01. Entorno e IDLE</a>
+          <a class="roadmap-link" href="#mod-2">02. Variables y Tipos</a>
+          <a class="roadmap-link" href="#mod-3">03. Cadenas y Slicing</a>
+          <a class="roadmap-link" href="#mod-4">04. Operadores y Condicionales</a>
+          <a class="roadmap-link" href="#mod-5">05. Listas, Tuplas y Diccionarios</a>
+          <a class="roadmap-link" href="#mod-6">06. Documentación y Ciclos</a>
+          <a class="roadmap-link" href="#mod-7">07. Funciones y Recursión</a>
+          <a class="roadmap-link" href="#mod-8">08. Archivos, Excepciones y POO</a>
+        </nav>
+      </div>
+
+      <aside class="block block--yellow">
+        <span class="label-caps" style="color: var(--on-primary-container);">Idea rectora</span>
+        <h2 class="subhead" style="margin-top: var(--space-xs);">«Todo el mundo debería aprender a programar porque te enseña a pensar.»</h2>
+        <p style="font-size: 0.95rem;">
+          Steve Jobs formuló esta idea en 1995: programar consiste en traducir un problema real en una secuencia ordenada de pasos que la computadora ejecuta de forma automatizada.
+        </p>
+        <div style="margin-top: var(--space-md); padding-top: var(--space-sm); border-top: 2px solid var(--outline);">
+          <span class="label-caps" style="color: var(--on-primary-container);">Áreas de impacto</span>
+          <p style="font-size: 0.9rem; margin-top: var(--space-xs);">
+            Ciencia de datos, inteligencia artificial, aprendizaje automático, desarrollo web, videojuegos, medicina, biología y astronomía.
+          </p>
+        </div>
+      </aside>
+    </header>
+
+    <section class="figure-grid" aria-label="Resumen estructural del curso">
+      <div class="block block--paper">
+        <span class="label-caps">Arquitectura</span>
+        <div class="key-figure-val">8 bloques</div>
+        <p style="font-size: 0.92rem; color: var(--on-surface-variant);">
+          Secuencia pedagógica progresiva: sintaxis base, control de flujo, colecciones, modularidad y objetos.
+        </p>
+      </div>
+      <div class="block block--paper">
+        <span class="label-caps">Estructuras nativas</span>
+        <div class="key-figure-val">3 tipos</div>
+        <p style="font-size: 0.92rem; color: var(--on-surface-variant);">
+          Listas mutables <code>[]</code>, tuplas inmutables <code>()</code> y diccionarios clave-valor <code>{}</code>.
+        </p>
+      </div>
+      <div class="block block--blue">
+        <span class="label-caps">Laboratorios en vivo</span>
+        <div class="key-figure-val">7 prácticas</div>
+        <p style="font-size: 0.92rem;">
+          Prueba variables, rebanado de cadenas, condicionales, colecciones, ciclos, Fibonacci recursivo y cuentas bancarias.
+        </p>
+      </div>
+    </section>
+
+    <!-- MODULO 1 -->
+    <section id="mod-1" class="section-open section-open--blue reveal">
+      <span class="kicker kicker--blue">Bloque 01 — Fundamentos e IDLE</span>
+      <h2 class="section-title">Un programa es una secuencia de instrucciones escritas con reglas precisas</h2>
+
+      <div class="asymmetric-2-1">
+        <div>
+          <p>
+            Un <strong>lenguaje de programación</strong> es un lenguaje formal con reglas bien definidas que nos permite comunicarnos con la computadora. A diferencia del habla cotidiana, cada instrucción debe seguir su sintaxis exacta; esa serie de pasos guardada en un archivo conforma un <strong>programa</strong>.
+          </p>
+          <p>
+            Python destaca por su sintaxis clara, cercana al inglés cotidiano y altamente pedagógica. Para empezar, se descarga desde la web oficial <code>python.org</code> en la sección <em>Downloads</em> (teniendo en cuenta que Python 3.9 en adelante no es compatible con Windows 7 o versiones anteriores). Durante el asistente, se recomienda la instalación por defecto para todos los usuarios; marcar la casilla de línea de comandos es opcional.
+          </p>
+          <div class="block block--paper" style="margin-top: var(--space-md);">
+            <h3 class="subhead">Las dos caras de IDLE</h3>
+            <p style="font-size: 0.95rem;">
+              Al instalar Python se incluye <strong>IDLE</strong>, un entorno integrado de programación que reúne tres capacidades esenciales: escribir archivos, editarlos y ejecutar código.
+            </p>
+            <div class="asymmetric-1-1" style="margin-top: var(--space-sm);">
+              <div style="border-top: var(--border-medium); padding-top: var(--space-sm);">
+                <span class="tag tag--black">Shell interactivo</span>
+                <p style="font-size: 0.9rem; margin-top: var(--space-xs);">
+                  Identificado por las tres flechas <code>&gt;&gt;&gt;</code>. Evalúa una instrucción al instante tras pulsar Enter (por ejemplo <code>5 + 5</code> devuelve <code>10</code> en azul).
+                </p>
+              </div>
+              <div style="border-top: var(--border-medium); padding-top: var(--space-sm);">
+                <span class="tag tag--blue">Archivo .py</span>
+                <p style="font-size: 0.9rem; margin-top: var(--space-xs);">
+                  Creado con <em>File &rarr; New File</em>. Permite escribir programas completos, mostrar números de línea desde <em>Options &rarr; Configure IDLE</em> y ejecutarlos con <em>Run &rarr; Run Module</em>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <span class="code-tag">Tu primer programa — hola_mundo.py</span>
+          <div class="code-console">
+            <span class="code-line">print("¡Hola, Mundo!")</span>
+            <span class="code-line code-muted"># Salida en el shell interactivo:</span>
+            <span class="code-line">¡Hola, Mundo!</span>
+          </div>
+          <p style="font-size: 0.9rem; margin-top: var(--space-md); color: var(--on-surface-variant);">
+            <code>print()</code> es una función incorporada que muestra en pantalla el mensaje encerrado entre comillas. Guardar el archivo con extensión <code>.py</code> indica que contiene código Python reutilizable.
+          </p>
+        </div>
+      </div>
+
+      <div class="quiz-box" style="margin-top: var(--space-lg);">
+        <span class="label-caps">Pregunta rápida 01</span>
+        <p style="font-weight: 600; margin-top: var(--space-xs);">
+          Verdadero o falso: un lenguaje de programación como Python nos permite escribir instrucciones que pueden ser leídas y ejecutadas por una computadora.
+        </p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q1', true, 0)">Verdadero</button>
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q1', false, 1)">Falso</button>
+        </div>
+        <div id="q1-feedback" class="quiz-feedback" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- MODULO 2 -->
+    <section id="mod-2" class="section-open section-open--yellow reveal">
+      <span class="kicker kicker--yellow">Bloque 02 — Variables y Tipos Básicos</span>
+      <h2 class="section-title">Las variables reservan memoria con nombre y distinguen mayúsculas</h2>
+
+      <div class="asymmetric-2-1">
+        <div>
+          <p>
+            Una <strong>variable</strong> es un nombre asignado a un espacio en la memoria de la computadora donde alojamos un valor. Se crea con el operador de asignación <code>=</code> (se recomienda dejar un espacio a cada lado por claridad): <code>num = 15</code>. Si luego escribimos <code>num = 8</code>, actualizamos el valor guardado en ese espacio; si evaluamos <code>num + 2</code>, Python reemplaza <code>num</code> por <code>8</code> y devuelve <code>10</code>.
+          </p>
+          <p>
+            Python distingue entre mayúsculas y minúsculas (<em>case-sensitive</em>): <code>edad = 24</code>, <code>Edad = 70</code> y <code>EDAD = 15</code> son tres variables independientes en memoria.
+          </p>
+
+          <div class="table-wrap" style="margin-top: var(--space-md);">
+            <table class="bauhaus-table">
+              <thead>
+                <tr>
+                  <th>Tipo de dato</th>
+                  <th>Clase en <code>type()</code></th>
+                  <th>Ejemplos del curso</th>
+                  <th>Nota clave</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Entero</strong></td>
+                  <td><code>&lt;class 'int'&gt;</code></td>
+                  <td><code>5</code>, <code>-15</code>, <code>0</code></td>
+                  <td>Sin decimales; tamaño solo limitado por la memoria del equipo.</td>
+                </tr>
+                <tr>
+                  <td><strong>Coma flotante</strong></td>
+                  <td><code>&lt;class 'float'&gt;</code></td>
+                  <td><code>0.5</code>, <code>13.4</code>, <code>4.0</code>, <code>0.0</code></td>
+                  <td>Todo número con punto decimal, incluso si termina en <code>.0</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>Booleano</strong></td>
+                  <td><code>&lt;class 'bool'&gt;</code></td>
+                  <td><code>True</code>, <code>False</code></td>
+                  <td>Palabras reservadas que siempre inician con mayúscula.</td>
+                </tr>
+                <tr>
+                  <td><strong>Cadena (String)</strong></td>
+                  <td><code>&lt;class 'str'&gt;</code></td>
+                  <td><code>"Nora"</code>, <code>"5"</code>, <code>""</code></td>
+                  <td>Texto entre comillas; <code>"5"</code> no permite aritmética como el entero <code>5</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Lab 1: Validador de variables + type() -->
+        <div class="block block--paper">
+          <span class="tag">Laboratorio interactivo</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Validador de nombres e inspector de tipos</h3>
+          <p style="font-size: 0.9rem; color: var(--on-surface-variant);">
+            Comprueba qué identificadores acepta Python según las reglas: iniciar con letra o <code>_</code>, nunca con dígito, y usar solo alfanuméricos o guion bajo.
+          </p>
+          <div class="input-row-aligned" style="margin-top: var(--space-sm);">
+            <div class="field-group">
+              <label class="field-label" for="var-name-input">Nombre de variable</label>
+              <input id="var-name-input" class="input-bauhaus" type="text" value="num_visitas" oninput="validateVarName(this.value)">
+            </div>
+            <button type="button" class="btn btn--primary" onclick="validateVarName(document.getElementById('var-name-input').value)">Comprobar</button>
+          </div>
+          <div class="btn-row" style="margin-top: var(--space-sm);">
+            <button type="button" class="btn" onclick="setVarSample('num_visitas')">num_visitas</button>
+            <button type="button" class="btn" onclick="setVarSample('_edad')">_edad</button>
+            <button type="button" class="btn" onclick="setVarSample('9num')">9num</button>
+            <button type="button" class="btn" onclick="setVarSample('correo@')">correo@</button>
+          </div>
+          <div id="var-name-result" class="status-strip status-strip--ok" style="margin-top: var(--space-md);" aria-live="polite">
+            Válido: "num_visitas" cumple todas las reglas de nomenclatura en Python.
+          </div>
+
+          <hr style="border: 0; border-top: 2px solid var(--outline); margin-block: var(--space-md);">
+
+          <div class="field-group">
+            <label class="field-label" for="type-preset-select">Inspeccionar con type(valor)</label>
+            <select id="type-preset-select" class="select-bauhaus" onchange="inspectPythonType(this.value)">
+              <option value="int:5">5</option>
+              <option value="int:-15">-15</option>
+              <option value="float:4.0">4.0</option>
+              <option value="float:0.0">0.0</option>
+              <option value="bool:True">True</option>
+              <option value="bool:False">False</option>
+              <option value="str:&quot;Nora&quot;">"Nora"</option>
+              <option value="str:&quot;5&quot;">"5"</option>
+            </select>
+          </div>
+          <div id="type-console-out" class="code-console" style="margin-top: var(--space-sm);" aria-live="polite">
+            <span class="code-line">&gt;&gt;&gt; type(5)</span>
+            <span class="code-line code-muted">&lt;class 'int'&gt; — Entero sin decimales</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-box" style="margin-top: var(--space-lg);">
+        <span class="label-caps">Pregunta rápida 02</span>
+        <p style="font-weight: 600; margin-top: var(--space-xs);">
+          Según las reglas de Python vistas en el curso, ¿cuál de estos nombres es válido para definir una variable?
+        </p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q2', false, 0)">a) 9num</button>
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q2', false, 1)">b) correo@</button>
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q2', true, 2)">c) num_visitas</button>
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q2', false, 3)">d) mi edad</button>
+        </div>
+        <div id="q2-feedback" class="quiz-feedback" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- MODULO 3 -->
+    <section id="mod-3" class="section-open section-open--red reveal">
+      <span class="kicker">Bloque 03 — Cadenas de Caracteres e Input</span>
+      <h2 class="section-title">Indexar accede a un carácter; rebanar recorta sin lanzar errores de rango</h2>
+
+      <div class="asymmetric-2-1">
+        <div>
+          <p>
+            Las cadenas (<code>str</code>) son secuencias de caracteres encerradas entre comillas simples o dobles (siempre consistentes: mezclarlas causa <code>SyntaxError: EOL while scanning string literal</code>). La función <code>len()</code> devuelve su longitud: <code>len("")</code> es <code>0</code>, <code>len("Nora")</code> es <code>4</code> y <code>len("Python")</code> es <code>6</code>.
+          </p>
+          <p>
+            Cada carácter ocupa una posición numerada desde <strong>0</strong> (numeración basada en cero). Con corchetes <code>palabra[i]</code> accedemos a un carácter; si el índice supera la longitud, Python detiene la ejecución con <code>IndexError: string index out of range</code>. En cambio, el <strong>rebanado</strong> (<em>slicing</em>) usa <code>cadena[inicio:fin:paso]</code>, donde <code>fin</code> no se incluye y los índices fuera de rango se ajustan sin error.
+          </p>
+        </div>
+
+        <div class="block block--paper">
+          <span class="tag tag--blue">Interacción con el usuario</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);"><code>input()</code> siempre devuelve texto</h3>
+          <p style="font-size: 0.92rem;">
+            Aunque el usuario escriba <code>5</code> o <code>True</code>, <code>input("Ingrese un número: ")</code> entrega una cadena <code>str</code>. Para operar aritméticamente debemos envolverla: <code>num = int(input("Ingrese un número: "))</code>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Lab 2: Explorador de Indexación y Slicing -->
+      <div class="block block--paper lab-wrapper" style="margin-top: var(--space-lg);">
+        <div class="btn-row" style="justify-content: space-between; margin-bottom: var(--space-md);">
+          <div>
+            <span class="tag">Laboratorio interactivo</span>
+            <h3 class="subhead" style="margin-top: var(--space-xs); margin-bottom: 0;">Rejilla de Indexación y Rebanado (Slicing)</h3>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn--primary" id="str-btn-python" onclick="loadStringExample('Python')">"Python"</button>
+            <button type="button" class="btn" id="str-btn-hola" onclick="loadStringExample('¡Hola, Mundo!')">"¡Hola, Mundo!"</button>
+          </div>
+        </div>
+
+        <div id="char-grid-container" class="char-grid" role="group" aria-label="Caracteres e índices de la cadena"></div>
+
+        <div class="lab-split" style="margin-top: var(--space-md);">
+          <div>
+            <div class="btn-row" style="margin-bottom: var(--space-sm);">
+              <button type="button" class="btn is-active" id="mode-index-btn" onclick="setStringMode('index')">Modo Indexación [i]</button>
+              <button type="button" class="btn" id="mode-slice-btn" onclick="setStringMode('slice')">Modo Rebanado [inicio:fin:paso]</button>
+            </div>
+
+            <div id="index-controls">
+              <div class="field-group">
+                <label class="field-label" for="idx-slider">Índice seleccionado (prueba pasar del último índice para ver IndexError)</label>
+                <div class="input-row-aligned">
+                  <input id="idx-slider" class="range-bauhaus" type="range" min="0" max="13" value="2" oninput="updateIndexFromSlider(this.value)">
+                  <input id="idx-number" class="input-bauhaus" type="number" min="0" max="15" value="2" style="width: 82px;" oninput="updateIndexFromNumber(this.value)">
+                </div>
+              </div>
+            </div>
+
+            <div id="slice-controls" style="display: none;">
+              <div class="asymmetric-1-1" style="gap: var(--space-sm);">
+                <div class="field-group">
+                  <label class="field-label" for="slice-start">Inicio (inclusivo)</label>
+                  <input id="slice-start" class="input-bauhaus" type="number" min="0" max="15" value="1" oninput="updateSliceOutput()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="slice-stop">Fin (exclusivo)</label>
+                  <input id="slice-stop" class="input-bauhaus" type="number" min="0" max="16" value="4" oninput="updateSliceOutput()">
+                </div>
+              </div>
+              <div class="field-group" style="margin-top: var(--space-sm);">
+                <label class="field-label" for="slice-step">Paso (step)</label>
+                <input id="slice-step" class="input-bauhaus" type="number" min="1" max="5" value="1" oninput="updateSliceOutput()">
+              </div>
+              <div class="btn-row" style="margin-top: var(--space-sm);">
+                <button type="button" class="btn" onclick="applySlicePreset('Python', 1, 4, 1)">palabra[1:4]</button>
+                <button type="button" class="btn" onclick="applySlicePreset('Python', 1, 6, 2)">palabra[1:6:2]</button>
+                <button type="button" class="btn" onclick="applySlicePreset('¡Hola, Mundo!', 7, 12, 1)">frase[7:12]</button>
+                <button type="button" class="btn" onclick="applySlicePreset('¡Hola, Mundo!', 7, 12, 2)">frase[7:12:2]</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-console" id="string-console-out" aria-live="polite">
+            <span class="code-line">&gt;&gt;&gt; palabra = "Python"</span>
+            <span class="code-line">&gt;&gt;&gt; len(palabra) -&gt; 6</span>
+            <span class="code-line">&gt;&gt;&gt; palabra[2]</span>
+            <span class="code-line code-muted">'t'</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top: var(--space-lg);">
+        <table class="bauhaus-table">
+          <thead>
+            <tr>
+              <th>Método de <code>str</code></th>
+              <th>Qué devuelve</th>
+              <th>Ejemplo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>.capitalize()</code></td>
+              <td>Copia con el primer carácter en mayúscula y el resto en minúscula.</td>
+              <td><code>"python".capitalize() &rarr; 'Python'</code></td>
+            </tr>
+            <tr>
+              <td><code>.lower()</code> / <code>.upper()</code></td>
+              <td>Copia completamente en minúsculas o en mayúsculas.</td>
+              <td><code>"Nora".upper() &rarr; 'NORA'</code></td>
+            </tr>
+            <tr>
+              <td><code>.find()</code> / <code>.index()</code></td>
+              <td>Localizan caracteres o subcadenas dentro de la cadena.</td>
+              <td><code>"Python".find("t") &rarr; 2</code></td>
+            </tr>
+            <tr>
+              <td><code>.isalnum()</code>, <code>.isalpha()</code>, <code>.isdigit()</code>, <code>.isdecimal()</code>, <code>.islower()</code>, <code>.isupper()</code></td>
+              <td>Métodos de validación que comienzan con <code>is</code>: devuelven <code>True</code> o <code>False</code>.</td>
+              <td><code>"abc".isalpha() &rarr; True</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="quiz-box" style="margin-top: var(--space-lg);">
+        <span class="label-caps">Pregunta rápida 03</span>
+        <p style="font-weight: 600; margin-top: var(--space-xs);">
+          Si ejecutamos <code>valor = input("Ingrese True o False: ")</code> y el usuario escribe <code>True</code>, ¿qué tipo de dato queda guardado en <code>valor</code>?
+        </p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q3', false, 0)">bool (booleano)</button>
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q3', true, 1)">str (cadena de caracteres)</button>
+        </div>
+        <div id="q3-feedback" class="quiz-feedback" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- MODULO 4 -->
+    <section id="mod-4" class="section-open section-open--black reveal">
+      <span class="kicker">Bloque 04 — Operadores y Condicionales</span>
+      <h2 class="section-title">Expresiones, precedencia PEMDAS y decisiones con if / elif / else</h2>
+
+      <div class="card-grid">
+        <article class="block block--paper">
+          <span class="tag tag--black">1. Aritméticos</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Cálculo y concatenación</h3>
+          <p style="font-size: 0.92rem;">
+            <code>+</code> suma números o concatena cadenas. <code>/</code> siempre devuelve <code>float</code> (<code>15 / 5 &rarr; 3.0</code>); dividir entre <code>0</code> causa <code>ZeroDivisionError</code>. <code>//</code> realiza división entera truncando decimales (<code>3 // 5 &rarr; 0</code>). <code>**</code> eleva a potencia (<code>5 ** 3 &rarr; 125</code>) y <code>%</code> da el resto (<code>5 % 2 &rarr; 1</code> para detectar impares). Orden: <strong>PEMDAS</strong> (Paréntesis, Exponentes, Multiplicación/División, Adición/Sustracción).
+          </p>
+        </article>
+
+        <article class="block block--paper">
+          <span class="tag tag--blue">2. Lógicos y Relacionales</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Comparar y combinar verdad</h3>
+          <p style="font-size: 0.92rem;">
+            Relacionales (<code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>==</code>, <code>!=</code>) evalúan a booleano; en cadenas comparan orden lexicográfico (<code>"a" &lt; "b"</code> es <code>True</code>). Lógicos: prioridad <code>not</code> &gt; <code>and</code> &gt; <code>or</code>.
+          </p>
+        </article>
+
+        <article class="block block--paper">
+          <span class="tag">3. Asignación compuesta</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Operar y guardar</h3>
+          <p style="font-size: 0.92rem;">
+            Combinan un operador aritmético con <code>=</code>: <code>edad += 3</code>, <code>edad -= 2</code>, <code>edad *= 3</code>, <code>edad /= 2</code>, <code>num %= 2</code>. Si <code>num = 6</code> y aplicamos <code>num %= 2</code>, su valor final es <code>0</code>.
+          </p>
+        </article>
+      </div>
+
+      <!-- Lab 3: Tabla de verdad + Simulador if/elif/else -->
+      <div class="asymmetric-1-1" style="margin-top: var(--space-lg);">
+        <div class="block block--paper">
+          <span class="tag">Laboratorio de lógica</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Evaluador booleano interactivo</h3>
+          <p style="font-size: 0.9rem; color: var(--on-surface-variant);">
+            Alterna los operandos <code>X</code> y <code>Y</code> para comprobar las tablas de verdad de <code>and</code>, <code>or</code> y <code>not</code>.
+          </p>
+          <div class="btn-row" style="margin-block: var(--space-md);">
+            <button type="button" class="btn btn--primary" id="bool-x-btn" onclick="toggleBoolOperand('x')">X = True</button>
+            <button type="button" class="btn btn--primary" id="bool-y-btn" onclick="toggleBoolOperand('y')">Y = False</button>
+          </div>
+          <div class="table-wrap">
+            <table class="bauhaus-table">
+              <thead>
+                <tr>
+                  <th>Expresión</th>
+                  <th>Resultado</th>
+                  <th>Regla</th>
+                </tr>
+              </thead>
+              <tbody id="truth-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="block block--paper">
+          <span class="tag tag--blue">Simulador condicional</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Flujo de <code>if</code> / <code>elif</code> / <code>else</code></h3>
+          <div class="field-group" style="margin-top: var(--space-sm);">
+            <label class="field-label" for="temp-slider">Temperatura actual (<code>temp</code>): <span id="temp-readout">15</span> °C</label>
+            <div class="input-row-aligned">
+              <input id="temp-slider" class="range-bauhaus" type="range" min="-10" max="45" value="15" oninput="updateTempFromSlider(this.value)">
+              <input id="temp-number" class="input-bauhaus" type="number" min="-10" max="45" value="15" style="width: 82px;" oninput="updateTempFromNumber(this.value)">
+            </div>
+          </div>
+          <div style="margin-top: var(--space-md);">
+            <div id="branch-if" class="branch-step">
+              <strong>if</strong> temp &lt;= 0:<br>&nbsp;&nbsp;&nbsp;&nbsp;print("Muy frío")
+            </div>
+            <div id="branch-elif" class="branch-step is-taken">
+              <strong>elif</strong> temp &lt; 25:<br>&nbsp;&nbsp;&nbsp;&nbsp;print("Frío")
+            </div>
+            <div id="branch-else" class="branch-step is-skipped">
+              <strong>else:</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;print("Calor")
+            </div>
+          </div>
+          <div id="temp-console-out" class="status-strip status-strip--yellow" aria-live="polite">
+            Salida: "Frío" — Solo se ejecuta el bloque de la primera condición verdadera (indentada 4 espacios tras los dos puntos :).
+          </div>
+        </div>
+      </div>
+
+      <details class="bauhaus-details" style="margin-top: var(--space-lg);">
+        <summary>Buenas prácticas sobre comentarios (#) en Python</summary>
+        <p style="font-size: 0.95rem;">
+          Los comentarios inician con <code>#</code> y Python los ignora al ejecutar. Sirven para explicar la <strong>lógica no obvia</strong> a otros desarrolladores o a ti mismo en el futuro. Evita comentar en exceso describiendo lo que ya salta a la vista (por ejemplo, escribir <code># Temperatura inicial 56</code> encima de <code>temp = 56</code> es redundante; es mejor nombrar bien la variable como <code>temperatura_inicial = 56</code>).
+        </p>
+      </details>
+    </section>
+
+    <hr class="divider">
+
+    <!-- MODULO 5 -->
+    <section id="mod-5" class="section-open section-open--blue reveal">
+      <span class="kicker kicker--blue">Bloque 05 — Estructuras de Datos</span>
+      <h2 class="section-title">Listas mutables, tuplas inmutables y diccionarios clave-valor</h2>
+
+      <div class="table-wrap" style="margin-bottom: var(--space-lg);">
+        <table class="bauhaus-table">
+          <thead>
+            <tr>
+              <th>Estructura</th>
+              <th>Delimitador</th>
+              <th>¿Mutable?</th>
+              <th>Acceso y pertenencia</th>
+              <th>Operaciones destacadas del curso</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Lista</strong></td>
+              <td><code>[1, 2, 3]</code></td>
+              <td>Sí (puede cambiar)</td>
+              <td>Por índice <code>lista[0]</code>; <code>elem in lista</code></td>
+              <td><code>.append()</code>, <code>.insert(i, x)</code>, <code>.remove(x)</code>, <code>.pop()</code>, <code>.reverse()</code>, <code>.extend()</code>, <code>.sort()</code>, <code>.index()</code>, <code>.count()</code></td>
+            </tr>
+            <tr>
+              <td><strong>Tupla</strong></td>
+              <td><code>('a', 'b', 'c')</code></td>
+              <td>No (inmutable)</td>
+              <td>Por índice <code>tupla[0]</code>; <code>elem in tupla</code></td>
+              <td><code>.index(x)</code>, <code>.count(x)</code>. Modificar un índice lanza <code>TypeError</code>; protege los datos.</td>
+            </tr>
+            <tr>
+              <td><strong>Diccionario</strong></td>
+              <td><code>{"Gino": 15}</code></td>
+              <td>Sí (claves únicas e inmutables)</td>
+              <td>Por clave <code>d["Gino"]</code> o <code>d.get("Gino")</code>; <code>clave in d</code></td>
+              <td>Añadir/actualizar <code>d[clave] = val</code>, borrar <code>del d[clave]</code>, iterar con <code>.values()</code> o <code>.items()</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Lab 4: Banco de pruebas de colecciones -->
+      <div class="block block--paper lab-wrapper">
+        <div class="btn-row" style="justify-content: space-between; margin-bottom: var(--space-md);">
+          <div>
+            <span class="tag tag--blue">Laboratorio interactivo</span>
+            <h3 class="subhead" style="margin-top: var(--space-xs); margin-bottom: 0;">Banco de pruebas de colecciones</h3>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn is-active" id="ds-tab-list" onclick="switchDsTab('list')">Lista nums</button>
+            <button type="button" class="btn" id="ds-tab-tuple" onclick="switchDsTab('tuple')">Tupla vocales</button>
+            <button type="button" class="btn" id="ds-tab-dict" onclick="switchDsTab('dict')">Diccionario edades</button>
+          </div>
+        </div>
+
+        <div class="lab-split">
+          <div>
+            <div id="ds-controls-list">
+              <p style="font-size: 0.92rem;">Prueba los métodos mutadores sobre <code>nums</code>:</p>
+              <div class="btn-row">
+                <button type="button" class="btn btn--primary" onclick="runListOp('append')">.append(5)</button>
+                <button type="button" class="btn" onclick="runListOp('insert')">.insert(0, 6)</button>
+                <button type="button" class="btn" onclick="runListOp('pop')">.pop()</button>
+                <button type="button" class="btn" onclick="runListOp('reverse')">.reverse()</button>
+                <button type="button" class="btn" onclick="runListOp('update0')">nums[0] = -8</button>
+                <button type="button" class="btn" onclick="runListOp('reset')">Reiniciar [1, 2, 3, 4]</button>
+              </div>
+            </div>
+
+            <div id="ds-controls-tuple" style="display: none;">
+              <p style="font-size: 0.92rem;">Consulta elementos o comprueba la inmutabilidad de la tupla:</p>
+              <div class="btn-row">
+                <button type="button" class="btn btn--primary" onclick="runTupleOp('index')">vocales.index('i')</button>
+                <button type="button" class="btn" onclick="runTupleOp('count')">vocales.count('a')</button>
+                <button type="button" class="btn" onclick="runTupleOp('in')">'z' in vocales</button>
+                <button type="button" class="btn" onclick="runTupleOp('mutate')">Intentar vocales[0] = 'x'</button>
+              </div>
+            </div>
+
+            <div id="ds-controls-dict" style="display: none;">
+              <p style="font-size: 0.92rem;">Gestiona pares clave-valor en <code>edades</code>:</p>
+              <div class="btn-row">
+                <button type="button" class="btn btn--primary" onclick="runDictOp('add')">edades["Talina"] = 67</button>
+                <button type="button" class="btn" onclick="runDictOp('update')">edades["Gino"] = 17</button>
+                <button type="button" class="btn" onclick="runDictOp('del')">del edades["Gino"]</button>
+                <button type="button" class="btn" onclick="runDictOp('keyerr')">Consultar edades["Jack"]</button>
+                <button type="button" class="btn" onclick="runDictOp('reset')">Reiniciar</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div id="ds-console" class="code-console" aria-live="polite">
+              <span class="code-line">&gt;&gt;&gt; nums = [1, 2, 3, 4]</span>
+              <span class="code-line code-muted">Estado actual: [1, 2, 3, 4]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-box" style="margin-top: var(--space-lg);">
+        <span class="label-caps">Pregunta rápida 04</span>
+        <p style="font-weight: 600; margin-top: var(--space-xs);">
+          Partiendo de <code>nums = [3, 4, 5, 6]</code>, ejecutamos en orden: <code>nums.pop()</code>, <code>nums.reverse()</code> y <code>nums.extend([8, 9, 0])</code>. ¿Cuál es la lista resultante?
+        </p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q4', false, 0)">[6, 5, 4, 3, 8, 9, 0]</button>
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q4', true, 1)">[5, 4, 3, 8, 9, 0]</button>
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q4', false, 2)">[3, 4, 5, 8, 9, 0]</button>
+        </div>
+        <div id="q4-feedback" class="quiz-feedback" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- MODULO 6 -->
+    <section id="mod-6" class="section-open section-open--yellow reveal">
+      <span class="kicker kicker--yellow">Bloque 06 — Documentación y Ciclos</span>
+      <h2 class="section-title">Repetir instrucciones con control: for sobre secuencias y while por condición</h2>
+
+      <div class="asymmetric-2-1">
+        <div>
+          <p>
+            Antes de escribir ciclos complejos, conviene saber leer la <strong>documentación oficial</strong> en <code>python.org</code> (disponible en español desde su selector de idioma). En la <em>Referencia de la Biblioteca &rarr; Funciones integradas</em> encontrarás firmas como <code>round(number[, ndigits])</code> —donde los corchetes marcan parámetros opcionales— o <code>sorted(iterable, *, key=None, reverse=False)</code> —donde <code>=</code> indica valores por defecto—.
+          </p>
+          <p>
+            Los <strong>ciclos</strong> (o bucles) son estructuras de control que ejecutan repetidamente un bloque indentado. Usamos <code>for</code> cuando sabemos de antemano cuántas iteraciones haremos —ya sea con <code>range(start, stop, step)</code> o recorriendo un <strong>iterable</strong> (cadenas, listas, tuplas o diccionarios con <code>.values()</code> y <code>for clave, valor in d.items():</code>)—. Usamos <code>while</code> cuando la repetición depende de que una condición siga siendo verdadera, actualizando manualmente la variable para evitar un <strong>ciclo infinito</strong> (que en IDLE se detiene con <code>Ctrl + C</code> o <em>Shell &rarr; Interrupt Execution</em>).
+          </p>
+        </div>
+
+        <div class="block">
+          <span class="code-tag">Comparativa for vs. while</span>
+          <div class="code-console">
+            <span class="code-line code-muted"># for con range(stop)</span>
+            <span class="code-line">for i in range(4):</span>
+            <span class="code-line">    print(i)  <span class="code-muted"># 0, 1, 2, 3</span></span>
+            <span class="code-line"></span>
+            <span class="code-line code-muted"># while con actualización explícita</span>
+            <span class="code-line">x = 20</span>
+            <span class="code-line">while x &lt; 35:</span>
+            <span class="code-line">    print(x)</span>
+            <span class="code-line">    x += 3    <span class="code-muted"># evita ciclo infinito</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lab 5: Simulador de Ciclos -->
+      <div class="block block--paper lab-wrapper" style="margin-top: var(--space-lg);">
+        <div class="btn-row" style="justify-content: space-between; margin-bottom: var(--space-md);">
+          <div>
+            <span class="tag">Simulador paso a paso</span>
+            <h3 class="subhead" style="margin-top: var(--space-xs); margin-bottom: 0;">Depurador visual de iteraciones</h3>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn is-active" id="loop-mode-for" onclick="setLoopMode('for')">Ciclo for + range()</button>
+            <button type="button" class="btn" id="loop-mode-while" onclick="setLoopMode('while')">Ciclo while x &lt; 35</button>
+          </div>
+        </div>
+
+        <div class="lab-split">
+          <div>
+            <div id="for-params-box">
+              <div class="card-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-sm);">
+                <div class="field-group">
+                  <label class="field-label" for="range-start">start</label>
+                  <input id="range-start" class="input-bauhaus" type="number" min="-10" max="20" value="0" oninput="resetLoopSim()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="range-stop">stop</label>
+                  <input id="range-stop" class="input-bauhaus" type="number" min="-5" max="25" value="4" oninput="resetLoopSim()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="range-step">step</label>
+                  <input id="range-step" class="input-bauhaus" type="number" min="1" max="10" value="1" oninput="resetLoopSim()">
+                </div>
+              </div>
+            </div>
+
+            <div id="while-params-box" style="display: none;">
+              <div class="asymmetric-1-1" style="gap: var(--space-sm);">
+                <div class="field-group">
+                  <label class="field-label" for="while-init">Valor inicial x</label>
+                  <input id="while-init" class="input-bauhaus" type="number" min="0" max="40" value="20" oninput="resetLoopSim()">
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="while-inc">Incremento x +=</label>
+                  <input id="while-inc" class="input-bauhaus" type="number" min="1" max="15" value="3" oninput="resetLoopSim()">
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-row" style="margin-top: var(--space-md);">
+              <button type="button" class="btn btn--primary" id="loop-step-btn" onclick="stepLoopSim()">Siguiente iteración</button>
+              <button type="button" class="btn" onclick="runAllLoopSim()">Ejecutar todo</button>
+              <button type="button" class="btn" onclick="resetLoopSim()">Reiniciar</button>
+            </div>
+          </div>
+
+          <div id="loop-console" class="code-console" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- MODULO 7 -->
+    <section id="mod-7" class="section-open section-open--red reveal">
+      <span class="kicker">Bloque 07 — Funciones, Scope y Recursión</span>
+      <h2 class="section-title">Reutilizar lógica con DRY y resolver problemas llamándose a sí mismo</h2>
+
+      <div class="asymmetric-1-1">
+        <div class="block block--paper">
+          <h3 class="subhead">Funciones, parámetros, <code>return</code> y <code>scope</code></h3>
+          <p style="font-size: 0.94rem;">
+            Siguiendo el principio <strong>DRY</strong> (<em>Don't Repeat Yourself</em>), agrupamos tareas en bloques con <code>def nombre_funcion(parametros):</code>. Los <strong>parámetros</strong> van en la definición; los <strong>argumentos</strong> son los valores concretos enviados al llamar a la función.
+          </p>
+          <p style="font-size: 0.94rem;">
+            La sentencia <code>return</code> devuelve un resultado al punto de llamada y detiene de inmediato la función (si falta <code>return</code>, Python devuelve <code>None</code> por defecto). Además, cada función crea su propio <strong>scope local</strong>: las variables definidas en el programa principal son globales, mientras que los parámetros y variables locales solo existen dentro de la función.
+          </p>
+        </div>
+
+        <div class="block block--paper">
+          <h3 class="subhead">Anatomía de una función recursiva</h3>
+          <p style="font-size: 0.94rem;">
+            La <strong>recursión</strong> define una función en términos de sí misma, como la sucesión de Fibonacci donde cada término suma los dos anteriores. Toda función recursiva exige dos partes:
+          </p>
+          <ul style="margin: var(--space-xs) 0 0 var(--space-lg); padding: 0; font-size: 0.94rem;">
+            <li><strong>Caso base:</strong> detiene las llamadas (<code>if n == 0 or n == 1: return n</code>).</li>
+            <li><strong>Caso recursivo:</strong> reduce el problema hacia el caso base (<code>fibonacci(n - 1) + fibonacci(n - 2)</code>).</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Lab 6: Árbol SVG de Fibonacci -->
+      <div class="block block--paper" style="margin-top: var(--space-lg);">
+        <div class="btn-row" style="justify-content: space-between; margin-bottom: var(--space-md);">
+          <div>
+            <span class="tag">Visualizador recursivo</span>
+            <h3 class="subhead" style="margin-top: var(--space-xs); margin-bottom: 0;">Árbol de llamadas de <code>fibonacci(n)</code></h3>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="fib-btn-2" onclick="renderFibTree(2)">fibonacci(2)</button>
+            <button type="button" class="btn is-active" id="fib-btn-3" onclick="renderFibTree(3)">fibonacci(3)</button>
+            <button type="button" class="btn" id="fib-btn-4" onclick="renderFibTree(4)">fibonacci(4)</button>
+          </div>
+        </div>
+
+        <div class="svg-frame" id="fib-tree-frame">
+          <svg id="fib-svg" width="100%" height="290" viewBox="0 0 760 290" role="img" aria-label="Árbol de llamadas recursivas de Fibonacci"></svg>
+        </div>
+        <div id="fib-summary" class="status-strip status-strip--yellow" style="margin-top: var(--space-md);" aria-live="polite">
+          fibonacci(3) genera 5 llamadas en total (3 casos base en amarillo, 2 casos recursivos) y retorna 2.
+        </div>
+      </div>
+
+      <div class="quiz-box" style="margin-top: var(--space-lg);">
+        <span class="label-caps">Pregunta rápida 05</span>
+        <p style="font-weight: 600; margin-top: var(--space-xs);">
+          Si definimos <code>def factorial(n):</code> con caso base <code>if n == 0 or n == 1: return 1</code>, pero en el <code>else:</code> escribimos <code>n * factorial(n)</code> sin restar 1 ni usar <code>return</code>, ¿qué ocurre al llamar <code>factorial(5)</code>?
+        </p>
+        <div class="quiz-options">
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q5', false, 0)">Retorna 120</button>
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q5', true, 1)">Lanza un RecursionError</button>
+          <button type="button" class="quiz-opt" onclick="answerQuiz(this, 'q5', false, 2)">Retorna -1</button>
+        </div>
+        <div id="q5-feedback" class="quiz-feedback" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- MODULO 8 -->
+    <section id="mod-8" class="section-open section-open--black reveal">
+      <span class="kicker">Bloque 08 — Archivos, Módulos, Excepciones y POO</span>
+      <h2 class="section-title">De scripts robustos a objetos: archivos, try/except y clases</h2>
+
+      <div class="card-grid">
+        <article class="block block--paper">
+          <span class="tag tag--black">Archivos de texto</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Sentencia <code>with open(...)</code></h3>
+          <p style="font-size: 0.92rem;">
+            Cierra el archivo automáticamente al salir del bloque indentado. Modos principales: <code>"r"</code> (leer, por defecto), <code>"w"</code> (escribir reemplazando todo el contenido), <code>"a"</code> (añadir al final con <code>.write(... + "\n")</code>), más <code>+</code> (como <code>"w+"</code>) para sumar lectura.
+          </p>
+        </article>
+
+        <article class="block block--paper">
+          <span class="tag tag--blue">Módulos e importaciones</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Organizar proyectos crecientes</h3>
+          <p style="font-size: 0.92rem;">
+            Un módulo es un archivo <code>.py</code> con funciones y constantes relacionadas. Formas recomendadas: <code>import math</code> (<code>math.pow(9, 2)</code>, <code>math.pi</code>), alias <code>import math as matematicas</code> o puntual <code>from math import pow</code>. Se desaconseja <code>from math import *</code> porque oculta de dónde proviene cada nombre.
+          </p>
+        </article>
+      </div>
+
+      <!-- Lab 7a: try / except / else / finally -->
+      <div class="asymmetric-1-1" style="margin-top: var(--space-lg);">
+        <div class="block block--paper">
+          <span class="tag">Manejo de excepciones</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Simulador <code>try / except / else / finally</code></h3>
+          <p style="font-size: 0.9rem; color: var(--on-surface-variant);">
+            Mientras los errores de sintaxis (<code>SyntaxError</code>, <code>IndentationError</code>) impiden arrancar el programa, las excepciones (<code>IndexError</code>, <code>KeyError</code>, <code>NameError</code>, <code>ZeroDivisionError</code>) ocurren en ejecución y pueden capturarse.
+          </p>
+          <div class="asymmetric-1-1" style="gap: var(--space-sm); margin-top: var(--space-sm);">
+            <div class="field-group">
+              <label class="field-label" for="exc-num1">Dividendo (num1)</label>
+              <input id="exc-num1" class="input-bauhaus" type="number" value="4" oninput="runExceptionSim()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="exc-num2">Divisor (num2)</label>
+              <input id="exc-num2" class="input-bauhaus" type="number" value="0" oninput="runExceptionSim()">
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top: var(--space-sm);">
+            <button type="button" class="btn" onclick="setExceptionCase(4, 5)">Probar 4 / 5</button>
+            <button type="button" class="btn btn--primary" onclick="setExceptionCase(3, 0)">Probar 3 / 0</button>
+          </div>
+          <div id="exc-console" class="code-console" style="margin-top: var(--space-md);" aria-live="polite"></div>
+        </div>
+
+        <!-- Lab 7b: POO CuentaBancaria -->
+        <div class="block block--paper">
+          <span class="tag tag--blue">Programación Orientada a Objetos</span>
+          <h3 class="subhead" style="margin-top: var(--space-xs);">Clase <code>CuentaBancaria</code> e instancia <code>mi_cuenta</code></h3>
+          <p style="font-size: 0.9rem; color: var(--on-surface-variant);">
+            Una <strong>clase</strong> es el plano; <code>__init__(self, ...)</code> inicializa los atributos; cada <strong>instancia</strong> tiene estado propio referenciado por <code>self</code>.
+          </p>
+          <div class="input-row-aligned" style="margin-top: var(--space-sm);">
+            <div class="field-group">
+              <label class="field-label" for="bank-deposit">Monto a depositar</label>
+              <input id="bank-deposit" class="input-bauhaus" type="number" min="1" value="400">
+            </div>
+            <button type="button" class="btn btn--primary" onclick="depositToAccount()">depositar()</button>
+          </div>
+          <div class="btn-row" style="margin-top: var(--space-sm);">
+            <button type="button" class="btn" onclick="showAccountBalance()">generar_balance()</button>
+            <button type="button" class="btn" onclick="resetAccount()">Reiniciar cuenta (5600)</button>
+          </div>
+          <div id="bank-console" class="code-console" style="margin-top: var(--space-md);" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- CIERRE Y FUENTE -->
+    <footer class="asymmetric-2-1" style="padding-bottom: var(--space-xl);">
+      <div class="block block--yellow">
+        <span class="label-caps" style="color: var(--on-primary-container);">Síntesis final</span>
+        <h2 class="subhead" style="margin-top: var(--space-xs);">Dominar los fundamentos abre la puerta a cualquier especialidad en Python</h2>
+        <p style="font-size: 0.95rem;">
+          Con variables, cadenas, operadores, estructuras de datos, ciclos, funciones, recursión, manejo de archivos, excepciones y clases ya cuentas con el vocabulario completo para construir programas reales y seguir explorando la documentación oficial en <code>python.org</code>.
+        </p>
+      </div>
+      <div class="block block--paper">
+        <span class="label-caps">Fuente de contenido</span>
+        <p style="font-size: 0.92rem; margin-top: var(--space-xs);">
+          Elaborado íntegramente a partir de la transcripción del curso en video <strong>«Aprende Python - Curso de Python desde Cero»</strong>, impartido por Estefanía en el canal <strong>freeCodeCamp Español</strong>.
+        </p>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // 1. Scroll reveals (IntersectionObserver)
+    (function initReveals() {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) return;
+      for (var i = 0; i < els.length; i++) {
+        els[i].classList.add('is-pending');
+      }
+      var observer = new IntersectionObserver(function (entries) {
+        for (var j = 0; j < entries.length; j++) {
+          if (entries[j].isIntersecting) {
+            entries[j].target.classList.remove('is-pending');
+            entries[j].target.classList.add('is-shown');
+            observer.unobserve(entries[j].target);
+          }
+        }
+      }, { threshold: 0.08 });
+      for (var k = 0; k < els.length; k++) {
+        observer.observe(els[k]);
+      }
+    })();
+
+    // 2. Quizzes
+    var QUIZ_EXPLANATIONS = {
+      q1: [
+        `Exacto. Un lenguaje de programación es la herramienta formal para escribir programas ejecutables por la computadora.`,
+        `Incorrecto. Justamente esa es la definición de un lenguaje de programación: permitir que la computadora lea y ejecute nuestras instrucciones.`
+      ],
+      q2: [
+        `Inválido: el nombre de una variable en Python nunca puede iniciar con un número.`,
+        `Inválido: el carácter @ no es alfanumérico ni guion bajo, lo que produce SyntaxError.`,
+        `Correcto. Tanto num_visitas como los nombres que inician con _ solo usan letras, dígitos internos y guion bajo.`,
+        `Inválido: contiene un espacio entre palabras; para separarlas se usa guion bajo (_).`
+      ],
+      q3: [
+        `Incorrecto. Aunque parezca un booleano, input() siempre entrega texto sin convertir.`,
+        `Correcto. La función input() siempre retorna una cadena de caracteres (str), sin importar lo que escriba el usuario.`
+      ],
+      q4: [
+        `Casi: pop() elimina el último elemento (6) antes de invertir.`,
+        `Exacto. pop() quita 6 -> [3, 4, 5]; reverse() invierte -> [5, 4, 3]; extend([8, 9, 0]) agrega esos tres elementos al final.`,
+        `Recuerda que reverse() invierte los elementos que quedaron tras el pop().`
+      ],
+      q5: [
+        `No: sin reducir n hacia 0 o 1, la función nunca alcanza el caso base.`,
+        `Correcto. Al pasar n intacto, la función se llama infinitamente hasta lanzar RecursionError (máxima profundidad excedida).`,
+        `Retornaría None si alcanzara el final, pero entra en recursión infinita antes de terminar.`
+      ]
+    };
+
+    function answerQuiz(btn, qId, isCorrect, msgIdx) {
+      var parent = btn.parentNode;
+      if (parent) {
+        var siblings = parent.querySelectorAll('.quiz-opt');
+        for (var i = 0; i < siblings.length; i++) {
+          siblings[i].classList.remove('is-correct', 'is-wrong');
+        }
+      }
+      btn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+      var fb = document.getElementById(qId + '-feedback');
+      var msgs = QUIZ_EXPLANATIONS[qId] || [];
+      if (fb) {
+        fb.textContent = msgs[msgIdx] || '';
+        fb.classList.remove('is-ok', 'is-err');
+        fb.classList.add('is-visible', isCorrect ? 'is-ok' : 'is-err');
+      }
+    }
+
+    // 3. Lab 1: Variable name validator & type() inspector
+    var PYTHON_KEYWORDS = [
+      `False`, `None`, `True`, `and`, `as`, `assert`, `async`, `await`,
+      `break`, `class`, `continue`, `def`, `del`, `elif`, `else`, `except`,
+      `finally`, `for`, `from`, `global`, `if`, `import`, `in`, `is`,
+      `lambda`, `nonlocal`, `not`, `or`, `pass`, `raise`, `return`, `try`,
+      `while`, `with`, `yield`
+    ];
+
+    function setVarSample(name) {
+      var inp = document.getElementById('var-name-input');
+      if (inp) inp.value = name;
+      validateVarName(name);
+    }
+
+    function validateVarName(raw) {
+      var out = document.getElementById('var-name-result');
+      if (!out) return;
+      var val = (raw || '').trim();
+      out.classList.remove('status-strip--ok', 'status-strip--err');
+
+      if (!val) {
+        out.classList.add('status-strip--err');
+        out.textContent = `Escribe un nombre de variable para validarlo.`;
+        return;
+      }
+      if (/^[0-9]/.test(val)) {
+        out.classList.add('status-strip--err');
+        out.textContent = `SyntaxError: invalid syntax — "${val}" comienza con un número, lo cual está prohibido en Python.`;
+        return;
+      }
+      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(val)) {
+        out.classList.add('status-strip--err');
+        out.textContent = `SyntaxError: invalid syntax — "${val}" contiene espacios o símbolos fuera de [A-Z, a-z, 0-9, _].`;
+        return;
+      }
+      if (PYTHON_KEYWORDS.indexOf(val) !== -1) {
+        out.classList.add('status-strip--err');
+        out.textContent = `SyntaxError: "${val}" es una palabra reservada (keyword) de Python y no puede usarse como variable.`;
+        return;
+      }
+      out.classList.add('status-strip--ok');
+      out.textContent = `Válido: "${val}" cumple todas las reglas de nomenclatura en Python.`;
+    }
+
+    function inspectPythonType(packed) {
+      var out = document.getElementById('type-console-out');
+      if (!out) return;
+      var idx = packed.indexOf(':');
+      var t = packed.slice(0, idx);
+      var v = packed.slice(idx + 1);
+      var descMap = {
+        int: `Entero sin decimales`,
+        float: `Número en coma flotante (incluye punto decimal)`,
+        bool: `Valor booleano reservado (inicia en mayúscula)`,
+        str: `Cadena de caracteres (texto, no operable como número)`
+      };
+      out.innerHTML =
+        `<span class="code-line">&gt;&gt;&gt; type(${v})</span>` +
+        `<span class="code-line code-muted">&lt;class '${t}'&gt; — ${descMap[t] || ''}</span>`;
+    }
+
+    // 4. Lab 2: String indexing & slicing explorer
+    var currentStr = `Python`;
+    var stringMode = `index`;
+
+    function loadStringExample(str) {
+      currentStr = str;
+      var b1 = document.getElementById('str-btn-python');
+      var b2 = document.getElementById('str-btn-hola');
+      if (b1 && b2) {
+        b1.classList.toggle('btn--primary', str === `Python`);
+        b2.classList.toggle('btn--primary', str === `¡Hola, Mundo!`);
+      }
+      var slider = document.getElementById('idx-slider');
+      var numInp = document.getElementById('idx-number');
+      if (slider) {
+        slider.max = str.length + 2;
+        if (Number(slider.value) > str.length + 1) slider.value = 0;
+      }
+      if (numInp && slider) numInp.value = slider.value;
+
+      if (stringMode === `index`) {
+        renderStringGrid(Number(slider ? slider.value : 0), -1, -1, 1);
+        updateIndexConsole(Number(slider ? slider.value : 0));
+      } else {
+        updateSliceOutput();
+      }
+    }
+
+    function setStringMode(mode) {
+      stringMode = mode;
+      var idxBtn = document.getElementById('mode-index-btn');
+      var slcBtn = document.getElementById('mode-slice-btn');
+      var idxBox = document.getElementById('index-controls');
+      var slcBox = document.getElementById('slice-controls');
+      if (idxBtn) idxBtn.classList.toggle('is-active', mode === `index`);
+      if (slcBtn) slcBtn.classList.toggle('is-active', mode === `slice`);
+      if (idxBox) idxBox.style.display = mode === `index` ? `block` : `none`;
+      if (slcBox) slcBox.style.display = mode === `slice` ? `block` : `none`;
+      if (mode === `index`) {
+        var sl = document.getElementById('idx-slider');
+        var v = sl ? Number(sl.value) : 0;
+        renderStringGrid(v, -1, -1, 1);
+        updateIndexConsole(v);
+      } else {
+        updateSliceOutput();
+      }
+    }
+
+    function renderStringGrid(selectedIdx, sliceStart, sliceStop, sliceStep) {
+      var grid = document.getElementById('char-grid-container');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      var included = {};
+      if (stringMode === `slice` && sliceStep >= 1) {
+        var s = Math.max(0, sliceStart);
+        var e = Math.min(currentStr.length, sliceStop);
+        for (var k = s; k < e; k += sliceStep) {
+          included[k] = true;
+        }
+      }
+
+      for (var i = 0; i < currentStr.length; i++) {
+        var ch = currentStr.charAt(i);
+        var cell = document.createElement('button');
+        cell.type = `button`;
+        cell.className = `char-cell`;
+        if (stringMode === `index` && i === selectedIdx) cell.classList.add('is-selected');
+        if (stringMode === `slice` && included[i]) cell.classList.add('is-sliced');
+        if (stringMode === `slice` && i === sliceStop) cell.classList.add('is-stop-edge');
+        cell.setAttribute('aria-label', `Índice ${i}: carácter ${ch === ' ' ? 'espacio' : ch}`);
+        (function (idxCopy) {
+          cell.onclick = function () {
+            if (stringMode !== `index`) setStringMode('index');
+            updateIndexFromNumber(idxCopy);
+          };
+        })(i);
+        cell.innerHTML =
+          `<span class="char-glyph">${ch === ' ' ? '␣' : ch}</span>` +
+          `<span class="char-idx">${i}</span>`;
+        grid.appendChild(cell);
+      }
+    }
+
+    function updateIndexFromSlider(val) {
+      var n = Number(val);
+      var numEl = document.getElementById('idx-number');
+      if (numEl) numEl.value = n;
+      renderStringGrid(n, -1, -1, 1);
+      updateIndexConsole(n);
+    }
+
+    function updateIndexFromNumber(val) {
+      var n = Math.max(0, Number(val) || 0);
+      var slEl = document.getElementById('idx-slider');
+      var numEl = document.getElementById('idx-number');
+      if (slEl) slEl.value = Math.min(Number(slEl.max), n);
+      if (numEl) numEl.value = n;
+      renderStringGrid(n, -1, -1, 1);
+      updateIndexConsole(n);
+    }
+
+    function updateIndexConsole(idx) {
+      var out = document.getElementById('string-console-out');
+      if (!out) return;
+      var varName = currentStr === `Python` ? `palabra` : `frase`;
+      if (idx >= 0 && idx < currentStr.length) {
+        var ch = currentStr.charAt(idx);
+        out.innerHTML =
+          `<span class="code-line">&gt;&gt;&gt; ${varName} = "${currentStr}"</span>` +
+          `<span class="code-line">&gt;&gt;&gt; len(${varName}) -&gt; ${currentStr.length}</span>` +
+          `<span class="code-line">&gt;&gt;&gt; ${varName}[${idx}]</span>` +
+          `<span class="code-line code-muted">'${ch === ' ' ? ' ' : ch}' ${ch === ' ' ? '(espacio en blanco)' : ''}</span>`;
+      } else {
+        out.innerHTML =
+          `<span class="code-line">&gt;&gt;&gt; ${varName} = "${currentStr}"</span>` +
+          `<span class="code-line">&gt;&gt;&gt; ${varName}[${idx}]</span>` +
+          `<span class="code-line code-muted">IndexError: string index out of range (índices válidos: 0 a ${currentStr.length - 1})</span>`;
+      }
+    }
+
+    function applySlicePreset(str, start, stop, step) {
+      if (currentStr !== str) loadStringExample(str);
+      if (stringMode !== `slice`) setStringMode('slice');
+      var sEl = document.getElementById('slice-start');
+      var eEl = document.getElementById('slice-stop');
+      var pEl = document.getElementById('slice-step');
+      if (sEl) sEl.value = start;
+      if (eEl) eEl.value = stop;
+      if (pEl) pEl.value = step;
+      updateSliceOutput();
+    }
+
+    function updateSliceOutput() {
+      var sEl = document.getElementById('slice-start');
+      var eEl = document.getElementById('slice-stop');
+      var pEl = document.getElementById('slice-step');
+      var out = document.getElementById('string-console-out');
+      if (!sEl || !eEl || !pEl || !out) return;
+
+      var s = Math.max(0, Number(sEl.value) || 0);
+      var e = Math.max(0, Number(eEl.value) || 0);
+      var step = Math.max(1, Number(pEl.value) || 1);
+      pEl.value = step;
+
+      renderStringGrid(-1, s, e, step);
+
+      var res = ``;
+      var limit = Math.min(currentStr.length, e);
+      for (var i = s; i < limit; i += step) {
+        res += currentStr.charAt(i);
+      }
+      var varName = currentStr === `Python` ? `palabra` : `frase`;
+      var expr = step === 1 ? `${varName}[${s}:${e}]` : `${varName}[${s}:${e}:${step}]`;
+      out.innerHTML =
+        `<span class="code-line">&gt;&gt;&gt; ${varName} = "${currentStr}"</span>` +
+        `<span class="code-line">&gt;&gt;&gt; ${expr}</span>` +
+        `<span class="code-line code-muted">'${res}' (el índice fin ${e} no se incluye)</span>`;
+    }
+
+    // 5. Lab 3: Truth table & Conditional simulator
+    var boolState = { x: true, y: false };
+
+    function toggleBoolOperand(which) {
+      boolState[which] = !boolState[which];
+      var bx = document.getElementById('bool-x-btn');
+      var by = document.getElementById('bool-y-btn');
+      if (bx) bx.textContent = `X = ${boolState.x ? 'True' : 'False'}`;
+      if (by) by.textContent = `Y = ${boolState.y ? 'True' : 'False'}`;
+      renderTruthTable();
+    }
+
+    function renderTruthTable() {
+      var tbody = document.getElementById('truth-table-body');
+      if (!tbody) return;
+      var x = boolState.x;
+      var y = boolState.y;
+      var rows = [
+        { expr: `X and Y`, val: x && y, rule: `True solo si ambos operandos son True.` },
+        { expr: `X or Y`, val: x || y, rule: `True si al menos uno es True.` },
+        { expr: `not X`, val: !x, rule: `Invierte el valor booleano de X.` },
+        { expr: `not Y`, val: !y, rule: `Invierte el valor booleano de Y.` }
+      ];
+      var html = ``;
+      for (var i = 0; i < rows.length; i++) {
+        var r = rows[i];
+        html +=
+          `<tr>` +
+          `<td><code>${r.expr}</code></td>` +
+          `<td><span class="tag ${r.val ? 'tag--blue' : 'tag--black'}">${r.val ? 'True' : 'False'}</span></td>` +
+          `<td>${r.rule}</td>` +
+          `</tr>`;
+      }
+      tbody.innerHTML = html;
+    }
+
+    function updateTempFromSlider(val) {
+      var n = Number(val);
+      var num = document.getElementById('temp-number');
+      if (num) num.value = n;
+      evaluateTempBranches(n);
+    }
+
+    function updateTempFromNumber(val) {
+      var n = Math.max(-10, Math.min(45, Number(val) || 0));
+      var sl = document.getElementById('temp-slider');
+      if (sl) sl.value = n;
+      evaluateTempBranches(n);
+    }
+
+    function evaluateTempBranches(temp) {
+      var ro = document.getElementById('temp-readout');
+      var bIf = document.getElementById('branch-if');
+      var bElif = document.getElementById('branch-elif');
+      var bElse = document.getElementById('branch-else');
+      var out = document.getElementById('temp-console-out');
+      if (ro) ro.textContent = temp;
+      if (!bIf || !bElif || !bElse || !out) return;
+
+      bIf.classList.remove('is-taken', 'is-skipped');
+      bElif.classList.remove('is-taken', 'is-skipped');
+      bElse.classList.remove('is-taken', 'is-skipped');
+
+      if (temp <= 0) {
+        bIf.classList.add('is-taken');
+        bElif.classList.add('is-skipped');
+        bElse.classList.add('is-skipped');
+        out.textContent = `Salida: "Muy frío" — temp (${temp}) <= 0 es True; las cláusulas elif y else se omiten.`;
+      } else if (temp < 25) {
+        bIf.classList.add('is-skipped');
+        bElif.classList.add('is-taken');
+        bElse.classList.add('is-skipped');
+        out.textContent = `Salida: "Frío" — temp <= 0 es False, pero temp (${temp}) < 25 es True.`;
+      } else {
+        bIf.classList.add('is-skipped');
+        bElif.classList.add('is-skipped');
+        bElse.classList.add('is-taken');
+        out.textContent = `Salida: "Calor" — Ninguna condición anterior fue True; else actúa como respaldo.`;
+      }
+    }
+
+    // 6. Lab 4: Data Structures workbench
+    var dsList = [1, 2, 3, 4];
+    var dsTuple = [`a`, `e`, `i`, `o`];
+    var dsDict = { Gino: 15, Nora: 45 };
+
+    function switchDsTab(tab) {
+      var tabs = [`list`, `tuple`, `dict`];
+      for (var i = 0; i < tabs.length; i++) {
+        var t = tabs[i];
+        var btn = document.getElementById('ds-tab-' + t);
+        var box = document.getElementById('ds-controls-' + t);
+        if (btn) btn.classList.toggle('is-active', t === tab);
+        if (box) box.style.display = t === tab ? `block` : `none`;
+      }
+      if (tab === `list`) showDsConsole([`>>> nums = ${JSON.stringify(dsList)}`, `Lista mutable lista para operar.`]);
+      if (tab === `tuple`) showDsConsole([`>>> vocales = ('a', 'e', 'i', 'o')`, `Tupla inmutable: protege sus 4 elementos.`]);
+      if (tab === `dict`) showDsConsole([`>>> edades = ${JSON.stringify(dsDict)}`, `Diccionario de pares clave-valor.`]);
+    }
+
+    function showDsConsole(lines) {
+      var out = document.getElementById('ds-console');
+      if (!out) return;
+      var html = ``;
+      for (var i = 0; i < lines.length; i++) {
+        var cls = i === lines.length - 1 ? `code-line code-muted` : `code-line`;
+        html += `<span class="${cls}">${lines[i]}</span>`;
+      }
+      out.innerHTML = html;
+    }
+
+    function runListOp(op) {
+      var cmd = ``;
+      var note = ``;
+      if (op === `append`) {
+        dsList.push(5);
+        cmd = `>>> nums.append(5)`;
+        note = `Agrega 5 al final -> ${JSON.stringify(dsList)}`;
+      } else if (op === `insert`) {
+        dsList.unshift(6);
+        cmd = `>>> nums.insert(0, 6)`;
+        note = `Inserta 6 en el índice 0 -> ${JSON.stringify(dsList)}`;
+      } else if (op === `pop`) {
+        if (dsList.length === 0) {
+          showDsConsole([`>>> nums.pop()`, `IndexError: pop from empty list`]);
+          return;
+        }
+        var popped = dsList.pop();
+        cmd = `>>> nums.pop()`;
+        note = `Elimina y retorna ${popped} -> ${JSON.stringify(dsList)}`;
+      } else if (op === `reverse`) {
+        dsList.reverse();
+        cmd = `>>> nums.reverse()`;
+        note = `Invierte el orden -> ${JSON.stringify(dsList)}`;
+      } else if (op === `update0`) {
+        if (dsList.length > 0) dsList[0] = -8;
+        cmd = `>>> nums[0] = -8`;
+        note = `Actualiza el índice 0 -> ${JSON.stringify(dsList)}`;
+      } else {
+        dsList = [1, 2, 3, 4];
+        cmd = `>>> nums = [1, 2, 3, 4]`;
+        note = `Estado reiniciado -> [1, 2, 3, 4]`;
+      }
+      showDsConsole([cmd, `>>> nums`, note]);
+    }
+
+    function runTupleOp(op) {
+      if (op === `index`) {
+        showDsConsole([`>>> vocales.index('i')`, `2 (índice de la primera ocurrencia)`]);
+      } else if (op === `count`) {
+        showDsConsole([`>>> vocales.count('a')`, `1 (apariciones de 'a' en la tupla)`]);
+      } else if (op === `in`) {
+        showDsConsole([`>>> 'z' in vocales`, `False ('z' no está en ('a', 'e', 'i', 'o'))`]);
+      } else {
+        showDsConsole([`>>> vocales[0] = 'x'`, `TypeError: 'tuple' object does not support item assignment`]);
+      }
+    }
+
+    function runDictOp(op) {
+      if (op === `add`) {
+        dsDict[`Talina`] = 67;
+        showDsConsole([`>>> edades["Talina"] = 67`, `>>> edades`, JSON.stringify(dsDict)]);
+      } else if (op === `update`) {
+        dsDict[`Gino`] = 17;
+        showDsConsole([`>>> edades["Gino"] = 17`, `>>> edades`, `${JSON.stringify(dsDict)} (clave única actualizada)`]);
+      } else if (op === `del`) {
+        if (`Gino` in dsDict) {
+          delete dsDict[`Gino`];
+          showDsConsole([`>>> del edades["Gino"]`, `>>> edades`, JSON.stringify(dsDict)]);
+        } else {
+          showDsConsole([`>>> del edades["Gino"]`, `KeyError: 'Gino' (ya fue eliminada)`]);
+        }
+      } else if (op === `keyerr`) {
+        showDsConsole([`>>> edades["Jack"]`, `KeyError: 'Jack' — La clave no existe en el diccionario.`]);
+      } else {
+        dsDict = { Gino: 15, Nora: 45 };
+        showDsConsole([`>>> edades = {"Gino": 15, "Nora": 45}`, `Diccionario reiniciado.`]);
+      }
+    }
+
+    // 7. Lab 5: Loop simulator
+    var loopMode = `for`;
+    var loopSteps = [];
+    var loopCursor = 0;
+
+    function setLoopMode(mode) {
+      loopMode = mode;
+      var bf = document.getElementById('loop-mode-for');
+      var bw = document.getElementById('loop-mode-while');
+      var pf = document.getElementById('for-params-box');
+      var pw = document.getElementById('while-params-box');
+      if (bf) bf.classList.toggle('is-active', mode === `for`);
+      if (bw) bw.classList.toggle('is-active', mode === `while`);
+      if (pf) pf.style.display = mode === `for` ? `block` : `none`;
+      if (pw) pw.style.display = mode === `while` ? `block` : `none`;
+      resetLoopSim();
+    }
+
+    function buildLoopSteps() {
+      loopSteps = [];
+      if (loopMode === `for`) {
+        var s = Number((document.getElementById('range-start') || {}).value) || 0;
+        var e = Number((document.getElementById('range-stop') || {}).value) || 0;
+        var step = Math.max(1, Number((document.getElementById('range-step') || {}).value) || 1);
+        for (var i = s; i < e && loopSteps.length < 18; i += step) {
+          loopSteps.push(`Iteración ${loopSteps.length + 1}: i = ${i} -> print(i) imprime ${i}`);
+        }
+      } else {
+        var x = Number((document.getElementById('while-init') || {}).value) || 0;
+        var inc = Math.max(1, Number((document.getElementById('while-inc') || {}).value) || 1);
+        while (x < 35 && loopSteps.length < 18) {
+          var nextX = x + inc;
+          loopSteps.push(`Condición ${x} < 35 es True -> imprime ${x}; x pasa a ${nextX}`);
+          x = nextX;
+        }
+        loopSteps.push(`Condición ${x} < 35 es False -> El ciclo se detiene.`);
+      }
+    }
+
+    function resetLoopSim() {
+      loopCursor = 0;
+      buildLoopSteps();
+      renderLoopConsole();
+    }
+
+    function stepLoopSim() {
+      if (loopCursor < loopSteps.length) {
+        loopCursor++;
+        renderLoopConsole();
+      }
+    }
+
+    function runAllLoopSim() {
+      loopCursor = loopSteps.length;
+      renderLoopConsole();
+    }
+
+    function renderLoopConsole() {
+      var out = document.getElementById('loop-console');
+      if (!out) return;
+      var header = ``;
+      if (loopMode === `for`) {
+        var s = Number((document.getElementById('range-start') || {}).value) || 0;
+        var e = Number((document.getElementById('range-stop') || {}).value) || 0;
+        var step = Math.max(1, Number((document.getElementById('range-step') || {}).value) || 1);
+        header = `for i in range(${s}, ${e}, ${step}):`;
+      } else {
+        var x = Number((document.getElementById('while-init') || {}).value) || 0;
+        var inc = Math.max(1, Number((document.getElementById('while-inc') || {}).value) || 1);
+        header = `x = ${x}; while x < 35: print(x); x += ${inc}`;
+      }
+      var lines = [`<span class="code-line">&gt;&gt;&gt; ${header}</span>`];
+      if (loopCursor === 0) {
+        lines.push(`<span class="code-line code-muted">Pulsa "Siguiente iteración" para observar cada paso.</span>`);
+      } else {
+        for (var i = 0; i < loopCursor; i++) {
+          lines.push(`<span class="code-line code-muted">${loopSteps[i]}</span>`);
+        }
+      }
+      var btn = document.getElementById('loop-step-btn');
+      if (btn) btn.disabled = loopCursor >= loopSteps.length;
+      out.innerHTML = lines.join('');
+    }
+
+    // 8. Lab 6: Dynamic Fibonacci recursion tree SVG
+    function fibVal(n) {
+      return n <= 1 ? n : fibVal(n - 1) + fibVal(n - 2);
+    }
+
+    function renderFibTree(n) {
+      var nums = [2, 3, 4];
+      for (var b = 0; b < nums.length; b++) {
+        var btn = document.getElementById('fib-btn-' + nums[b]);
+        if (btn) btn.classList.toggle('is-active', nums[b] === n);
+      }
+
+      var svg = document.getElementById('fib-svg');
+      var sumEl = document.getElementById('fib-summary');
+      if (!svg || !sumEl) return;
+
+      var nodes = [];
+      var edges = [];
+      var baseCount = 0;
+      var totalCount = 0;
+
+      function traverse(val, depth, xMin, xMax, parentX, parentY) {
+        totalCount++;
+        var x = (xMin + xMax) / 2;
+        var y = 36 + depth * 72;
+        var isBase = val <= 1;
+        if (isBase) baseCount++;
+        if (parentX !== null) {
+          edges.push({ x1: parentX, y1: parentY + 18, x2: x, y2: y - 18 });
+        }
+        nodes.push({ x: x, y: y, val: val, res: fibVal(val), isBase: isBase });
+        if (!isBase) {
+          traverse(val - 1, depth + 1, xMin, x, x, y);
+          traverse(val - 2, depth + 1, x, xMax, x, y);
+        }
+      }
+
+      var w = n === 4 ? 860 : 760;
+      var h = n === 4 ? 340 : 270;
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      svg.setAttribute('height', String(h));
+
+      traverse(n, 0, 20, w - 20, null, null);
+
+      var svgHtml = ``;
+      for (var i = 0; i < edges.length; i++) {
+        var e = edges[i];
+        svgHtml += `<line x1="${e.x1}" y1="${e.y1}" x2="${e.x2}" y2="${e.y2}" stroke="var(--outline)" stroke-width="2" />`;
+      }
+      for (var j = 0; j < nodes.length; j++) {
+        var nd = nodes[j];
+        var boxW = n === 4 ? 76 : 92;
+        var rx = nd.x - boxW / 2;
+        var ry = nd.y - 18;
+        var fill = nd.isBase ? `var(--primary-container)` : `var(--background)`;
+        var textFill = `var(--on-surface)`;
+        svgHtml +=
+          `<rect x="${rx}" y="${ry}" width="${boxW}" height="36" fill="${fill}" stroke="var(--outline)" stroke-width="2.5" />` +
+          `<text x="${nd.x}" y="${nd.y + 4}" text-anchor="middle" font-family="var(--font-mono)" font-size="12" font-weight="700" fill="${textFill}">fib(${nd.val})=${nd.res}</text>`;
+      }
+      svg.innerHTML = svgHtml;
+      sumEl.textContent =
+        `fibonacci(${n}) realiza ${totalCount} llamadas en total (${baseCount} casos base en amarillo, ${totalCount - baseCount} casos recursivos) y retorna ${fibVal(n)}.`;
+    }
+
+    // 9. Lab 7a: Exceptions try/except/else/finally
+    function setExceptionCase(a, b) {
+      var e1 = document.getElementById('exc-num1');
+      var e2 = document.getElementById('exc-num2');
+      if (e1) e1.value = a;
+      if (e2) e2.value = b;
+      runExceptionSim();
+    }
+
+    function runExceptionSim() {
+      var e1 = document.getElementById('exc-num1');
+      var e2 = document.getElementById('exc-num2');
+      var out = document.getElementById('exc-console');
+      if (!e1 || !e2 || !out) return;
+      var a = Number(e1.value) || 0;
+      var b = Number(e2.value) || 0;
+
+      if (b === 0) {
+        out.innerHTML =
+          `<span class="code-line">&gt;&gt;&gt; try: resultado = ${a} / ${b}</span>` +
+          `<span class="code-line code-muted">[except ZeroDivisionError as e] -&gt; division by zero</span>` +
+          `<span class="code-line code-muted">[else] -&gt; Omitido porque ocurrió una excepción.</span>` +
+          `<span class="code-line code-muted">[finally] -&gt; Ejecutado siempre (ideal para cerrar recursos).</span>`;
+      } else {
+        var r = (a / b).toFixed(2);
+        out.innerHTML =
+          `<span class="code-line">&gt;&gt;&gt; try: resultado = ${a} / ${b} -&gt; ${r}</span>` +
+          `<span class="code-line code-muted">[except] -&gt; Omitido (sin errores).</span>` +
+          `<span class="code-line code-muted">[else] -&gt; Ejecutado: operación válida (${r}).</span>` +
+          `<span class="code-line code-muted">[finally] -&gt; Ejecutado siempre.</span>`;
+      }
+    }
+
+    // 10. Lab 7b: OOP CuentaBancaria instance
+    var bankAccount = {
+      numero: `153-566-43`,
+      titular: `Nora Smith`,
+      balance: 5600,
+      log: `Instancia mi_cuenta creada con balance inicial 5600.`
+    };
+
+    function renderBankConsole() {
+      var out = document.getElementById('bank-console');
+      if (!out) return;
+      out.innerHTML =
+        `<span class="code-line">&gt;&gt;&gt; mi_cuenta = CuentaBancaria("${bankAccount.numero}", "${bankAccount.titular}", 5600)</span>` +
+        `<span class="code-line">&gt;&gt;&gt; mi_cuenta.balance -&gt; ${bankAccount.balance}</span>` +
+        `<span class="code-line code-muted">${bankAccount.log}</span>`;
+    }
+
+    function depositToAccount() {
+      var inp = document.getElementById('bank-deposit');
+      var monto = inp ? Number(inp.value) : 0;
+      if (monto > 0) {
+        bankAccount.balance += monto;
+        bankAccount.log = `mi_cuenta.depositar(${monto}) -> self.balance actualizado a ${bankAccount.balance}.`;
+      } else {
+        bankAccount.log = `Monto inválido: depositar() exige un monto mayor que 0.`;
+      }
+      renderBankConsole();
+    }
+
+    function showAccountBalance() {
+      bankAccount.log = `mi_cuenta.generar_balance() -> Balance actual de ${bankAccount.titular}: ${bankAccount.balance}.`;
+      renderBankConsole();
+    }
+
+    function resetAccount() {
+      bankAccount.balance = 5600;
+      bankAccount.log = `Instancia reiniciada con balance inicial 5600.`;
+      renderBankConsole();
+    }
+
+    // Initialize interactive sections on load
+    renderStringGrid(2, -1, -1, 1);
+    renderTruthTable();
+    evaluateTempBranches(15);
+    resetLoopSim();
+    renderFibTree(3);
+    runExceptionSim();
+    renderBankConsole();
+  </script>
+</body>
+</html>
