@@ -1,0 +1,2991 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="charter">
+  <title>Estatuto Tributario - DIAN · Arquitectura Normativa para Directivos y Posgrado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces — Charter */
+      --background: #f7f4ec;
+      --surface-container-low: #fffdf8;
+      --surface-container: #ece5d4;
+      --surface-container-high: #e3dac4;
+
+      /* Ink */
+      --on-surface: #1c1f26;
+      --on-surface-variant: #4f5360;
+
+      /* Rules */
+      --outline: #b08d57;
+      --outline-variant: #d9cfb8;
+
+      /* Accents */
+      --primary: #14213d;
+      --on-primary: #f7f4ec;
+      --primary-container: #e3e6ee;
+      --on-primary-container: #14213d;
+      --secondary: #2d5a4a;
+      --tertiary: #8a6a35;
+      --error: #9b2c2c;
+      --on-error: #f7f4ec;
+
+      /* Data series */
+      --data-1: #14213d;
+      --data-2: #8a6a35;
+      --data-3: #2d5a4a;
+      --data-4: #5b7aa0;
+      --data-context: #c2bba9;
+
+      /* Fonts */
+      --font-headline: 'Libre Caslon Text', serif;
+      --font-body: 'Inter', sans-serif;
+      --font-label: 'Inter', sans-serif;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.125rem;
+      --rounded-full: 0.125rem;
+
+      /* Style effects */
+      --brass-rule: 2px solid var(--outline);
+      --hairline: 1px solid var(--outline-variant);
+      --leaf-underline: 0 1px 0 var(--outline-variant);
+      --title-brass-text: color-mix(in srgb, var(--outline) 75%, var(--on-primary));
+      --title-lede-text: color-mix(in srgb, var(--on-primary) 82%, var(--primary));
+      --error-bg: color-mix(in srgb, var(--error) 8%, var(--surface-container-low));
+      --positive-bg: color-mix(in srgb, var(--secondary) 9%, var(--surface-container-low));
+      --warning-bg: color-mix(in srgb, var(--tertiary) 10%, var(--surface-container-low));
+
+      /* Shared semantic & focus */
+      --positive: #2d5a4a;
+      --warning: #8a6a35;
+      --focus: #14213d;
+
+      /* Type scale — Narrative */
+      --display-size: clamp(2.35rem, 1.4rem + 3.4vw, 4rem);
+      --headline-size: clamp(1.65rem, 1.2rem + 1.8vw, 2.35rem);
+      --subhead-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem);
+      --body-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Title Band — Charter Treatment 1 & 2 */
+    .title-band {
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+      border-bottom: 3px solid var(--outline);
+    }
+    .title-band-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+    .eyebrow-band {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--title-brass-text);
+      margin: 0 0 var(--space-md) 0;
+    }
+    .title-band h1 {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: var(--display-size);
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      color: var(--on-primary);
+      margin: 0 0 var(--space-md) 0;
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--outline);
+      max-width: 24ch;
+    }
+    .title-band h1 em {
+      font-style: italic;
+      color: var(--title-brass-text);
+    }
+    .title-band .lede {
+      font-size: clamp(1.125rem, 1.02rem + 0.35vw, 1.3rem);
+      line-height: 1.55;
+      color: var(--title-lede-text);
+      max-width: 66ch;
+      margin: 0 0 var(--space-lg) 0;
+    }
+    .hero-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid color-mix(in srgb, var(--outline) 45%, var(--primary));
+    }
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .hero-meta-label {
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--title-brass-text);
+    }
+    .hero-meta-value {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: 1.15rem;
+      font-variant-numeric: tabular-nums lining-nums;
+      color: var(--on-primary);
+    }
+
+    /* Main Container */
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-xl) var(--space-lg) var(--space-3xl);
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Mandatory Orientative Notice */
+    .orientative-banner {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      border-left: 4px solid var(--primary);
+      box-shadow: var(--leaf-underline);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+    .orientative-icon {
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: var(--space-xs);
+    }
+    .orientative-banner strong {
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--primary);
+      display: block;
+      margin-bottom: var(--space-xs);
+    }
+    .orientative-banner p {
+      margin: 0;
+      font-size: 0.96rem;
+      color: var(--on-surface);
+      max-width: 82ch;
+    }
+
+    /* Progress & Navigation Ledger */
+    .ledger-panel {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .ledger-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+      border-bottom: var(--hairline);
+      padding-bottom: var(--space-md);
+    }
+    .label-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-xs) 0;
+    }
+    .figure-value {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-variant-numeric: tabular-nums lining-nums;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .ledger-stat {
+      font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+    }
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      transition: width var(--dur-long) var(--ease-out);
+    }
+    .index-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .index-nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--background);
+      border: var(--hairline);
+      border-radius: var(--rounded);
+      color: var(--on-surface);
+      text-decoration: none;
+      font-size: 0.9rem;
+      min-height: 44px;
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .index-nav-link:hover {
+      background: var(--primary-container);
+    }
+    .index-nav-link.is-done {
+      border-left: 3px solid var(--secondary);
+      background: var(--positive-bg);
+    }
+    .index-nav-num {
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: var(--tertiary);
+      margin-right: var(--space-xs);
+    }
+    .index-nav-status {
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+      flex-shrink: 0;
+    }
+    .index-nav-link.is-done .index-nav-status {
+      color: var(--secondary);
+    }
+
+    /* Key Figures Row */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .figure-card .figure-value {
+      font-size: clamp(1.75rem, 1.3rem + 1.2vw, 2.35rem);
+      line-height: 1.1;
+    }
+    .figure-delta {
+      color: var(--tertiary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-top: var(--space-xs);
+    }
+    .figure-source {
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-top: auto;
+      padding-top: var(--space-xs);
+      border-top: var(--hairline);
+    }
+
+    /* Interactive Search & Filter Explorer */
+    .tool-panel {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .section-head {
+      border-top: var(--brass-rule);
+      padding-top: var(--space-md);
+      border-bottom: var(--hairline);
+      padding-bottom: var(--space-sm);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+    }
+    .section-head-titles {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      max-width: 72ch;
+    }
+    .section-head h2 {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: var(--headline-size);
+      line-height: 1.15;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .section-sub {
+      font-size: 0.96rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Controls & Inputs */
+    .search-controls-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+    }
+    .text-input, .select-input {
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      padding: 0.65rem 0.85rem;
+      font-size: 1rem;
+      color: var(--on-surface);
+      min-height: 44px;
+      width: 100%;
+      transition: box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .select-input {
+      padding-right: 2.25rem;
+    }
+    .text-input:focus, .select-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+      border-radius: var(--rounded);
+      padding: 0.65rem 1.25rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary:hover {
+      background: color-mix(in srgb, var(--primary) 85%, var(--on-surface));
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: var(--rounded);
+      padding: 0.65rem 1.1rem;
+      font-size: 0.92rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .btn-secondary:hover {
+      background: var(--primary-container);
+    }
+    .btn-secondary[aria-pressed="true"], .filter-btn.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .filter-btn {
+      background: var(--background);
+      color: var(--on-surface);
+      border: var(--hairline);
+      border-radius: var(--rounded);
+      padding: 0.45rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      min-height: 44px;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .filter-btn:hover {
+      background: var(--primary-container);
+    }
+
+    /* Search Results */
+    .search-meta-line {
+      font-size: 0.9rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .article-card {
+      background: var(--background);
+      border: var(--hairline);
+      border-top: var(--brass-rule);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .stamp-tag {
+      display: inline-block;
+      border: 1px solid var(--outline);
+      color: var(--tertiary);
+      background: transparent;
+      border-radius: var(--rounded);
+      padding: 0.15rem 0.5rem;
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      align-self: flex-start;
+    }
+    .article-card h3 {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1.08rem;
+      margin: var(--space-xs) 0 0 0;
+      color: var(--on-surface);
+    }
+    .article-card p {
+      font-size: 0.94rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+    .article-card-footer {
+      margin-top: auto;
+      padding-top: var(--space-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-sm);
+      border-top: var(--hairline);
+    }
+    .inline-link {
+      color: var(--primary);
+      text-decoration: underline;
+      text-decoration-color: var(--outline);
+      text-underline-offset: 3px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .inline-link:hover {
+      text-decoration-thickness: 2px;
+    }
+
+    /* Narrative Sections (01 - 10) */
+    .narrative-section {
+      display: grid;
+      gap: var(--space-lg);
+      padding-top: var(--space-md);
+    }
+    .done-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      padding: 0.5rem 0.95rem;
+      min-height: 44px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--on-surface);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+      flex-shrink: 0;
+    }
+    .done-toggle-btn:hover {
+      background: var(--primary-container);
+    }
+    .done-toggle-btn.is-checked {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+    .done-box {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid currentColor;
+      border-radius: var(--rounded);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      line-height: 1;
+    }
+
+    /* Asymmetric Narrative Split */
+    .section-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+    .prose-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      max-width: 65ch;
+    }
+    .prose-col p {
+      margin: 0;
+    }
+    .prose-col ul {
+      margin: 0;
+      padding-left: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .prose-col h3 {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      margin: var(--space-sm) 0 0 0;
+      color: var(--on-surface);
+    }
+    .notes-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .source-box {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .source-box h4 {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .source-box p, .source-box li {
+      font-size: 0.93rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+    .source-box ul {
+      margin: var(--space-xs) 0 0 0;
+      padding-left: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .no-consta-note {
+      background: var(--warning-bg);
+      border-left: 3px solid var(--tertiary);
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.92rem;
+      color: var(--on-surface);
+    }
+
+    /* Tables — Charter Habitat */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+    }
+    thead th {
+      background: var(--surface-container-high);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface);
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--brass-rule);
+    }
+    tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--hairline);
+      vertical-align: top;
+      color: var(--on-surface);
+    }
+    .num-col {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    thead th.num-col {
+      text-align: right;
+    }
+
+    /* Calculator Module */
+    .calc-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      border-bottom: var(--hairline);
+      padding-bottom: var(--space-md);
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+    .calc-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .dual-input-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 115px;
+      gap: var(--space-md);
+      align-items: center;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      min-height: 44px;
+      cursor: pointer;
+    }
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      cursor: pointer;
+      font-size: 0.96rem;
+    }
+    .check-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .calc-output-panel {
+      background: var(--background);
+      border-top: var(--brass-rule);
+      border-bottom: var(--hairline);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .calc-verdict {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.85rem);
+      line-height: 1.2;
+      margin: 0;
+      color: var(--primary);
+    }
+    .calc-breakdown {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .calc-breakdown li {
+      font-size: 0.94rem;
+      padding-bottom: var(--space-xs);
+      border-bottom: var(--hairline);
+    }
+
+    /* Chart & Timeline */
+    .chart-box {
+      position: relative;
+      width: 100%;
+      min-height: 360px;
+      height: 380px;
+    }
+    .timeline-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .timeline-track {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .timeline-node {
+      background: var(--background);
+      border: var(--hairline);
+      border-top: var(--brass-rule);
+      padding: var(--space-md);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      min-height: 44px;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .timeline-node:hover {
+      background: var(--primary-container);
+    }
+    .timeline-node.is-selected {
+      background: var(--primary-container);
+      border-top-color: var(--primary);
+    }
+    .timeline-year {
+      font-family: var(--font-headline);
+      font-size: 1.35rem;
+      font-variant-numeric: tabular-nums;
+      color: var(--primary);
+    }
+    .timeline-detail-card {
+      background: var(--background);
+      border-left: 4px solid var(--outline);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    /* Quiz Module */
+    .quiz-progress-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md);
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+    }
+    .question-card {
+      background: var(--background);
+      border: var(--hairline);
+      border-top: var(--brass-rule);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .question-stem {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: 1.15rem;
+      line-height: 1.35;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    .options-list {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      min-height: 44px;
+      font-size: 0.97rem;
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .option-label:hover {
+      background: var(--primary-container);
+    }
+    .option-label input[type="radio"] {
+      margin-top: 0.25rem;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      flex-shrink: 0;
+    }
+    .option-label.is-correct {
+      background: var(--positive-bg);
+      border-color: var(--secondary);
+    }
+    .option-label.is-wrong {
+      background: var(--error-bg);
+      border-color: var(--error);
+    }
+    .external-tag {
+      display: inline-block;
+      border: 1px solid var(--tertiary);
+      color: var(--tertiary);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.08rem 0.4rem;
+      border-radius: var(--rounded);
+      margin-left: var(--space-xs);
+      vertical-align: middle;
+    }
+    .option-feedback {
+      font-size: 0.91rem;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container);
+      border-left: 3px solid var(--primary);
+      color: var(--on-surface);
+    }
+    .quiz-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: center;
+    }
+    .quiz-score-panel {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      border-left: 4px solid var(--secondary);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    /* Footer */
+    .doc-footer {
+      border-top: var(--brass-rule);
+      padding-top: var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+      color: var(--on-surface-variant);
+      font-size: 0.9rem;
+    }
+
+    /* Scroll reveal */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+    }
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 860px) {
+      .section-layout, .calc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .title-band {
+        padding: var(--space-xl) var(--space-md) var(--space-lg);
+      }
+      .page-grid {
+        grid-template-columns: 1fr;
+        padding: var(--space-lg) var(--space-md) var(--space-2xl);
+        gap: var(--space-lg);
+      }
+      .search-controls-row {
+        grid-template-columns: 1fr;
+      }
+      .dual-input-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .reveal-item {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Full-bleed Navy Title Band -->
+  <header class="title-band">
+    <div class="title-band-inner">
+      <p class="eyebrow-band">Decreto Ley 624 de 1989 · Diario Oficial 38756 · Dirección General de Impuestos Nacionales (DIAN)</p>
+      <h1>Estatuto Tributario - DIAN: <em>el activo normativo</em> que poseéis sin usar</h1>
+      <p class="lede">
+        Guía ejecutiva y de posgrado sobre el Decreto 624 de 1989. La mayoría de directivos y asesores tratan el Estatuto como un mero catálogo sancionador, ignorando que su arquitectura —desde la residencia fiscal hasta las ECE, el régimen SIMPLE o la sede efectiva de administración— constituye un mapa estratégico de decisión patrimonial y societaria.
+      </p>
+      <div class="hero-meta-grid">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Norma de base</span>
+          <span class="hero-meta-value">Decreto 624 de 1989</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Publicación oficial</span>
+          <span class="hero-meta-value">30/03/1989 · DO 38756</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Estructura cubierta</span>
+          <span class="hero-meta-value">10 bloques · Título Prel. a Libro VII</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Estado en fuente</span>
+          <span class="hero-meta-value">Vigente (SUIN-Juriscol)</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-grid">
+
+    <!-- Mandatory Visible Orientative Notice -->
+    <section class="orientative-banner" aria-label="Aviso de carácter orientativo">
+      <i data-lucide="scale" class="orientative-icon" width="22" height="22" aria-hidden="true"></i>
+      <div>
+        <strong>Aviso obligatorio: contenido puramente orientativo</strong>
+        <p>
+          Todo el contenido, los cálculos, las gráficas y las evaluaciones de esta herramienta tienen carácter <strong>puramente orientativo</strong> y académico. Se basan exclusivamente en los fragmentos literales del Decreto 624 de 1989 («Estatuto Tributario - DIAN») aportados en la fuente documental; todo dato o tabla ausente en dichos fragmentos se señala explícitamente como «no consta». No sustituye en ningún caso el criterio profesional ni constituye asesoramiento fiscal vinculante.
+        </p>
+      </div>
+    </section>
+
+    <!-- Headline Quantitative Snapshot -->
+    <section class="card-grid" aria-label="Cifras clave verificadas en la fuente">
+      <article class="figure-card">
+        <span class="label-kicker">Umbral de permanencia · Art. 10 num. 1</span>
+        <p class="figure-value">&gt; 183 días</p>
+        <span class="figure-delta">En cualquier período de 365 días consecutivos</span>
+        <span class="figure-source">Fuente: Decreto 624 de 1989, Libro I, Art. 10</span>
+      </article>
+      <article class="figure-card">
+        <span class="label-kicker">Presencia Económica Significativa · Art. 20-3</span>
+        <p class="figure-value">3% bruto / 31.300 UVT</p>
+        <span class="figure-delta">Opción de declaración directa desde el 1/01/2024</span>
+        <span class="figure-source">Fuente: Decreto 624 de 1989, Libro I, Art. 20-3</span>
+      </article>
+      <article class="figure-card">
+        <span class="label-kicker">Portafolio exterior · Art. 18-1 num. 4</span>
+        <p class="figure-value">14% / 25% / 5%</p>
+        <span class="figure-delta">General (14%) vs. paraíso fiscal (25%) vs. renta fija (5%)</span>
+        <span class="figure-source">Fuente: Decreto 624 de 1989, Libro I, Art. 18-1</span>
+      </article>
+      <article class="figure-card">
+        <span class="label-kicker">Sede efectiva y exclusión · Art. 12-1 Par. 6</span>
+        <p class="figure-value">&ge; 80% origen</p>
+        <span class="figure-delta">Exclusión por ingresos locales no pasivos (part. &le; 25%)</span>
+        <span class="figure-source">Fuente: Decreto 624 de 1989, Libro I, Art. 12-1</span>
+      </article>
+    </section>
+
+    <!-- User Progress & Section Index ("Marcar como hecho") -->
+    <section class="ledger-panel" aria-label="Seguimiento del progreso de lectura">
+      <div class="ledger-header">
+        <div>
+          <p class="label-kicker">Cuadro de avance del ejecutivo</p>
+          <p class="figure-value ledger-stat" id="progress-summary-text">0 de 10 secciones completadas (0%)</p>
+        </div>
+        <button type="button" class="btn-secondary" id="reset-progress-btn" onclick="resetProgress(this)">
+          Reiniciar avance
+        </button>
+      </div>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" id="progress-bar-wrap">
+        <div class="progress-fill" id="progress-fill-bar"></div>
+      </div>
+      <nav class="index-nav-grid" id="index-nav-grid" aria-label="Índice rápido de las diez secciones">
+        <!-- Populated by JS -->
+      </nav>
+    </section>
+
+    <!-- Dynamic Search & Book/Topic Filter -->
+    <section class="tool-panel" id="buscador-normativo" aria-label="Buscador dinámico de artículos y filtros por tema">
+      <div class="section-head" style="border-top: none; padding-top: 0;">
+        <div class="section-head-titles">
+          <span class="label-kicker">Instrumento de consulta inmediata</span>
+          <h2>Buscador dinámico de artículos y filtros por libro</h2>
+          <p class="section-sub">Localizad al instante cualquier artículo, umbral en UVT, tarifa porcentual o regla de sujeción contenida en los fragmentos de la fuente.</p>
+        </div>
+      </div>
+
+      <div class="search-controls-row">
+        <div class="field-group">
+          <label class="field-label" for="search-input">Buscar término, número de artículo o concepto</label>
+          <input type="search" id="search-input" class="text-input" placeholder="Ej.: 183 días, Art. 20-3, paraíso fiscal, UVT, SIMPLE, timbre…" oninput="handleSearchInput(this.value)">
+        </div>
+        <button type="button" class="btn-secondary" onclick="clearSearchFilters()">Limpiar filtros</button>
+      </div>
+
+      <div class="field-group">
+        <span class="field-label">Filtrar por libro o bloque temático</span>
+        <div class="filter-bar" id="topic-filter-bar">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="search-meta-line">
+        <span id="search-count-label">Mostrando 0 artículos indexados</span>
+        <span>Procedencia única: Decreto 624 de 1989 (fragmentos del cuaderno)</span>
+      </div>
+
+      <div class="results-grid" id="search-results-grid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- SECTION 01 -->
+    <section class="narrative-section reveal-item" id="sec-01">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 01 · Encabezamiento y Título Preliminar</span>
+          <h2>01. El nacimiento de la obligación y el error de confundir contribuyente con responsable</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Diario Oficial n.º 38756 (30/03/1989, pág. 1), Artículos 1.º a 3.º del Decreto y Título Preliminar (Arts. 1 a 4).</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-01" onclick="toggleSectionDone('sec-01')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            El activo normativo que tenéis sobre la mesa nace como <strong>Decreto Ley 624 de 1989</strong>, expedido el 30 de marzo de 1989 por el Presidente de la República en ejercicio de las facultades extraordinarias conferidas por los <strong>artículos 90, numeral 5.º, de la Ley 75 de 1986</strong> y <strong>41 de la Ley 43 de 1987</strong>, oída la Comisión Asesora de la Sala de Consulta y Servicio Civil del Consejo de Estado. Según el artículo 3.º de su parte dispositiva, sustituyó las normas con fuerza de ley vigentes hasta entonces sobre los impuestos administrados por la Dirección General de Impuestos Nacionales y entró en vigor <strong>dos (2) meses después de su publicación</strong> en el Diario Oficial n.º 38756.
+          </p>
+          <p>
+            El Título Preliminar fija en cuatro artículos la distinción operativa que todo directivo debe dominar antes de analizar cualquier balance. La obligación tributaria sustancial no nace de una factura ni de una declaración: se origina al realizarse el presupuesto previsto en la ley como generador del impuesto y su objeto es el pago del tributo (<strong>Art. 1</strong>).
+          </p>
+          <ul>
+            <li><strong>Contribuyente (Art. 2):</strong> es el responsable directo del pago respecto de quien se realiza el hecho generador de la obligación sustancial.</li>
+            <li><strong>Responsable en el impuesto de timbre (Art. 3):</strong> quien, sin tener el carácter de contribuyente, debe cumplir las obligaciones de este por disposición expresa de la ley.</li>
+            <li><strong>Sinónimos en el impuesto sobre las ventas (Art. 4):</strong> para fines del IVA, los términos <em>contribuyente</em> y <em>responsable</em> se consideran sinónimos.</li>
+          </ul>
+        </div>
+        <aside class="notes-col" aria-label="Fichas técnicas de la Sección 01">
+          <div class="source-box">
+            <span class="stamp-tag">Decreto 624/89 · Título Preliminar</span>
+            <h4>Por qué importa en dirección ejecutiva</h4>
+            <p>Confundir al sujeto que realiza el hecho generador (Art. 2) con el tercero obligado al cumplimiento por mandato legal (Art. 3) provoca contingencias directas en contratos de suministro, mandatos y operaciones sujetas a retención.</p>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes:</strong> En los fragmentos suministrados del Título Preliminar <strong>no consta</strong> el texto de los artículos 90 de la Ley 75 de 1986 ni 41 de la Ley 43 de 1987, únicamente su cita habilitante en el encabezado del Decreto 624 de 1989.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 02 -->
+    <section class="narrative-section reveal-item" id="sec-02">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 02 · Libro Primero · Disposiciones Generales y Personas Naturales</span>
+          <h2>02. Renta única, regla de los 183 días y ventana del quinto año para extranjeros</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Libro Primero, Artículos 5 a 11.</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-02" onclick="toggleSectionDone('sec-02')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            El Libro Primero arranca estableciendo que el impuesto sobre la renta y sus complementarios constituyen <strong>un solo impuesto</strong> (<strong>Art. 5</strong>), liquidado sobre renta, ganancias ocasionales, patrimonio y transferencia al exterior —además de utilidades comerciales en sucursales extranjeras—. A continuación, el <strong>Art. 6</strong> abre un instrumento habitualmente infrautilizado por profesionales con retenciones: los no obligados a declarar tienen como impuesto la suma de las retenciones en la fuente practicadas, pero su Parágrafo faculta a las personas naturales residentes a presentar <strong>declaración voluntaria</strong> con plenos efectos legales.
+          </p>
+          <p>
+            En el plano personal y sucesoral, están sometidas las personas naturales y las sucesiones ilíquidas (<strong>Art. 7</strong>, desde la muerte del causante hasta la ejecutoria de la partición o escritura pública del Decreto extraordinario 902 de 1988), y los cónyuges tributan de forma <strong>individual</strong> sobre sus propios bienes y rentas (<strong>Art. 8</strong>).
+          </p>
+          <p>
+            El núcleo patrimonial reside en los <strong>Artículos 9 y 10</strong>. Los residentes tributan por renta, ganancia ocasional de fuente nacional y extranjera y patrimonio dentro y fuera del país, mientras que los no residentes solo responden por fuente nacional y patrimonio poseído en Colombia. Sin embargo, el <strong>Art. 9</strong> introduce una regla diferencial decisiva: los <strong>extranjeros residentes en Colombia</strong> solo quedan gravados sobre su renta o ganancia ocasional de fuente extranjera y su patrimonio en el exterior a partir del <strong>quinto (5.º) año o período gravable</strong> de residencia continua o discontinua.
+          </p>
+          <p>
+            Finalmente, el <strong>Art. 11</strong> somete los bienes destinados a fines especiales (donaciones o asignaciones modales) al régimen de personas naturales, salvo usufructo personal del donatario o asignatario, y regula la deducibilidad de gastos de financiación con relación de causalidad (excluyendo intereses por tributos y la contribución de los Decretos Legislativos de la Emergencia Económica de 1998).
+          </p>
+        </div>
+        <aside class="notes-col" aria-label="Criterios de residencia del Artículo 10">
+          <div class="source-box">
+            <span class="stamp-tag">Art. 10 ET · Condiciones de residencia</span>
+            <h4>Tres vías hacia la residencia fiscal</h4>
+            <ul>
+              <li><strong>Permanencia (num. 1):</strong> más de <strong>183 días calendario</strong> (incluidos entrada y salida) en cualquier período de <strong>365 días</strong> consecutivos. Si abarca más de un año gravable, rige desde el segundo año.</li>
+              <li><strong>Servicio exterior (num. 2):</strong> exentos de tributación en misión bajo Convenciones de Viena.</li>
+              <li><strong>Nacionales (num. 3):</strong> si cónyuge/compañero o hijos menores dependientes residen fiscalmente en Colombia; o si <strong>&ge; 50%</strong> de ingresos son nacionales, <strong>&ge; 50%</strong> de bienes se administran o <strong>&ge; 50%</strong> de activos se poseen en Colombia; o sin acreditación ante la DIAN (Par. 1); o residencia en paraíso fiscal.</li>
+              <li><strong>Excepción del Par. 2:</strong> no serán residentes los nacionales del num. 3 si <strong>&ge; 50%</strong> de sus ingresos anuales tienen fuente en su jurisdicción de domicilio o <strong>&ge; 50%</strong> de sus activos están allí.</li>
+            </ul>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes:</strong> En el extracto del Art. 9 y Art. 10 <strong>no consta</strong> el texto de la reglamentación gubernamental anunciada en el Parágrafo 2 del Art. 10 ni el desarrollo completo del Título IV sobre el impuesto de remesas.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 03 -->
+    <section class="narrative-section reveal-item" id="sec-03">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 03 · Libro Primero · Sociedades, Sede Efectiva y Portafolio</span>
+          <h2>03. Sociedades nacionales por «sede efectiva», contratos sin personalidad e inversión de portafolio</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Libro Primero, Artículos 12 a 18-1.</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-03" onclick="toggleSectionDone('sec-03')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            Al igual que las personas naturales, las sociedades nacionales tributan sobre renta y ganancia ocasional mundial, mientras las extranjeras lo hacen únicamente sobre fuente nacional (<strong>Art. 12</strong>). El error frecuente de la alta dirección es asumir que constituir una sociedad fuera de Colombia basta para tratarla como extranjera. El <strong>Art. 12-1</strong> cierra esa brecha: se considera nacional toda sociedad que tenga su <strong>sede efectiva de administración</strong> en territorio colombiano —el lugar donde materialmente se toman las decisiones comerciales y de gestión del día a día (Par. 1.º)—, además de las domiciliadas o constituidas en Colombia.
+          </p>
+          <p>
+            No obstante, el propio <strong>Art. 12-1</strong> ofrece salvaguardas estratégicas claras: el simple hecho de reunir la junta directiva en Colombia o tener accionistas residentes no convierte a la entidad en nacional (Par. 2); la decisión en fiscalización corresponde al <strong>Comité de Fiscalización de la DIAN</strong> (Par. 3); y quedan excluidas de sede efectiva las emisoras en la Bolsa de Valores de Colombia o bolsa internacional reconocida (y sus subordinadas consolidadas, Par. 5), así como las entidades del exterior cuyos ingresos de fuente en su jurisdicción de constitución sean <strong>iguales o superiores al 80%</strong> de sus ingresos totales, excluidas rentas pasivas (como dividendos cuando la participación directa o indirecta sea <strong>igual o inferior al 25%</strong> del capital, Par. 6).
+          </p>
+          <p>
+            En el plano asociativo, los <strong>Arts. 13 a 17</strong> regulan sociedades limitadas y asimiladas (con mención histórica de consorcios en el Art. 13), anónimas y asimiladas (Art. 14), artículos derogados (14-1, 14-2, 15), empresas industriales y comerciales del Estado y sociedades de economía mixta con amortización teórica de pérdidas en <strong>cinco (5) años</strong> (Art. 16), y fondos públicos junto a TELECOM (Art. 17). A continuación, el <strong>Art. 18</strong> precisa que los <strong>contratos de colaboración empresarial</strong> (consorcios, uniones temporales, <em>joint ventures</em> y cuentas en participación) <strong>no son contribuyentes</strong>: cada parte declara independientemente según su participación, y los rendimientos garantizados se tratan fiscalmente como operaciones entre independientes.
+          </p>
+          <p>
+            Por último, el <strong>Art. 18-1</strong> diseña un régimen integral para las <strong>inversiones de capital del exterior de portafolio</strong>: el impuesto se liquida vía retención mensual practicada por el administrador, constituyendo impuesto definitivo (salvo superación del límite del inciso 2.º del Art. 36-1, cuyo texto exacto no consta en las fuentes). Las retenciones en exceso son descontables en los <strong>12 meses siguientes</strong> (num. 7) y el régimen no aplica si el beneficiario final es un residente fiscal colombiano con control según el Art. 260-1 (Par. 4 y 5).
+          </p>
+        </div>
+        <aside class="notes-col" aria-label="Tabla de retenciones del Artículo 18-1">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Concepto en Portafolio (Art. 18-1)</th>
+                  <th class="num-col">Tarifa</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Tarifa general (no paraíso fiscal, num. 4 lit. e)</td>
+                  <td class="num-col">14%</td>
+                </tr>
+                <tr>
+                  <td>Domiciliado en paraíso fiscal (num. 4 lit. e)</td>
+                  <td class="num-col">25%</td>
+                </tr>
+                <tr>
+                  <td>Renta fija pública/privada o derivados (num. 4 lit. f)</td>
+                  <td class="num-col">5%</td>
+                </tr>
+                <tr>
+                  <td>Dividendos gravados Art. 49 Par. 2.º (num. 3)</td>
+                  <td class="num-col">25%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes:</strong> En el extracto <strong>no consta</strong> la tarifa del inciso 1.º del Art. 245, el límite numérico del Art. 36-1 ni el contenido anterior de los artículos derogados 14-1, 14-2 y 15.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 04 -->
+    <section class="narrative-section reveal-item" id="sec-04">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 04 · Libro Primero · RTE, Establecimiento Permanente, PES y No Contribuyentes</span>
+          <h2>04. Del Establecimiento Permanente a la Presencia Económica Significativa (PES) y las entidades exentas</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Libro Primero, Artículos 19 a 23-2.</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-04" onclick="toggleSectionDone('sec-04')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            El <strong>Art. 19</strong> invierte la presunción habitual sobre entidades sin ánimo de lucro (ESAL): todas las asociaciones, fundaciones y corporaciones sin ánimo de lucro son contribuyentes conforme al régimen de sociedades nacionales, y solo excepcionalmente pueden solicitar calificación al <strong>Régimen Tributario Especial (RTE)</strong> si cumplen objeto de interés general en actividades meritorias (Art. 359) y no reembolsan aportes ni distribuyen excedentes. Si superan <strong>160.000 UVT</strong> de ingresos anuales deben presentar memoria económica (Par. 2). Por su parte, el <strong>Art. 19-2</strong> grava a cajas de compensación familiar, fondos de empleados y asociaciones gremiales únicamente por actividades industriales, comerciales o financieras distintas a inversión de patrimonio y ajenas a salud, educación, recreación y desarrollo social, eximiéndolas de renta presuntiva.
+          </p>
+          <p>
+            En el frente internacional (<strong>Arts. 20 a 21</strong>), el Estatuto define el <strong>Establecimiento Permanente (EP, Art. 20-1)</strong> como un lugar fijo de negocios en Colombia o un agente no independiente con poder habitual para concluir contratos vinculantes (excluidas actividades exclusivamente auxiliares/preparatorias y oficinas de representación de reaseguradoras del exterior). El <strong>Art. 20-2</strong> exige a los EP y sucursales llevar contabilidad separada soportada en un estudio de funciones, activos, riesgos y personal.
+          </p>
+          <p>
+            Como pieza clave de economía digital vigente desde el <strong>1.º de enero de 2024</strong> (Par. 8.º), el <strong>Art. 20-3</strong> introduce la tributación por <strong>Presencia Económica Significativa (PES)</strong> sobre venta de bienes y servicios digitales desde el exterior (publicidad <em>online</em>, contenidos digitales, <em>streaming</em>, monetización de datos, intermediación, nube, <em>software</em>, intangibles) cuando exista interacción deliberada y sistemática (presumida con <strong>300.000 o más clientes/usuarios</strong> en Colombia o visualización/pago en <strong>COP</strong>) y el umbral de <strong>31.300 UVT</strong> o más en venta de bienes, con la opción de declarar y pagar una tarifa del <strong>3%</strong> sobre la totalidad de ingresos brutos (Par. 2.º), solicitando la no aplicación de la retención del Art. 408.
+          </p>
+          <p>
+            Cierran este bloque el <strong>Art. 21-1</strong> (remisión a marcos técnicos normativos contables vigentes en Colombia bajo base de acumulación o devengo, manteniendo el costo o valor nominal hasta la realización económica, Par. 6.º) y los <strong>Arts. 22, 23 y 23-2</strong>, que enumeran las entidades no contribuyentes (la Nación, entidades territoriales, resguardos indígenas del Decreto 1088 de 1993, propiedad colectiva de comunidades negras de la Ley 70 de 1993, sindicatos, hospitales, fondos de pensiones y cesantías, entre otras).
+          </p>
+        </div>
+        <aside class="notes-col" aria-label="Resumen de umbrales Sección 04">
+          <div class="source-box">
+            <span class="stamp-tag">Art. 20-3 · PES desde 01/01/2024</span>
+            <h4>Parámetros literales de la PES</h4>
+            <ul>
+              <li><strong>Venta de bienes:</strong> ingresos de <strong>31.300 UVT o más</strong>.</li>
+              <li><strong>Presunción de interacción (Par. 1):</strong> <strong>&ge; 300.000</strong> clientes/usuarios en el año anterior o en curso, o precios/pagos en <strong>COP</strong>.</li>
+              <li><strong>Opción de tarifa (Par. 2):</strong> <strong>3%</strong> sobre ingresos brutos totales.</li>
+              <li><strong>Sin obligaciones formales de residentes (Par. 7):</strong> eximidos aunque sean nombrados gran contribuyente.</li>
+            </ul>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes:</strong> En el extracto del Art. 20-3 el inicio de la frase del numeral 1.1 aparece cortado por paginación antes de «31.300 UVT»; asimismo, <strong>no consta</strong> el texto del Art. 408 ni el valor en pesos de 1 UVT.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- EMBEDDED INTERACTIVE TAX CALCULATOR -->
+    <section class="tool-panel" id="calculadora-tributaria" aria-label="Calculadora interactiva de encuadramiento y umbrales">
+      <div class="section-head" style="border-top: none; padding-top: 0;">
+        <div class="section-head-titles">
+          <span class="label-kicker">Instrumento cuantitativo · Artículos 9, 10, 18-1, 19, 20-3, 235-2, 437 y SIMPLE</span>
+          <h2>Calculadora interactiva de encuadramiento, retenciones y umbrales</h2>
+          <p class="section-sub">Evaluad escenarios reales aplicando exclusivamente las reglas numéricas verificadas en el Decreto 624 de 1989. El valor en pesos (COP) de la UVT <strong>no consta</strong> en las fuentes, por lo que las magnitudes operan directamente en UVT, días y porcentajes.</p>
+        </div>
+      </div>
+
+      <div class="calc-tabs" role="tablist" aria-label="Módulos de cálculo">
+        <button type="button" class="btn-secondary is-active filter-btn" id="tab-btn-res" onclick="switchCalcMode('residencia')">A. Residencia Fiscal (Arts. 9 y 10)</button>
+        <button type="button" class="btn-secondary filter-btn" id="tab-btn-pes" onclick="switchCalcMode('pes')">B. PES y Portafolio (Arts. 20-3 y 18-1)</button>
+        <button type="button" class="btn-secondary filter-btn" id="tab-btn-umb" onclick="switchCalcMode('umbrales')">C. Umbrales Operativos (UVT y %)</button>
+      </div>
+
+      <!-- Mode A: Residencia -->
+      <div class="calc-grid" id="calc-mode-residencia">
+        <div class="calc-inputs">
+          <div class="field-group">
+            <label class="field-label" for="slider-days">Días de permanencia en 365 días consecutivos (Art. 10 num. 1)</label>
+            <div class="dual-input-row">
+              <input type="range" id="slider-days" min="0" max="365" value="190" oninput="onDaysSlider(this.value)">
+              <input type="number" id="input-days" class="text-input" min="0" max="365" value="190" oninput="onDaysNumber(this.value)">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="select-nationality">Nacionalidad y años de residencia (Art. 9 y Art. 10 num. 3)</label>
+            <select id="select-nationality" class="select-input" onchange="updateResidenciaCalc()">
+              <option value="colombiano">Nacional colombiano</option>
+              <option value="extranjero_1_4">Extranjero (años 1.º a 4.º de residencia)</option>
+              <option value="extranjero_5">Extranjero (5.º año o período gravable o superior)</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="slider-income-pct">Porcentaje de ingresos de fuente nacional (%)</label>
+            <div class="dual-input-row">
+              <input type="range" id="slider-income-pct" min="0" max="100" value="35" oninput="onIncomePctSlider(this.value)">
+              <input type="number" id="input-income-pct" class="text-input" min="0" max="100" value="35" oninput="onIncomePctNumber(this.value)">
+            </div>
+          </div>
+
+          <label class="check-row">
+            <input type="checkbox" id="chk-family-or-haven" onchange="updateResidenciaCalc()">
+            <span>Cónyuge/hijos residentes en Colombia, 50%+ bienes/activos en el país o paraíso fiscal (Art. 10 num. 3)</span>
+          </label>
+          <label class="check-row">
+            <input type="checkbox" id="chk-par2-exception" onchange="updateResidenciaCalc()">
+            <span>Excepción Art. 10 Par. 2: &ge; 50% de ingresos o activos en su jurisdicción de domicilio</span>
+          </label>
+        </div>
+
+        <div class="calc-output-panel" aria-live="polite">
+          <span class="label-kicker">Resultado de encuadramiento</span>
+          <p class="calc-verdict" id="res-verdict">Residente fiscal colombiano</p>
+          <ul class="calc-breakdown" id="res-breakdown">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Mode B: PES & Portafolio -->
+      <div class="calc-grid" id="calc-mode-pes" style="display: none;">
+        <div class="calc-inputs">
+          <div class="field-group">
+            <label class="field-label" for="select-intl-regime">Régimen de operación desde el exterior</label>
+            <select id="select-intl-regime" class="select-input" onchange="updatePesCalc()">
+              <option value="pes_3">PES (Art. 20-3 Par. 2): Opción tarifa 3% sobre ingresos brutos</option>
+              <option value="portafolio_general">Portafolio exterior (Art. 18-1 num. 4 lit. e): Tarifa general 14%</option>
+              <option value="portafolio_paraiso">Portafolio exterior (Art. 18-1 num. 4 lit. e): Paraíso fiscal 25%</option>
+              <option value="portafolio_rentafija">Portafolio exterior (Art. 18-1 num. 4 lit. f): Renta fija 5%</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="slider-uvt-base">Base gravable o ingresos brutos en UVT (o utilidad mensual en UVT)</label>
+            <div class="dual-input-row">
+              <input type="range" id="slider-uvt-base" min="1000" max="150000" step="500" value="35000" oninput="onUvtBaseSlider(this.value)">
+              <input type="number" id="input-uvt-base" class="text-input" min="0" max="1000000" value="35000" oninput="onUvtBaseNumber(this.value)">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="input-pes-users">Clientes/usuarios ubicados en Colombia (presunción 300.000, Art. 20-3 Par. 1)</label>
+            <input type="number" id="input-pes-users" class="text-input" min="0" max="5000000" value="320000" oninput="updatePesCalc()">
+          </div>
+
+          <label class="check-row">
+            <input type="checkbox" id="chk-pes-cop" checked onchange="updatePesCalc()">
+            <span>Visualiza precios o permite el pago en pesos colombianos (COP)</span>
+          </label>
+        </div>
+
+        <div class="calc-output-panel" aria-live="polite">
+          <span class="label-kicker">Liquidación orientativa en UVT</span>
+          <p class="calc-verdict" id="pes-verdict">1.050,00 UVT</p>
+          <ul class="calc-breakdown" id="pes-breakdown">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+      </div>
+
+      <!-- Mode C: Umbrales Operativos -->
+      <div class="calc-grid" id="calc-mode-umbrales" style="display: none;">
+        <div class="calc-inputs">
+          <div class="field-group">
+            <label class="field-label" for="select-threshold-type">Escenario normativo a comprobar</label>
+            <select id="select-threshold-type" class="select-input" onchange="updateUmbralCalc()">
+              <option value="rte_memoria">ESAL en RTE: Memoria económica (&gt; 160.000 UVT, Art. 19 Par. 2)</option>
+              <option value="naranja">Economía Naranja: Tope ingresos (&lt; 80.000 UVT, Art. 235-2 Par. 1)</option>
+              <option value="iva_estado">Prestador servicios al Estado: Tope IVA (4.000 UVT, Art. 437 Par. 5)</option>
+              <option value="dependiente">Dependiente económico: Ingresos anuales (&lt; 260 UVT, num. 4 y 5)</option>
+              <option value="simple_pasivos">Régimen SIMPLE: Ingresos pasivos (&ge; 20% exclusión)</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="input-umbral-val">Valor a evaluar (en UVT o en % según el escenario seleccionado)</label>
+            <input type="number" id="input-umbral-val" class="text-input" min="0" step="1" value="175000" oninput="updateUmbralCalc()">
+          </div>
+        </div>
+
+        <div class="calc-output-panel" aria-live="polite">
+          <span class="label-kicker">Verificación frente al Estatuto</span>
+          <p class="calc-verdict" id="umbral-verdict">Obligación activa</p>
+          <ul class="calc-breakdown" id="umbral-breakdown">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 05 -->
+    <section class="narrative-section reveal-item" id="sec-05">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 05 · Libro Primero · Transferencias Indirectas, Deducciones y Rentas Exentas</span>
+          <h2>05. Requisitos críticos de deducción, exclusiones de renta presuntiva e incentivos</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Libro Primero, fragmento sobre transferencia indirecta, Artículos 115-1, 123, 191, 235, 235-1, 235-2 y 241.</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-05" onclick="toggleSectionDone('sec-05')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            El primer fragmento de este bloque aborda la <strong>transferencia indirecta de activos ubicados en Colombia</strong> (Parágrafos 3.º a 5.º; el número exacto del artículo <strong>no consta</strong> en el fragmento visible): si el vendedor extranjero incumple, la subordinada en Colombia responde solidariamente por impuestos, intereses y sanciones (con acción de repetición), y el comprador responde solidariamente si conoce que la operación constituye abuso tributario. El vendedor no residente debe declarar dentro del <strong>mes siguiente</strong> a la enajenación.
+          </p>
+          <p>
+            En materia de deducciones, dos artículos actúan como seguros de cumplimiento: el <strong>Art. 115-1</strong> permite deducir prestaciones sociales, aportes parafiscales e impuestos devengados en el período siempre que aportes e impuestos estén <strong>efectivamente pagados antes de presentar la declaración inicial</strong>. Por su parte, el <strong>Art. 123</strong> exige para pagos al exterior acreditar la consignación de la retención en la fuente y las normas cambiarias; en contratos de importación de tecnología, patentes y marcas, el registro debe solicitarse en los <strong>6 meses</strong> siguientes a la suscripción (o <strong>3 meses</strong> si se modifica).
+          </p>
+          <p>
+            En cuanto a depuración y beneficios, el <strong>Art. 191</strong> excluye de la renta presuntiva del Art. 188 a 13 categorías (entre ellas, entidades del Art. 19, empresas de servicios públicos domiciliarios, fondos de los Arts. 23-1 y 23-2, sociedades en concordato, sociedades en liquidación durante los <strong>primeros tres (3) años</strong> y centros de eventos con participación estatal superior al <strong>51%</strong>). Los <strong>Arts. 235 y 235-1</strong> recuerdan que las exenciones solo benefician a su titular y gravan al 100% desde 2004 ciertas rentas históricas. El <strong>Art. 235-2</strong> delimita las rentas exentas desde 2019 —incluyendo el incentivo a la economía naranja por <strong>5 años</strong> (constitución e inicio antes del 30 de junio de 2022 e ingresos brutos anuales inferiores a <strong>80.000 UVT</strong> salvo CIIU 5911)— y fija en el Parágrafo 7 una tarifa del <strong>15%</strong> para empresas editoriales de libros (Ley 98 de 1993), mencionando también ZESE (0%) y ZOMAC frente a reglas de Utilidad Depurada (UD/IUD).
+          </p>
+        </div>
+        <aside class="notes-col" aria-label="Notas de rigor de la Sección 05">
+          <div class="source-box">
+            <span class="stamp-tag">Arts. 123 y 235-2 · Plazos y topes</span>
+            <h4>Plazos y umbrales exactos</h4>
+            <ul>
+              <li>Declaración transferencia indirecta: <strong>1 mes</strong> siguiente a la enajenación.</li>
+              <li>Registro contrato tecnología/marcas (Art. 123): <strong>6 meses</strong> (suscripción) / <strong>3 meses</strong> (modificación).</li>
+              <li>Liquidación fuera de presuntiva (Art. 191 num. 8): <strong>3 años</strong> iniciales.</li>
+              <li>Economía naranja (Art. 235-2): <strong>5 años</strong> y tope de <strong>&lt; 80.000 UVT</strong>.</li>
+            </ul>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes (Art. 241 y Art. 188):</strong> En los fragmentos suministrados <strong>no consta</strong> la tabla numérica de tarifas marginales del Art. 241 (solo figura el encabezado y el numeral 1 «Para la renta líquida laboral y de pensiones»), ni el porcentaje de la renta presuntiva del Art. 188, ni el número del artículo correspondiente al fragmento sobre transferencias indirectas.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 06 -->
+    <section class="narrative-section reveal-item" id="sec-06">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 06 · Libro Primero · Precios de Transferencia, Paraísos, Patrimonio y ESAL</span>
+          <h2>06. Plena competencia, paraísos fiscales, impuesto al patrimonio 2026 y control de ESAL</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Libro Primero, fragmento de Plena Competencia, Art. 260-7, fragmentos de Patrimonio 2026, Art. 358 y fragmentos de ESAL y dependientes.</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-06" onclick="toggleSectionDone('sec-06')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            El bloque de precios de transferencia obliga a determinar ingresos, costos, deducciones, activos y pasivos bajo el <strong>Principio de Plena Competencia</strong> en operaciones con vinculados del exterior, establecimientos permanentes o vinculados en <strong>zona franca</strong> (el número exacto del artículo previo al 260-7 <strong>no consta</strong> en el fragmento), produciendo efectos exclusivamente en el impuesto sobre la renta y complementarios.
+          </p>
+          <p>
+            El <strong>Art. 260-7</strong> faculta al Gobierno Nacional para definir los <strong>paraísos fiscales</strong> atendiendo cuatro criterios (tipos impositivos inexistentes o bajos, carencia de efectivo intercambio de información, falta de transparencia y ausencia de presencia local sustantiva). Su Parágrafo 2.º contiene una trampa crítica: toda operación con personas o entidades en paraísos fiscales queda sometida al régimen de precios de transferencia, documentación comprobatoria (Art. 260-5) y declaración informativa (Art. 260-9), <strong>sin importar que su patrimonio o ingresos sean inferiores a los topes generales</strong>.
+          </p>
+          <p>
+            A continuación aparecen fragmentos del <strong>Impuesto al Patrimonio</strong> (número de artículo <strong>no consta</strong> en el extracto): gravan a no residentes por patrimonio poseído directamente o mediante establecimientos permanentes, salvo exclusiones cambiarias (acciones, cuentas por cobrar, portafolio Art. 18-1 y Decreto 1068 de 2015, y contratos de arrendamiento financiero) frente a bienes inmuebles, yates, obras de arte, aeronaves o derechos mineros. Para la <strong>vigencia 2026</strong> (num. 6), son sujetos pasivos las personas jurídicas y sociedades de hecho declarantes de renta, excluyendo empresas del sector salud, intervenidas por el Estado y servicios públicos domiciliarios de municipios bajo calamidad pública del <strong>Decreto Legislativo 0150 de 2026</strong>.
+          </p>
+          <p>
+            Cierra el Libro Primero el <strong>Art. 358</strong> sobre el RTE: el beneficio neto o excedente es exento si se destina en el año siguiente a programas del objeto social y actividad meritoria, pero los contratos de obra pública e interventoría tributan a la tarifa general. Los fragmentos siguientes sancionan el abuso o distribución indirecta en ESAL (beneficios o compras con vinculados o parientes hasta el <strong>cuarto grado</strong>, donaciones simuladas sin deducción para el donante) y precisan los requisitos de <strong>dependientes</strong>: hijos mayores de <strong>18 años</strong> por factores físicos o psicológicos, y cónyuge, padres o hermanos con ausencia de ingresos o ingresos anuales inferiores a <strong>260 UVT</strong> certificados por contador público o Medicina Legal.
+          </p>
+        </div>
+        <aside class="notes-col" aria-label="Criterios del Art. 260-7 y notas de fuentes">
+          <div class="source-box">
+            <span class="stamp-tag">Art. 260-7 · 4 criterios de paraíso fiscal</span>
+            <h4>Regla de activación automática</h4>
+            <p>Basta cumplir <strong>uno cualquiera</strong> de los cuatro criterios del Art. 260-7 para la calificación reglamentaria, y una sola operación con esa jurisdicción activa precios de transferencia sin umbral mínimo (Par. 2.º).</p>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes:</strong> En los fragmentos proporcionados <strong>no constan</strong> los números exactos de artículo correspondientes al Principio de Plena Competencia, al Impuesto al Patrimonio 2026, a las causales de abuso en ESAL ni a la lista completa de dependientes (numerales 1 y 2), así como tampoco la tarifa del Impuesto al Patrimonio.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- EMBEDDED INTERACTIVE CHART -->
+    <section class="tool-panel" id="grafico-comparativo" aria-label="Gráfico interactivo de tarifas y umbrales del Estatuto">
+      <div class="section-head" style="border-top: none; padding-top: 0;">
+        <div class="section-head-titles">
+          <span class="label-kicker">Visualización cuantitativa · Datos verificados del Estatuto</span>
+          <h2>Mapa numérico de tarifas, porcentajes y umbrales en UVT</h2>
+          <p class="section-sub">Alternad entre las alícuotas y porcentajes normativos (%) y los umbrales cuantitativos en UVT extraídos literalmente de los artículos de la fuente.</p>
+        </div>
+        <div class="timeline-controls">
+          <button type="button" class="btn-secondary is-active filter-btn" id="chart-btn-pct" onclick="switchChartDataset('pct')">Tarifas y porcentajes (%)</button>
+          <button type="button" class="btn-secondary filter-btn" id="chart-btn-uvt" onclick="switchChartDataset('uvt')">Umbrales en UVT</button>
+        </div>
+      </div>
+      <div class="chart-box">
+        <canvas id="statuteChart" aria-label="Gráfico de barras con tarifas y umbrales del Estatuto Tributario"></canvas>
+      </div>
+      <p class="section-sub" id="chart-caption">
+        Serie activa: porcentajes verificados (3% PES Art. 20-3; 3% utilidad CIIU exclusión SIMPLE; 5% renta fija Art. 18-1; 14% portafolio general Art. 18-1; 15% editoriales Art. 235-2; 20% ingresos pasivos exclusión SIMPLE; 25% portafolio paraíso fiscal y dividendos Art. 18-1; 50% residencia Art. 10; 51% centros de eventos Art. 191; 80% sede efectiva Art. 12-1).
+      </p>
+    </section>
+
+    <!-- SECTION 07 -->
+    <section class="narrative-section reveal-item" id="sec-07">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 07 · Libro Tercero · Impuesto sobre las Ventas (IVA)</span>
+          <h2>07. Responsables del IVA, límite de 4.000 UVT y los ocho agentes de retención</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Libro Tercero, fragmento de parágrafos transitorios, Artículos 436, 437, 437-2 y fragmento de bienes exentos.</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-07" onclick="toggleSectionDone('sec-07')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            Tras los parágrafos transitorios sobre servicios técnicos prestados desde el exterior en proyectos de infraestructura anteriores al 31 de diciembre de 1997 y contratos de <em>leasing</em> anteriores al 31 de diciembre de 2010, el Libro Tercero precisa en el <strong>Art. 436</strong> que en los seguros de daños autorizados en moneda extranjera (Arts. 98 a 100 del Decreto 444 de 1967), el IVA se paga en pesos colombianos al tipo de cambio vigente en la fecha de emisión, anexo o renovación.
+          </p>
+          <p>
+            El <strong>Art. 437</strong> define quiénes son responsables del IVA: comerciantes en cualquier fase de producción y distribución, vendedores (incluso ocasionales) de aerodinos, prestadores de servicios, importadores, compradores del régimen común en operaciones con el régimen simplificado o bienes del Art. 468-1, y los <strong>consorcios y uniones temporales</strong> cuando realicen directamente actividades gravadas. Su Parágrafo 5.º fija un tope específico de <strong>4.000 UVT</strong> para prestadores de servicios personas naturales que deriven sus ingresos de contratos con el Estado.
+          </p>
+          <p>
+            El <strong>Art. 437-2</strong> articula ocho categorías de <strong>agentes retenedores de IVA</strong> que todo director financiero debe mapear en su tesorería: entidades estatales (con participación pública superior al <strong>50%</strong>), grandes contribuyentes designados por la DIAN, responsables del régimen común que contraten servicios gravados con no residentes o compren al régimen simplificado, emisoras de tarjetas crédito/débito, la Aeronáutica Civil (por el <strong>100%</strong> del IVA en venta de aerodinos), proveedores de Sociedades de Comercialización Internacional y pasarelas/emisoras en el sistema alternativo voluntario para servicios digitales desde el exterior.
+          </p>
+          <p>
+            Cierra el extracto del Libro Tercero un fragmento de exenciones (literales e, f y g; el número del artículo principal <strong>no consta</strong> en el encabezado visible): materias primas e insumos vendidos desde el territorio aduanero nacional a usuarios industriales de Zona Franca, impresos del Art. 478, cuadernos escolares (subpartida <strong>48.20.20.00.00</strong>), diarios y publicaciones (partida <strong>49.02</strong>) incluidas ediciones digitales, y productores de bienes exentos del Art. 477 con facturación electrónica en toda su cadena.
+          </p>
+        </div>
+        <aside class="notes-col" aria-label="Notas de fuentes Sección 07">
+          <div class="source-box">
+            <span class="stamp-tag">Arts. 437 y 437-2 · Reglas de IVA</span>
+            <h4>Puntos clave de tesorería</h4>
+            <ul>
+              <li>Consorcios y uniones temporales: responsables de IVA si realizan directamente actividades gravadas (Art. 437).</li>
+              <li>Aeronáutica Civil: retiene el <strong>100%</strong> del IVA en venta de aerodinos (Art. 437-2 num. 6).</li>
+              <li>Prestadores al Estado (personas naturales): límite de <strong>4.000 UVT</strong> (Art. 437 Par. 5.º).</li>
+            </ul>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes:</strong> En los fragmentos del Libro Tercero <strong>no consta</strong> la tarifa general del IVA, los parágrafos 1.º a 4.º del Art. 437 ni el número de artículo exacto de los literales e, f y g sobre bienes/operaciones exentas.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 08 -->
+    <section class="narrative-section reveal-item" id="sec-08">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 08 · Libro Cuarto · Impuesto de Timbre Nacional</span>
+          <h2>08. Sujetos pasivos y solidaridad de funcionarios y agentes de retención en Timbre</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Libro Cuarto, Título I, Artículos 514 a 517.</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-08" onclick="toggleSectionDone('sec-08')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            El Libro Cuarto retoma la distinción anunciada en el Título Preliminar y la aplica a la contratación documental y actuaciones públicas. El <strong>Art. 514</strong> establece que son sujetos pasivos de la obligación tributaria o de las sanciones las personas o entidades en calidad de contribuyentes o de responsables.
+          </p>
+          <p>
+            El <strong>Art. 515</strong> identifica como <strong>contribuyentes</strong> a quienes intervengan como otorgantes, giradores, aceptantes, emisores o suscriptores en los documentos, a quienes promuevan procesos, incidentes, recursos o formulen solicitudes, y a aquel a cuyo favor se expida o extienda el documento, permiso o licencia (asimilando sociedades de hecho, sucesiones y comunidades indivisas).
+          </p>
+          <p>
+            Por su parte, el <strong>Art. 516</strong> define como <strong>responsables</strong> a quienes, sin tener el carácter de contribuyentes, deban cumplir sus obligaciones por mandato expreso de la ley; y el <strong>Art. 517</strong> impone <strong>responsabilidad solidaria</strong> con el contribuyente a dos actores clave: (1) los funcionarios oficiales (o quienes desempeñen funciones públicas) que autoricen, expidan, registren o tramiten actos sometidos al impuesto, y (2) los agentes de retención del impuesto.
+          </p>
+        </div>
+        <aside class="notes-col" aria-label="Notas de fuentes Sección 08">
+          <div class="source-box">
+            <span class="stamp-tag">Arts. 514–517 · Timbre Nacional</span>
+            <h4>Impacto en contratación pública y privada</h4>
+            <p>La solidaridad del Art. 517 blinda la recaudación en notarías, registros y entidades públicas: el funcionario que tramita un instrumento gravado sin verificar el impuesto responde solidariamente junto con el agente retenedor.</p>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes:</strong> En los fragmentos suministrados del Libro Cuarto <strong>no constan</strong> las cuantías mínimas, las tarifas aplicables ni el listado de documentos gravados o exentos del Impuesto de Timbre Nacional.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 09 -->
+    <section class="narrative-section reveal-item" id="sec-09">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 09 · Libro Quinto (y GMF) · Procedimiento, Deberes Formales y Solidaridad</span>
+          <h2>09. Representación formal, reportes de información, solidaridad y abuso tributario</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Libro Quinto (Arts. 572, 575, 576, 591, 598, reporte de información, Título VII Arts. 792–793) y cierre GMF (Art. 879 num. 1).</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-09" onclick="toggleSectionDone('sec-09')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            El Libro Quinto concentra el poder operativo de la administración y la responsabilidad personal de la alta dirección. El <strong>Art. 572</strong> enumera los representantes obligados a cumplir deberes formales (literales a–i): padres, tutores y curadores, <strong>gerentes, administradores y representantes legales</strong> (quienes pueden delegar la responsabilidad en funcionarios designados informando a la Administración, lit. c), albaceas, administradores de comunidades, donatarios, liquidadores y síndicos, apoderados de residentes en el exterior y representantes de sociedades receptoras de inversión extranjera. Las declaraciones deben coincidir con el período gravable (<strong>Art. 575</strong>) y, para no residentes, deben ser presentadas por sucursales o establecimientos permanentes (<strong>Art. 576</strong>).
+          </p>
+          <p>
+            Los <strong>Arts. 591 y 598</strong> separan desde el año gravable 1987 la obligación de presentar declaración de renta (contribuyentes) de la declaración anual de ingresos y patrimonio (entidades no contribuyentes, exceptuando juntas de acción comunal, defensa civil, sindicatos, asociaciones de padres y copropietarios en propiedad horizontal, lit. b). Sigue un extenso fragmento sobre suministro de información a solicitud del Director General (literales a–k, número de artículo <strong>no consta</strong> en el extracto), con plazo no menor a <strong>2 meses</strong>, medios magnéticos para patrimonios brutos &gt; <strong>$200.000.000</strong> o ingresos &gt; <strong>$400.000.000</strong> (año base 1987), y una definición de pequeños contribuyentes (año base 1998: ingresos &lt; <strong>$300.000.000</strong>, patrimonio &lt; <strong>$500.000.000</strong> y máximo <strong>20 trabajadores</strong>).
+          </p>
+          <p>
+            En el Título VII (Extinción de la Obligación Tributaria), tras reiterar quiénes son sujetos pasivos (<strong>Art. 792</strong>), el <strong>Art. 793</strong> despliega ocho supuestos de <strong>responsabilidad solidaria</strong>: herederos y legatarios a prorrata, socios de sociedades disueltas hasta el valor recibido en liquidación, sociedad absorbente, subordinadas por su matriz extranjera sin sucursal en Colombia, titulares de entes sin personería, terceros que asuman deuda, quienes participen en negocios con propósitos de evasión o abuso (lit. g), y custodios o administradores de activos en fondos usados para abuso con conocimiento de causa (lit. h). El Parágrafo 1 exige notificar a los deudores solidarios para garantizar su defensa, y el Parágrafo 2 limita a subsidiaria la responsabilidad de liquidadores o interventores auxiliares de la justicia. Al cierre, el fragmento financiero exime operaciones de reporto de Fogafín/Fogacoop, tesorerías territoriales y recursos de la Seguridad Social, remitiendo en su caso al numeral 1 del <strong>Art. 879</strong>.
+          </p>
+        </div>
+        <aside class="notes-col" aria-label="Notas de fuentes Sección 09">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Referencia de umbral</th>
+                  <th class="num-col">Cifra en fuente</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Pagos con costo/deducción (base 1987, lit. e)</td>
+                  <td class="num-col">&gt; $50.000</td>
+                </tr>
+                <tr>
+                  <td>Ingresos recibidos / activos fijos (base 1987, lit. f, j)</td>
+                  <td class="num-col">&gt; $500.000</td>
+                </tr>
+                <tr>
+                  <td>Medios magnéticos: patrimonio bruto (base 1987)</td>
+                  <td class="num-col">&gt; $200.000.000</td>
+                </tr>
+                <tr>
+                  <td>Medios magnéticos: ingresos brutos (base 1987)</td>
+                  <td class="num-col">&gt; $400.000.000</td>
+                </tr>
+                <tr>
+                  <td>Pequeños contribuyentes (base 1998)</td>
+                  <td class="num-col">&lt; $300M / &lt; $500M / 20 trab.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes:</strong> En los fragmentos del Libro Quinto <strong>no consta</strong> el texto del Art. 592 (excepciones a declarar renta), ni el número del artículo de reporte de información (a–k), ni el nombre completo del tributo del Art. 879 en los numerales visibles 8–10.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECTION 10 -->
+    <section class="narrative-section reveal-item" id="sec-10">
+      <div class="section-head">
+        <div class="section-head-titles">
+          <span class="label-kicker">Sección 10 · Libro Séptimo y Régimen Simple · ECE, CHC y SIMPLE</span>
+          <h2>10. Entidades Controladas del Exterior (ECE), coordinación CHC y Régimen SIMPLE</h2>
+          <p class="section-sub">Procedencia: Decreto 624 de 1989, Libro Séptimo (adicionado por Art. 139 de la Ley 1819 de 2016), Artículos 882, 886, 898, exclusiones y Art. 915.</p>
+        </div>
+        <button type="button" class="done-toggle-btn" data-sec="sec-10" onclick="toggleSectionDone('sec-10')">
+          <span class="done-box" aria-hidden="true"></span>
+          <span class="done-label">Marcar como hecho</span>
+        </button>
+      </div>
+
+      <div class="section-layout">
+        <div class="prose-col">
+          <p>
+            El Libro Séptimo, adicionado por el <strong>Art. 139 de la Ley 1819 de 2016</strong>, introduce el <strong>Régimen de Entidades Controladas del Exterior (ECE)</strong>. Según el <strong>Art. 882</strong>, una entidad sin residencia fiscal en Colombia califica como ECE si es controlada por uno o más residentes fiscales colombianos (vía subordinada o vinculado del Art. 260-1). El alcance es amplísimo (Par. 1.º): abarca sociedades, patrimonios autónomos, <em>trusts</em>, fondos de inversión colectiva, negocios fiduciarios y fundaciones de interés privado, transparentes o no. Además, se presume el control cuando la entidad opera en jurisdicciones no cooperantes o de baja o nula imposición del Art. 260-7 (Par. 2.º), y las opciones de compra se asimilan a tenencia directa (Par. 3.º).
+          </p>
+          <p>
+            El fragmento intermedio (numerales 3 a 7, número exacto de artículo <strong>no consta</strong> en el extracto) cataloga como rentas pasivas las derivadas de intangibles, enajenación de activos que generen rentas pasivas, arrendamiento o venta de inmuebles, compraventa de bienes corporales con relacionadas fuera de la jurisdicción de la ECE y servicios técnicos, de ingeniería o comerciales para relacionadas en otra jurisdicción. Por mandato del <strong>Art. 886</strong>, esas rentas pasivas se entienden realizadas directamente en cabeza de los residentes fiscales controlantes en el mismo año gravable en proporción a su participación.
+          </p>
+          <p>
+            El <strong>Art. 898</strong> coordina el régimen <strong>CHC</strong> con los demás regímenes: las CHC son residentes fiscales para convenios de doble imposición, solo deducen costos atribuibles a actividades gravadas en Colombia o EP en el exterior (Art. 177-1), están sometidas al régimen ECE (cuyas rentas no gozan de beneficios CHC) y tributan ICA salvo sobre dividendos de inversiones extranjeras cubiertos por el régimen CHC.
+          </p>
+          <p>
+            Finalmente, los fragmentos del <strong>Régimen Simple de Tributación (SIMPLE)</strong> listan actividades excluidas (numerales 7 a 11; número del artículo de exclusiones <strong>no consta</strong>): entidades financieras, microcrédito, gestión de activos o ingresos pasivos que representen el <strong>20% o más</strong> de los ingresos brutos totales, <em>factoring</em>, asesoría financiera, energía eléctrica, automóviles, combustibles, armas/explosivos, sociedades escindidas en los <strong>5 años</strong> anteriores, y actividades CIIU <strong>4665, 3830 y 3811</strong> con utilidades netas superiores al <strong>3%</strong> del ingreso bruto. Quienes opten por el SIMPLE (<strong>Art. 915</strong>) son responsables de IVA o impuesto al consumo (expendio de comidas y bebidas dentro del SIMPLE; IVA mediante recibo electrónico mensual y declaración anual consolidada) y deben adoptar la <strong>factura electrónica</strong> dentro de los <strong>2 meses</strong> siguientes a su inscripción en el RUT.
+          </p>
+        </div>
+        <aside class="notes-col" aria-label="Notas de fuentes Sección 10">
+          <div class="source-box">
+            <span class="stamp-tag">Arts. 882, 886, 898 y 915 · Cierre global</span>
+            <h4>Reglas de cierre internacional y simplificación</h4>
+            <ul>
+              <li><strong>Transparencia fiscal ECE (Art. 886):</strong> tributación inmediata en Colombia sobre rentas pasivas sin esperar distribución.</li>
+              <li><strong>Exclusión SIMPLE por rentas pasivas:</strong> &ge; <strong>20%</strong> de ingresos brutos totales.</li>
+              <li><strong>Plazo factura electrónica SIMPLE (Art. 915 Par.):</strong> <strong>2 meses</strong> desde inscripción en el RUT.</li>
+            </ul>
+          </div>
+          <div class="no-consta-note">
+            <strong>Rigor de fuentes:</strong> En los fragmentos del Libro Séptimo y SIMPLE <strong>no constan</strong> el desarrollo de las siglas CHC, los artículos 894 a 897, las tablas de tarifas del SIMPLE ni los números exactos de los artículos que enumeran los rentas pasivas ECE (num. 3–7) y exclusiones del SIMPLE (num. 7–11).
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE CHRONOLOGICAL TIMELINE -->
+    <section class="tool-panel" id="linea-tiempo" aria-label="Línea de tiempo normativa del Estatuto Tributario">
+      <div class="section-head" style="border-top: none; padding-top: 0;">
+        <div class="section-head-titles">
+          <span class="label-kicker">Evolución temporal verificada en las fuentes (1986–2026)</span>
+          <h2>Línea de tiempo normativa de los hitos citados en el Decreto 624</h2>
+          <p class="section-sub">Seleccionad cualquier hito cronológico para inspeccionar el acto normativo, la vigencia o el umbral temporal tal como aparece documentado en el Estatuto.</p>
+        </div>
+      </div>
+
+      <div class="timeline-controls" id="timeline-filter-bar">
+        <button type="button" class="btn-secondary is-active filter-btn" onclick="filterTimeline('all', this)">Todos los hitos (10)</button>
+        <button type="button" class="btn-secondary filter-btn" onclick="filterTimeline('origen', this)">Origen (1986–1998)</button>
+        <button type="button" class="btn-secondary filter-btn" onclick="filterTimeline('modern', this)">Reformas y vigencia (2004–2026)</button>
+      </div>
+
+      <div class="timeline-track" id="timeline-track">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="timeline-detail-card" id="timeline-detail-card" aria-live="polite">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- EVALUABLE INTERACTIVE TEST (12 QUESTIONS, 3A-3B-3C-3D) -->
+    <section class="tool-panel" id="test-evaluativo" aria-label="Test interactivo evaluable sobre el Estatuto Tributario">
+      <div class="section-head" style="border-top: none; padding-top: 0;">
+        <div class="section-head-titles">
+          <span class="label-kicker">Evaluación ejecutiva y de posgrado · 12 preguntas · Reparto equitativo A / B / C / D</span>
+          <h2>Test evaluable con auditoría literal de fuentes</h2>
+          <p class="section-sub">
+            Respondéis 12 casos prácticos sobre el Decreto 624 de 1989. Las respuestas correctas están repartidas equitativamente (3 A, 3 B, 3 C y 3 D). Toda opción o distractor que no provenga directamente de los fragmentos del Estatuto está marcada explícitamente como <strong>«fuera de tus fuentes»</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="quiz-progress-bar">
+        <span id="quiz-answered-count">0 de 12 preguntas respondidas</span>
+        <div class="quiz-actions">
+          <button type="button" class="btn-primary" onclick="gradeQuiz()">Corregir y obtener nota final</button>
+          <button type="button" class="btn-secondary" id="quiz-reset-btn" onclick="resetQuiz(this)">Reiniciar test</button>
+        </div>
+      </div>
+
+      <div id="quiz-score-container" style="display: none;"></div>
+
+      <div id="quiz-questions-container" style="display: grid; gap: var(--space-lg);">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <footer class="doc-footer">
+      <p>
+        <strong>Procedencia exclusiva:</strong> Excerpts de «DECRETO 624 DE 1989 - Colombia _ SUIN Juriscol.pdf» (Diario Oficial n.º 38756 del 30 de marzo de 1989, pág. 1). Todos los artículos, umbrales en UVT, porcentajes y fechas proceden exclusivamente de los fragmentos suministrados.
+      </p>
+      <p>
+        <strong>Recordatorio orientativo:</strong> Este recurso interactivo tiene carácter exclusivamente orientativo e informativo y no constituye certificación normativa ni asesoramiento profesional.
+      </p>
+    </footer>
+
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    // =========================================================================
+    // 1. DATA CATALOGUES (Strictly grounded in Decreto 624 de 1989 excerpts)
+    // =========================================================================
+    const SECTION_META = [
+      { id: `sec-01`, num: `01`, title: `Título Preliminar (Arts. 1–4)` },
+      { id: `sec-02`, num: `02`, title: `Personas Naturales y Residencia (Arts. 5–11)` },
+      { id: `sec-03`, num: `03`, title: `Sociedades, Sede y Portafolio (Arts. 12–18-1)` },
+      { id: `sec-04`, num: `04`, title: `RTE, EP, PES y No Contrib. (Arts. 19–23-2)` },
+      { id: `sec-05`, num: `05`, title: `Deducciones, Presuntiva y Exentas (Arts. 115-1–241)` },
+      { id: `sec-06`, num: `06`, title: `Precios, Patrimonio y ESAL (Art. 260-7–358)` },
+      { id: `sec-07`, num: `07`, title: `IVA y Retención en IVA (Arts. 436–437-2)` },
+      { id: `sec-08`, num: `08`, title: `Impuesto de Timbre (Arts. 514–517)` },
+      { id: `sec-09`, num: `09`, title: `Procedimiento y Solidaridad (Arts. 572–793)` },
+      { id: `sec-10`, num: `10`, title: `ECE, CHC y SIMPLE (Arts. 882–915)` }
+    ];
+
+    const TOPIC_FILTERS = [
+      { id: `all`, label: `Todos` },
+      { id: `preliminar`, label: `Título Preliminar` },
+      { id: `personas`, label: `Libro I: Personas` },
+      { id: `sociedades`, label: `Libro I: Sociedades y EP` },
+      { id: `exentas`, label: `Libro I: Deducciones y Exentas` },
+      { id: `precios`, label: `Libro I: Precios y Patrimonio` },
+      { id: `iva`, label: `Libro III: IVA` },
+      { id: `timbre`, label: `Libro IV: Timbre` },
+      { id: `procedimiento`, label: `Libro V: Procedimiento` },
+      { id: `ece`, label: `Libro VII y SIMPLE` }
+    ];
+
+    const ARTICLES_INDEX = [
+      {
+        art: `Arts. 1 a 4`,
+        topic: `preliminar`,
+        sec: `sec-01`,
+        title: `Obligación sustancial, contribuyentes, responsables y sinónimos`,
+        summary: `La obligación sustancial nace con el hecho generador (Art. 1). Distingue contribuyente (Art. 2) de responsable en timbre (Art. 3), y equipara ambos en IVA (Art. 4).`
+      },
+      {
+        art: `Art. 6`,
+        topic: `personas`,
+        sec: `sec-02`,
+        title: `Declaración voluntaria del impuesto sobre la renta`,
+        summary: `Para no obligados a declarar, el impuesto equivale a la suma de retenciones; los residentes pueden presentar declaración voluntaria con efectos legales (Parágrafo).`
+      },
+      {
+        art: `Art. 9`,
+        topic: `personas`,
+        sec: `sec-02`,
+        title: `Personas naturales residentes y no residentes (regla del 5.º año)`,
+        summary: `Extranjeros residentes solo tributan sobre renta extranjera y patrimonio en el exterior a partir del quinto (5.º) año o período gravable.`
+      },
+      {
+        art: `Art. 10`,
+        topic: `personas`,
+        sec: `sec-02`,
+        title: `Residencia para efectos tributarios (183 días y 50%)`,
+        summary: `Más de 183 días en 365 consecutivos, servicio exterior o criterios de nacionales (50% ingresos/bienes/activos, familia o paraíso fiscal, con excepción del Par. 2).`
+      },
+      {
+        art: `Art. 12-1`,
+        topic: `sociedades`,
+        sec: `sec-03`,
+        title: `Sociedades nacionales y sede efectiva de administración`,
+        summary: `Lugar donde se toman decisiones diarias de gestión. Exclusión por Bolsa (Par. 5) o si >= 80% de ingresos locales sin pasivas ni dividendos <= 25% (Par. 6).`
+      },
+      {
+        art: `Art. 18`,
+        topic: `sociedades`,
+        sec: `sec-03`,
+        title: `Contratos de colaboración empresarial`,
+        summary: `Consorcios, uniones temporales, joint ventures y cuentas en participación no son contribuyentes; cada parte declara su participación.`
+      },
+      {
+        art: `Art. 18-1`,
+        topic: `sociedades`,
+        sec: `sec-03`,
+        title: `Inversiones de capital del exterior de portafolio`,
+        summary: `Retención mensual definitiva: 14% general, 25% si es paraíso fiscal o dividendos gravados del Art. 49 Par. 2, y 5% en renta fija. Exceso descontable en 12 meses.`
+      },
+      {
+        art: `Art. 19 y 358`,
+        topic: `sociedades`,
+        sec: `sec-04`,
+        title: `Régimen Tributario Especial (RTE) y memoria económica`,
+        summary: `Las ESAL tributan como sociedades salvo calificación al RTE. Memoria económica obligatoria si superan 160.000 UVT (Art. 19 Par. 2); obra pública gravada (Art. 358).`
+      },
+      {
+        art: `Arts. 20-1 y 20-2`,
+        topic: `sociedades`,
+        sec: `sec-04`,
+        title: `Establecimiento permanente (EP) y atribución de rentas`,
+        summary: `Lugar fijo o agente dependiente habitual; contabilidad separada basada en estudio de funciones, activos, riesgos y personal.`
+      },
+      {
+        art: `Art. 20-3`,
+        topic: `sociedades`,
+        sec: `sec-04`,
+        title: `Presencia Económica Significativa (PES)`,
+        summary: `Desde 1/01/2024: 31.300 UVT o más en bienes, servicios digitales listados, presunción con 300.000 usuarios o precios en COP, y opción del 3% sobre ingresos brutos.`
+      },
+      {
+        art: `Arts. 22, 23 y 23-2`,
+        topic: `sociedades`,
+        sec: `sec-04`,
+        title: `Entidades no contribuyentes`,
+        summary: `Nación, entidades territoriales, resguardos indígenas (Dec. 1088/93), comunidades negras (Ley 70/93), sindicatos, hospitales y fondos de pensiones/cesantías.`
+      },
+      {
+        art: `Arts. 115-1 y 123`,
+        topic: `exentas`,
+        sec: `sec-05`,
+        title: `Requisitos de deducibilidad y contratos de tecnología`,
+        summary: `Parafiscales e impuestos pagados antes de la declaración inicial (Art. 115-1); registro en 6 meses (o 3 meses por modificación) para tecnología/marcas del exterior (Art. 123).`
+      },
+      {
+        art: `Art. 191`,
+        topic: `exentas`,
+        sec: `sec-05`,
+        title: `Exclusiones de la renta presuntiva`,
+        summary: `13 exclusiones, incluidas entidades del Art. 19, servicios públicos, liquidación por 3 primeros años y centros de eventos con participación estatal > 51%.`
+      },
+      {
+        art: `Art. 235-2`,
+        topic: `exentas`,
+        sec: `sec-05`,
+        title: `Rentas exentas (economía naranja y tarifa editorial del 15%)`,
+        summary: `Economía naranja por 5 años (< 80.000 UVT, constitución antes de 30/06/2022) y tarifa del 15% para editoriales de libros (Par. 7). Tabla del Art. 241 no consta.`
+      },
+      {
+        art: `Art. 260-7`,
+        topic: `precios`,
+        sec: `sec-06`,
+        title: `Paraísos fiscales y precios de transferencia obligatorios`,
+        summary: `4 criterios reglamentarios; toda operación con paraísos fiscales queda sometida a precios de transferencia sin importar topes de patrimonio o ingresos (Par. 2).`
+      },
+      {
+        art: `Fragmento Patrimonio 2026`,
+        topic: `precios`,
+        sec: `sec-06`,
+        title: `Impuesto al Patrimonio no residentes y vigencia 2026`,
+        summary: `Grava inmuebles, yates, aeronaves o derechos mineros de no residentes y personas jurídicas en 2026, excluyendo municipios afectados del Decreto Legislativo 0150 de 2026.`
+      },
+      {
+        art: `Arts. 436, 437 y 437-2`,
+        topic: `iva`,
+        sec: `sec-07`,
+        title: `Responsables del IVA, tope 4.000 UVT y retención de IVA`,
+        summary: `Responsabilidad en ventas, servicios, importaciones y consorcios; tope 4.000 UVT contratos con el Estado (Art. 437 Par. 5); 8 agentes retenedores, 100% Aerocivil (Art. 437-2).`
+      },
+      {
+        art: `Arts. 514 a 517`,
+        topic: `timbre`,
+        sec: `sec-08`,
+        title: `Impuesto de Timbre Nacional: sujetos y solidaridad`,
+        summary: `Define contribuyentes (otorgantes, emisores, beneficiarios) y responsabilidad solidaria de funcionarios oficiales y agentes de retención.`
+      },
+      {
+        art: `Arts. 572, 576 y 598`,
+        topic: `procedimiento`,
+        sec: `sec-09`,
+        title: `Deberes formales de representantes y declaraciones`,
+        summary: `Representantes legales (con delegación informada), EP/sucursales por no residentes (Art. 576) y declaración de ingresos y patrimonio (Art. 598).`
+      },
+      {
+        art: `Arts. 792 y 793`,
+        topic: `procedimiento`,
+        sec: `sec-09`,
+        title: `Responsabilidad solidaria en el pago del tributo`,
+        summary: `8 literales (a–h): herederos, socios en liquidación, absorbente, subordinadas de matriz extranjera, evasión y abuso; exige notificación para defensa (Par. 1).`
+      },
+      {
+        art: `Arts. 882 y 886`,
+        topic: `ece`,
+        sec: `sec-10`,
+        title: `Entidades Controladas del Exterior (ECE)`,
+        summary: `Adicionado por Ley 1819 de 2016 Art. 139. Incluye trusts y fundaciones; las rentas pasivas se realizan directamente en cabeza del controlante residente en Colombia.`
+      },
+      {
+        art: `Arts. 898 y 915`,
+        topic: `ece`,
+        sec: `sec-10`,
+        title: `Coordinación CHC y Régimen SIMPLE (IVA / factura electrónica)`,
+        summary: `CHC sujetas a ECE y convenios de doble imposición (Art. 898); SIMPLE excluye >= 20% ingresos pasivos y exige factura electrónica en 2 meses desde RUT (Art. 915).`
+      }
+    ];
+
+    const TIMELINE_EVENTS = [
+      {
+        year: `1986–1987`,
+        cat: `origen`,
+        title: `Leyes habilitantes y año gravable base`,
+        source: `Encabezado Decreto 624/89; Arts. 591, 598 y reporte de información`,
+        detail: `Los artículos 90 (num. 5.º) de la Ley 75 de 1986 y 41 de la Ley 43 de 1987 otorgaron facultades extraordinarias. Además, 1987 marca el año gravable base para las declaraciones de los Arts. 591 y 598 y los umbrales de reporte ($50.000, $500.000, $200M y $400M).`
+      },
+      {
+        year: `30/03/1989`,
+        cat: `origen`,
+        title: `Expedición del Decreto 624 de 1989`,
+        source: `Diario Oficial n.º 38756, pág. 1; Art. 3.º del Decreto`,
+        detail: `Se expide el Estatuto Tributario de los impuestos administrados por la Dirección General de Impuestos Nacionales. El Art. 3.º dispone su entrada en vigencia dos (2) meses después de su publicación.`
+      },
+      {
+        year: `1993`,
+        cat: `origen`,
+        title: `Leyes 70, 98, 100 y Decreto 1088`,
+        source: `Arts. 22, 235-2 (Par. 2 y 7) y fragmento GMF`,
+        detail: `Normas integradas en las remisiones del Estatuto: comunidades negras (Ley 70/93) y cabildos indígenas (Decreto 1088/93) como no contribuyentes; editoriales de libros (Ley 98/93, tarifa 15%); Seguridad Social (Ley 100/93).`
+      },
+      {
+        year: `1997–1998`,
+        cat: `origen`,
+        title: `Infraestructura PND y Emergencia Económica`,
+        source: `Art. 11; Par. Transitorio 1.º previo al Art. 436; fragmento pequeños contribuyentes`,
+        detail: `Corte al 31/12/1997 para exención de servicios técnicos desde el exterior en proyectos del PND; exclusión de la contribución de Emergencia Económica de 1998 en el Art. 11; base 1998 para pequeños contribuyentes (< $300M ingresos, < $500M patrimonio, máx. 20 trabajadores).`
+      },
+      {
+        year: `2003–2004`,
+        cat: `modern`,
+        title: `Límite a rentas exentas y exclusiones de presuntiva`,
+        source: `Arts. 191 num. 13 y 235-1`,
+        detail: `Desde el 1/01/2003 aplica la exclusión de renta presuntiva del Art. 191 num. 13; a partir del año gravable 2004, las rentas enumeradas en el Art. 235-1 quedan gravadas en el 100%.`
+      },
+      {
+        year: `2009–2010`,
+        cat: `modern`,
+        title: `Marcos contables, leasing y fondos extranjeros`,
+        source: `Art. 21-1; Art. 18-1 Par. 1; Par. Transitorio 2.º previo al Art. 436`,
+        detail: `Remisión a la Ley 1314 de 2009 en contabilidad fiscal (Art. 21-1); corte al 31/12/2010 para contratos de leasing del exterior y referencia al Decreto 4800 de 2010 para fondos de inversión de capital extranjero.`
+      },
+      {
+        year: `2012–2016`,
+        cat: `modern`,
+        title: `Ley 1819 de 2016: RTE y Libro Séptimo (ECE)`,
+        source: `Art. 18-1 num. 7; Art. 19 Par. transitorios; Libro Séptimo (Art. 139 Ley 1819/16)`,
+        detail: `Amortización en 2013 de pérdidas de portafolio acumuladas a 31/12/2012; corte al 31/12/2016 para transición de ESAL al RTE; y adición del Libro Séptimo (ECE, Arts. 882 y 886) por el Art. 139 de la Ley 1819 de 2016.`
+      },
+      {
+        year: `2019–2022`,
+        cat: `modern`,
+        title: `Rentas exentas 2019 y tope economía naranja`,
+        source: `Art. 235-2 num. 1`,
+        detail: `Regulación de rentas exentas a partir del año gravable 2019; las sociedades de economía naranja debían constituirse e iniciar actividad antes del 30 de junio de 2022 para el incentivo de 5 años (< 80.000 UVT).`
+      },
+      {
+        year: `01/01/2024`,
+        cat: `modern`,
+        title: `Entrada en vigor de la PES digital`,
+        source: `Art. 20-3 Parágrafo 8.º`,
+        detail: `Rigen las reglas de Presencia Económica Significativa (31.300 UVT, 300.000 usuarios o pago en COP, y opción de declaración del 3% sobre ingresos brutos).`
+      },
+      {
+        year: `2026`,
+        cat: `modern`,
+        title: `Impuesto al Patrimonio vigencia 2026`,
+        source: `Fragmento Impuesto al Patrimonio, numeral 6`,
+        detail: `Sujeción en la vigencia 2026 para personas jurídicas y sociedades de hecho declarantes de renta, excluyendo empresas de salud, intervenidas y servicios públicos en zona del Decreto Legislativo 0150 de 2026.`
+      }
+    ];
+
+    // 12 questions, equitable key: A=3 (Q1, Q5, Q9), B=3 (Q2, Q6, Q10), C=3 (Q3, Q7, Q11), D=3 (Q4, Q8, Q12)
+    // Every distractor not from the Estatuto text is explicitly tagged "fuera de tus fuentes".
+    const QUIZ_QUESTIONS = [
+      {
+        id: 1,
+        book: `Título Preliminar · Arts. 1–4`,
+        stem: `De acuerdo con el Título Preliminar del Decreto 624 de 1989, ¿en qué impuesto se consideran sinónimos los términos «contribuyente» y «responsable»?`,
+        options: {
+          A: `En el impuesto sobre las ventas (IVA), conforme al Artículo 4.`,
+          B: `En el impuesto de timbre nacional, donde el Artículo 3 los declara idénticos.`,
+          C: `En el impuesto al patrimonio de la vigencia 2026 (fuera de tus fuentes: esta equiparación no figura para el patrimonio).`,
+          D: `En el impuesto sobre la renta y complementarios, según el Artículo 5.`
+        },
+        correct: `A`,
+        rationale: `El Art. 4 dispone expresamente que para fines del impuesto sobre las ventas son sinónimos contribuyente y responsable. En cambio, en timbre (Art. 3) se diferencian expresamente.`
+      },
+      {
+        id: 2,
+        book: `Libro I · Art. 10`,
+        stem: `Según el Artículo 10 numeral 1 del Estatuto Tributario, una persona natural se considera residente fiscal en Colombia cuando permanece continua o discontinuamente en el país:`,
+        options: {
+          A: `Exactamente 180 días calendario dentro del mismo año fiscal (fuera de tus fuentes).`,
+          B: `Más de 183 días calendario (incluidos entrada y salida) durante un período cualquiera de 365 días calendario consecutivos.`,
+          C: `Más de 183 días hábiles contados exclusivamente dentro de un mismo año calendario (fuera de tus fuentes).`,
+          D: `Durante cinco (5) años continuos o discontinuos desde su primer ingreso.`
+        },
+        correct: `B`,
+        rationale: `El Art. 10 num. 1 fija más de 183 días calendario en cualquier período de 365 días consecutivos. La regla del 5.º año pertenece al Art. 9 para extranjeros residentes sobre renta extranjera.`
+      },
+      {
+        id: 3,
+        book: `Libro I · Art. 9`,
+        stem: `¿A partir de qué momento quedan sujetos los extranjeros residentes en Colombia al impuesto sobre su renta de fuente extranjera y su patrimonio poseído en el exterior?`,
+        options: {
+          A: `Desde el primer día del segundo año gravable tras superar 183 días.`,
+          B: `Desde que el 50% o más de sus bienes sean administrados en Colombia.`,
+          C: `A partir del quinto (5.º) año o período gravable de residencia continua o discontinua en el país.`,
+          D: `Únicamente si optan por la declaración voluntaria del Artículo 6.`
+        },
+        correct: `C`,
+        rationale: `El Art. 9 inciso 2.º establece expresamente la tributación de fuente extranjera y patrimonio exterior para extranjeros residentes a partir del quinto (5.º) año o período gravable.`
+      },
+      {
+        id: 4,
+        book: `Libro I · Art. 12-1`,
+        stem: `De conformidad con el Parágrafo 6 del Artículo 12-1, NO se entiende que existe sede efectiva de administración en Colombia para una sociedad del exterior cuando:`,
+        options: {
+          A: `Su junta directiva se reúne en el extranjero al menos cuatro veces al año (fuera de tus fuentes).`,
+          B: `Sus socios son personas naturales no residentes en un 51% o más.`,
+          C: `Lleva contabilidad separada conforme al Artículo 20-2 para establecimientos permanentes.`,
+          D: `Sus ingresos de fuente en la jurisdicción de constitución son iguales o superiores al 80% de sus ingresos totales (excluyendo rentas pasivas).`
+        },
+        correct: `D`,
+        rationale: `El Art. 12-1 Par. 6 excluye la sede efectiva cuando >= 80% de los ingresos totales (sin rentas pasivas, considerando pasivos los dividendos con participación <= 25%) provienen de su jurisdicción de constitución.`
+      },
+      {
+        id: 5,
+        book: `Libro I · Art. 18-1`,
+        stem: `En las inversiones de capital del exterior de portafolio (Art. 18-1 num. 4 lit. e y f), ¿cuáles son respectivamente la tarifa general, la tarifa para paraíso fiscal y la tarifa para renta fija?`,
+        options: {
+          A: `14% general, 25% si está domiciliado en paraíso fiscal, y 5% para valores de renta fija o derivados sobre renta fija.`,
+          B: `15% general, 20% en paraíso fiscal y 3% para valores de renta fija.`,
+          C: `33% general, 35% en paraíso fiscal y 10% para renta fija (fuera de tus fuentes).`,
+          D: `25% general, 14% en paraíso fiscal y 5% para dividendos gravados del Artículo 49.`
+        },
+        correct: `A`,
+        rationale: `El Art. 18-1 num. 4 lit. e) y f) fija 14% general, 25% en paraíso fiscal y 5% en renta fija pública/privada. Las tarifas de 15% y 3% en B proceden de los Arts. 235-2 Par. 7 y 20-3 Par. 2.`
+      },
+      {
+        id: 6,
+        book: `Libro I · Art. 20-3`,
+        stem: `Respecto a la tributación por Presencia Económica Significativa (PES, Art. 20-3), ¿qué opción de declaración y tarifa alternativa contempla el Parágrafo 2.º?`,
+        options: {
+          A: `Declarar una tarifa del 14% sobre la utilidad neta mensual de la operación.`,
+          B: `Declarar y pagar una tarifa del 3% sobre la totalidad de los ingresos brutos derivados de la venta de bienes o servicios digitales a usuarios en Colombia.`,
+          C: `Pagar una tarifa fija de 31.300 UVT anuales sin presentar formulario (fuera de tus fuentes).`,
+          D: `Tributar al 15% únicamente cuando se superen 160.000 UVT de ingresos anuales.`
+        },
+        correct: `B`,
+        rationale: `El Art. 20-3 Par. 2.º faculta a optar por declarar y pagar el 3% sobre la totalidad de ingresos brutos (y pedir la no aplicación de la retención del Art. 408), vigente desde el 1/01/2024.`
+      },
+      {
+        id: 7,
+        book: `Libro I · Arts. 19 y 358`,
+        stem: `¿A partir de qué nivel de ingresos anuales deben presentar memoria económica las entidades del Régimen Tributario Especial (Art. 19 Par. 2) y cómo tributan sus contratos de obra pública (Art. 358)?`,
+        options: {
+          A: `Desde 80.000 UVT; los contratos de obra pública están exentos si se reinvierten en el año siguiente.`,
+          B: `Desde 4.000 UVT; tributan al 5% mediante retención definitiva.`,
+          C: `Cuando superen 160.000 UVT de ingresos anuales; los contratos de obra pública e interventoría están gravados a la tarifa general del impuesto sobre la renta.`,
+          D: `Desde 300.000 UVT (fuera de tus fuentes); tributan a la tarifa especial del 20% (fuera de tus fuentes).`
+        },
+        correct: `C`,
+        rationale: `El Art. 19 Par. 2 exige memoria económica al superar 160.000 UVT, y el Art. 358 grava a tarifa general los ingresos por contratos de obra pública e interventoría.`
+      },
+      {
+        id: 8,
+        book: `Libro I · Art. 235-2`,
+        stem: `Según el Parágrafo 7 del Artículo 235-2 del Estatuto Tributario, ¿qué tarifa del impuesto sobre la renta aplica a las empresas editoriales constituidas en Colombia cuyo objeto exclusivo sea la edición de libros (Ley 98 de 1993)?`,
+        options: {
+          A: `0% durante cinco años, al igual que las ZESE.`,
+          B: `9%, siempre que facturen menos de 80.000 UVT (fuera de tus fuentes).`,
+          C: `25%, equivalente a los dividendos gravados del Artículo 18-1.`,
+          D: `15%.`
+        },
+        correct: `D`,
+        rationale: `El Parágrafo 7 del Art. 235-2 fija expresamente la tarifa del 15% para estas empresas editoriales de libros en los términos de la Ley 98 de 1993.`
+      },
+      {
+        id: 9,
+        book: `Libro I · Art. 260-7`,
+        stem: `Según el Parágrafo 2.º del Artículo 260-7, cuando un contribuyente realiza operaciones con entidades ubicadas en paraísos fiscales:`,
+        options: {
+          A: `Queda sometido al régimen de precios de transferencia (documentación comprobatoria y declaración informativa) con independencia de que su patrimonio o ingresos sean inferiores a los topes generales.`,
+          B: `Solo queda sometido a precios de transferencia si su patrimonio supera $200.000.000 base 1987.`,
+          C: `Aplica automáticamente la tarifa del 3% sobre ingresos brutos del Artículo 20-3.`,
+          D: `Queda exonerado si el contrato de tecnología se registra antes de 12 meses (fuera de tus fuentes).`
+        },
+        correct: `A`,
+        rationale: `El Art. 260-7 Par. 2.º elimina los topes de patrimonio bruto o ingresos brutos de los Arts. 260-5 y 260-9 cuando se opera con paraísos fiscales.`
+      },
+      {
+        id: 10,
+        book: `Libro III · Arts. 437 y 437-2`,
+        stem: `En el Impuesto sobre las Ventas (IVA), ¿qué porcentaje retiene la Unidad Administrativa de Aeronáutica Civil en la venta de aerodinos (Art. 437-2 num. 6) y qué umbral fija el Art. 437 Par. 5.º para prestadores personas naturales con contratos con el Estado?`,
+        options: {
+          A: `Retiene el 50% y el umbral es de 3.500 UVT (fuera de tus fuentes).`,
+          B: `Retiene el 100% del IVA causado en la venta de aerodinos y el límite del Parágrafo 5.º es de 4.000 UVT.`,
+          C: `Retiene el 14% y el umbral es de 31.300 UVT.`,
+          D: `Retiene el 25% y el umbral es de 260 UVT.`
+        },
+        correct: `B`,
+        rationale: `El Art. 437-2 num. 6 asigna a la Aeronáutica Civil el 100% del IVA causado en venta de aerodinos, y el Art. 437 Par. 5.º eleva los límites a 4.000 UVT para contratistas personas naturales con el Estado.`
+      },
+      {
+        id: 11,
+        book: `Libros IV y V · Arts. 517 y 793`,
+        stem: `De acuerdo con los Artículos 517 (Timbre) y 793 (Extinción de la Obligación Tributaria), ¿qué afirmación es estrictamente cierta?`,
+        options: {
+          A: `Las sociedades subordinadas nunca responden por las obligaciones de su matriz extranjera sin sucursales en Colombia.`,
+          B: `Los liquidadores auxiliares de la justicia responden siempre de forma solidaria e ilimitada incluso por hechos previos a su posesión.`,
+          C: `Responden solidariamente en timbre los funcionarios oficiales que tramiten actos gravados y los agentes de retención (Art. 517); y en general la Administración debe notificar a los deudores solidarios para que ejerzan su derecho de defensa (Art. 793 Par. 1).`,
+          D: `En el Libro Cuarto se fija una tarifa única de timbre del 1,5% sobre cuantías mayores a 6.000 UVT (fuera de tus fuentes).`
+        },
+        correct: `C`,
+        rationale: `El Art. 517 establece la solidaridad de funcionarios oficiales y agentes de retención en timbre, y el Art. 793 Par. 1 exige notificar a todos los deudores solidarios. Las tarifas concretas de timbre no constan en las fuentes.`
+      },
+      {
+        id: 12,
+        book: `Libro VII y SIMPLE · Arts. 882, 886 y 915`,
+        stem: `Sobre el régimen ECE (Arts. 882 y 886) y el Régimen Simple de Tributación (Art. 915 y exclusiones), ¿cuál es la respuesta correcta?`,
+        options: {
+          A: `Los trusts y fundaciones de interés privado están excluidos del concepto de ECE en el Artículo 882.`,
+          B: `Los ingresos pasivos de una ECE solo tributan en Colombia cuando se decretan dividendos en efectivo.`,
+          C: `Los contribuyentes del SIMPLE tienen 6 meses tras inscribirse en el RUT para adoptar factura electrónica y quedan excluidos si sus ingresos pasivos son del 10% (fuera de tus fuentes).`,
+          D: `Las rentas pasivas de la ECE se entienden realizadas en cabeza de los controlantes residentes en Colombia en el mismo año gravable (Art. 886), y en el SIMPLE la factura electrónica debe adoptarse en los 2 meses siguientes a la inscripción en el RUT (Art. 915 Par.).`
+        },
+        correct: `D`,
+        rationale: `El Art. 882 Par. 1 incluye trusts y fundaciones; el Art. 886 imputa realización inmediata al controlante en el mismo período; y el Art. 915 Par. concede 2 meses desde el RUT para factura electrónica (la exclusión de pasivos es >= 20%).`
+      }
+    ];
+
+    // =========================================================================
+    // 2. APPLICATION STATE (Synced with notebookAppApi)
+    // =========================================================================
+    const appState = {
+      completedSections: [],
+      quizAnswers: {},
+      quizSubmitted: false,
+      calcMode: `residencia`,
+      calcDays: 190,
+      calcNationality: `colombiano`,
+      calcIncomePct: 35,
+      calcFamilyOrHaven: false,
+      calcPar2Exception: false,
+      pesRegime: `pes_3`,
+      pesUvtBase: 35000,
+      pesUsers: 320000,
+      pesCop: true,
+      umbralType: `rte_memoria`,
+      umbralVal: 175000
+    };
+
+    let activeTopicFilter = `all`;
+    let activeSearchQuery = ``;
+    let activeChartMode = `pct`;
+    let activeTimelineCat = `all`;
+    let selectedTimelineIndex = 0;
+    let statuteChartInstance = null;
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (err) {
+        // Silent fallback in non-host preview
+      }
+    }
+
+    async function loadPersistedState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            Object.assign(appState, saved);
+          }
+        }
+      } catch (err) {
+        // Silent fallback
+      }
+    }
+
+    // =========================================================================
+    // 3. PROGRESS & SECTION CHECKBOXES ("Marcar como hecho")
+    // =========================================================================
+    function renderProgress() {
+      const doneSet = new Set(Array.isArray(appState.completedSections) ? appState.completedSections : []);
+      const count = doneSet.size;
+      const total = SECTION_META.length;
+      const pct = Math.round((count / total) * 100);
+
+      const summaryEl = document.getElementById(`progress-summary-text`);
+      if (summaryEl) {
+        summaryEl.textContent = `${count} de ${total} secciones completadas (${pct}%)`;
+      }
+
+      const barFill = document.getElementById(`progress-fill-bar`);
+      if (barFill) {
+        barFill.style.width = `${pct}%`;
+      }
+
+      const barWrap = document.getElementById(`progress-bar-wrap`);
+      if (barWrap) {
+        barWrap.setAttribute(`aria-valuenow`, String(count));
+      }
+
+      const navGrid = document.getElementById(`index-nav-grid`);
+      if (navGrid) {
+        navGrid.innerHTML = SECTION_META.map(sec => {
+          const isDone = doneSet.has(sec.id);
+          return `<a href="#${sec.id}" class="index-nav-link ${isDone ? `is-done` : ``}">
+            <span><span class="index-nav-num">${sec.num}</span>${sec.title}</span>
+            <span class="index-nav-status">${isDone ? `Hecho` : `Pendiente`}</span>
+          </a>`;
+        }).join(``);
+      }
+
+      const buttons = document.querySelectorAll(`.done-toggle-btn`);
+      buttons.forEach(btn => {
+        const secId = btn.getAttribute(`data-sec`);
+        const isDone = doneSet.has(secId);
+        btn.classList.toggle(`is-checked`, isDone);
+        btn.setAttribute(`aria-pressed`, isDone ? `true` : `false`);
+        const box = btn.querySelector(`.done-box`);
+        const label = btn.querySelector(`.done-label`);
+        if (box) box.textContent = isDone ? `✓` : ``;
+        if (label) label.textContent = isDone ? `Hecho` : `Marcar como hecho`;
+      });
+    }
+
+    function toggleSectionDone(secId) {
+      const idx = appState.completedSections.indexOf(secId);
+      if (idx === -1) {
+        appState.completedSections.push(secId);
+      } else {
+        appState.completedSections.splice(idx, 1);
+      }
+      renderProgress();
+      persistState();
+    }
+
+    function resetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Pulsad de nuevo para confirmar`;
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `Reiniciar avance`;
+      appState.completedSections = [];
+      renderProgress();
+      persistState();
+    }
+
+    // =========================================================================
+    // 4. DYNAMIC SEARCH & BOOK/TOPIC FILTERS
+    // =========================================================================
+    function renderTopicFilters() {
+      const bar = document.getElementById(`topic-filter-bar`);
+      if (!bar) return;
+      bar.innerHTML = TOPIC_FILTERS.map(f => {
+        const active = f.id === activeTopicFilter;
+        return `<button type="button" class="filter-btn ${active ? `is-active` : ``}" aria-pressed="${active}" onclick="setTopicFilter('${f.id}')">${f.label}</button>`;
+      }).join(``);
+    }
+
+    function setTopicFilter(topicId) {
+      activeTopicFilter = topicId;
+      renderTopicFilters();
+      renderSearchResults();
+    }
+
+    function handleSearchInput(val) {
+      activeSearchQuery = (val || ``).trim().toLowerCase();
+      renderSearchResults();
+    }
+
+    function clearSearchFilters() {
+      activeTopicFilter = `all`;
+      activeSearchQuery = ``;
+      const input = document.getElementById(`search-input`);
+      if (input) input.value = ``;
+      renderTopicFilters();
+      renderSearchResults();
+    }
+
+    function renderSearchResults() {
+      const grid = document.getElementById(`search-results-grid`);
+      const countEl = document.getElementById(`search-count-label`);
+      if (!grid || !countEl) return;
+
+      const filtered = ARTICLES_INDEX.filter(item => {
+        const matchTopic = activeTopicFilter === `all` || item.topic === activeTopicFilter;
+        if (!matchTopic) return false;
+        if (!activeSearchQuery) return true;
+        const haystack = `${item.art} ${item.title} ${item.summary}`.toLowerCase();
+        return haystack.includes(activeSearchQuery);
+      });
+
+      countEl.textContent = `Mostrando ${filtered.length} de ${ARTICLES_INDEX.length} bloques normativos indexados`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="article-card" style="grid-column: 1 / -1;">
+          <h3>Sin coincidencias en los fragmentos del Estatuto</h3>
+          <p>No figura ningún artículo o término que coincida con «${activeSearchQuery}» en el filtro activo. Limpiad los filtros para consultar de nuevo todo el índice.</p>
+        </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => {
+        return `<article class="article-card">
+          <span class="stamp-tag">${item.art}</span>
+          <h3>${item.title}</h3>
+          <p>${item.summary}</p>
+          <div class="article-card-footer">
+            <span class="field-label">Decreto 624 de 1989</span>
+            <a href="#${item.sec}" class="inline-link">Ir a sección</a>
+          </div>
+        </article>`;
+      }).join(``);
+    }
+
+    // =========================================================================
+    // 5. INTERACTIVE TAX CALCULATOR (3 MODES)
+    // =========================================================================
+    function switchCalcMode(mode) {
+      appState.calcMode = mode;
+      const modes = [`residencia`, `pes`, `umbrales`];
+      modes.forEach(m => {
+        const panel = document.getElementById(`calc-mode-${m}`);
+        if (panel) panel.style.display = m === mode ? `grid` : `none`;
+      });
+
+      const tabMap = { residencia: `tab-btn-res`, pes: `tab-btn-pes`, umbrales: `tab-btn-umb` };
+      Object.keys(tabMap).forEach(k => {
+        const btn = document.getElementById(tabMap[k]);
+        if (btn) btn.classList.toggle(`is-active`, k === mode);
+      });
+
+      persistState();
+    }
+
+    // Dedicated dual handlers for slider & number inputs (prevents snap-back)
+    function onDaysSlider(val) {
+      const num = Math.max(0, Math.min(365, Number(val) || 0));
+      appState.calcDays = num;
+      const inp = document.getElementById(`input-days`);
+      if (inp) inp.value = String(num);
+      updateResidenciaCalc();
+    }
+    function onDaysNumber(val) {
+      const num = Math.max(0, Math.min(365, Number(val) || 0));
+      appState.calcDays = num;
+      const sld = document.getElementById(`slider-days`);
+      if (sld) sld.value = String(num);
+      updateResidenciaCalc();
+    }
+
+    function onIncomePctSlider(val) {
+      const num = Math.max(0, Math.min(100, Number(val) || 0));
+      appState.calcIncomePct = num;
+      const inp = document.getElementById(`input-income-pct`);
+      if (inp) inp.value = String(num);
+      updateResidenciaCalc();
+    }
+    function onIncomePctNumber(val) {
+      const num = Math.max(0, Math.min(100, Number(val) || 0));
+      appState.calcIncomePct = num;
+      const sld = document.getElementById(`slider-income-pct`);
+      if (sld) sld.value = String(num);
+      updateResidenciaCalc();
+    }
+
+    function updateResidenciaCalc() {
+      const natEl = document.getElementById(`select-nationality`);
+      const famEl = document.getElementById(`chk-family-or-haven`);
+      const par2El = document.getElementById(`chk-par2-exception`);
+      if (natEl) appState.calcNationality = natEl.value;
+      if (famEl) appState.calcFamilyOrHaven = famEl.checked;
+      if (par2El) appState.calcPar2Exception = par2El.checked;
+
+      const days = appState.calcDays;
+      const nat = appState.calcNationality;
+      const incPct = appState.calcIncomePct;
+      const famOrHaven = appState.calcFamilyOrHaven;
+      const par2 = appState.calcPar2Exception;
+
+      const byDays = days > 183;
+      const nationalCriteria = nat === `colombiano` && (incPct >= 50 || famOrHaven);
+      const exemptedByPar2 = !byDays && nationalCriteria && par2;
+      const isResident = byDays || (nationalCriteria && !exemptedByPar2);
+
+      let verdict = ``;
+      let scope = ``;
+
+      if (!isResident) {
+        verdict = `No residente fiscal en Colombia`;
+        scope = `Sujeto únicamente respecto a rentas y ganancias ocasionales de fuente nacional y patrimonio poseído en Colombia (Art. 9 inc. 3.º).`;
+      } else if (nat === `extranjero_1_4`) {
+        verdict = `Extranjero residente (años 1.º a 4.º)`;
+        scope = `Residente por permanencia (> 183 días, Art. 10 num. 1), pero conforme al Art. 9 inc. 2.º tributa aún solo por fuente nacional y patrimonio en Colombia hasta cumplir el 5.º año.`;
+      } else {
+        verdict = `Residente fiscal con tributación mundial`;
+        scope = `Sujeto sobre rentas y ganancias ocasionales de fuente nacional y extranjera, y patrimonio dentro y fuera de Colombia (Art. 9 inc. 1.º y 2.º).`;
+      }
+
+      const verdictEl = document.getElementById(`res-verdict`);
+      const listEl = document.getElementById(`res-breakdown`);
+      if (verdictEl) verdictEl.textContent = verdict;
+      if (listEl) {
+        listEl.innerHTML = `
+          <li><strong>Criterio de permanencia (Art. 10 num. 1):</strong> ${days} días frente al umbral de &gt; 183 días en 365 consecutivos &rarr; <strong>${byDays ? `Cumplido` : `No alcanzado`}</strong>.</li>
+          <li><strong>Criterio de nacionales (Art. 10 num. 3):</strong> ${nat === `colombiano` ? (nationalCriteria ? `Activado (${incPct}% ingresos nacionales / vínculo o paraíso).` : `Sin activación (${incPct}% &lt; 50% y sin vínculos).`) : `No aplica a extranjeros (solo aplica a nacionales colombianos).`}</li>
+          <li><strong>Excepción Parágrafo 2 (Art. 10):</strong> ${exemptedByPar2 ? `Aplica excepción por &ge; 50% en jurisdicción de domicilio.` : `No aplica o no necesaria.`}</li>
+          <li><strong>Alcance impositivo (Art. 9):</strong> ${scope}</li>
+        `;
+      }
+      persistState();
+    }
+
+    function onUvtBaseSlider(val) {
+      const num = Math.max(0, Number(val) || 0);
+      appState.pesUvtBase = num;
+      const inp = document.getElementById(`input-uvt-base`);
+      if (inp) inp.value = String(num);
+      updatePesCalc();
+    }
+    function onUvtBaseNumber(val) {
+      const num = Math.max(0, Number(val) || 0);
+      appState.pesUvtBase = num;
+      const sld = document.getElementById(`slider-uvt-base`);
+      if (sld) sld.value = String(Math.min(150000, num));
+      updatePesCalc();
+    }
+
+    function updatePesCalc() {
+      const regEl = document.getElementById(`select-intl-regime`);
+      const usrEl = document.getElementById(`input-pes-users`);
+      const copEl = document.getElementById(`chk-pes-cop`);
+      if (regEl) appState.pesRegime = regEl.value;
+      if (usrEl) appState.pesUsers = Math.max(0, Number(usrEl.value) || 0);
+      if (copEl) appState.pesCop = copEl.checked;
+
+      const rates = {
+        pes_3: { rate: 0.03, label: `3% sobre ingresos brutos (Art. 20-3 Par. 2)` },
+        portafolio_general: { rate: 0.14, label: `14% retención general portafolio (Art. 18-1 num. 4 lit. e)` },
+        portafolio_paraiso: { rate: 0.25, label: `25% retención paraíso fiscal portafolio (Art. 18-1 num. 4 lit. e)` },
+        portafolio_rentafija: { rate: 0.05, label: `5% retención renta fija portafolio (Art. 18-1 num. 4 lit. f)` }
+      };
+
+      const selected = rates[appState.pesRegime] || rates.pes_3;
+      const taxUvt = appState.pesUvtBase * selected.rate;
+      const hasPesGoodsThreshold = appState.pesUvtBase >= 31300;
+      const hasPesInteraction = appState.pesUsers >= 300000 || appState.pesCop;
+
+      const verdictEl = document.getElementById(`pes-verdict`);
+      const listEl = document.getElementById(`pes-breakdown`);
+      if (verdictEl) {
+        verdictEl.textContent = `${taxUvt.toLocaleString(`es-ES`, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} UVT estimadas`;
+      }
+      if (listEl) {
+        listEl.innerHTML = `
+          <li><strong>Regla aplicada:</strong> ${selected.label}.</li>
+          <li><strong>Base evaluada:</strong> ${appState.pesUvtBase.toLocaleString(`es-ES`)} UVT &times; ${(selected.rate * 100).toFixed(0)}% = <strong>${taxUvt.toLocaleString(`es-ES`, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} UVT</strong>.</li>
+          <li><strong>Umbral de bienes PES (31.300 UVT, Art. 20-3):</strong> ${hasPesGoodsThreshold ? `Superado o igualado (&ge; 31.300 UVT).` : `Por debajo de 31.300 UVT (para servicios digitales listados en 2.1–2.11 se atiende al Art. 20-3 num. 2).`}</li>
+          <li><strong>Presunción de interacción (Art. 20-3 Par. 1):</strong> ${hasPesInteraction ? `Activada (${appState.pesUsers.toLocaleString(`es-ES`)} usuarios / precios en COP: ${appState.pesCop ? `Sí` : `No`}).` : `No activada (&lt; 300.000 usuarios y sin COP).`}</li>
+          <li><strong>Conversión a pesos (COP):</strong> <em>no consta</em> el valor oficial de 1 UVT en las fuentes proporcionadas.</li>
+        `;
+      }
+      persistState();
+    }
+
+    function updateUmbralCalc() {
+      const typeEl = document.getElementById(`select-threshold-type`);
+      const valEl = document.getElementById(`input-umbral-val`);
+      if (typeEl) appState.umbralType = typeEl.value;
+      if (valEl) appState.umbralVal = Math.max(0, Number(valEl.value) || 0);
+
+      const v = appState.umbralVal;
+      let verdict = ``;
+      let ruleDetail = ``;
+      let artRef = ``;
+
+      if (appState.umbralType === `rte_memoria`) {
+        artRef = `Art. 19 Parágrafo 2.º`;
+        verdict = v > 160000 ? `Obligada a presentar memoria económica` : `Por debajo del umbral de memoria económica`;
+        ruleDetail = `Las entidades del RTE que superen <strong>160.000 UVT</strong> de ingresos anuales deben presentar memoria económica ante Fiscalización. Valor introducido: <strong>${v.toLocaleString(`es-ES`)} UVT</strong>.`;
+      } else if (appState.umbralType === `naranja`) {
+        artRef = `Art. 235-2 num. 1 y Par. 1.º`;
+        verdict = v < 80000 ? `Cumple el tope de ingresos (< 80.000 UVT)` : `Excede el tope de ingresos (salvo CIIU 5911)`;
+        ruleDetail = `Exención de 5 años exclusiva para ingresos brutos anuales inferiores a <strong>80.000 UVT</strong> (no aplica a CIIU 5911) con inicio antes del 30/06/2022. Valor introducido: <strong>${v.toLocaleString(`es-ES`)} UVT</strong>.`;
+      } else if (appState.umbralType === `iva_estado`) {
+        artRef = `Art. 437 Parágrafo 5.º`;
+        verdict = v <= 4000 ? `Dentro del límite de 4.000 UVT` : `Supera el límite de 4.000 UVT`;
+        ruleDetail = `El límite del Parágrafo 3 del Art. 437 asciende a <strong>4.000 UVT</strong> para prestadores de servicios personas naturales con contratos con el Estado. Valor introducido: <strong>${v.toLocaleString(`es-ES`)} UVT</strong>.`;
+      } else if (appState.umbralType === `dependiente`) {
+        artRef = `Fragmento dependientes, num. 4 y 5`;
+        verdict = v < 260 ? `Cumple condición cuantitativa (< 260 UVT)` : `Supera el tope de 260 UVT anuales`;
+        ruleDetail = `Cónyuge, compañero, padres o hermanos en dependencia por ingresos anuales menores a <strong>260 UVT</strong> certificados por contador público. Valor introducido: <strong>${v.toLocaleString(`es-ES`)} UVT</strong>.`;
+      } else {
+        artRef = `Exclusiones SIMPLE, num. 8 lit. b`;
+        verdict = v >= 20 ? `Excluido del Régimen SIMPLE (>= 20%)` : `No incurre en exclusión por pasivos (< 20%)`;
+        ruleDetail = `Quedan excluidas del SIMPLE las personas con actividades que generen ingresos pasivos que representen un <strong>20% o más</strong> de sus ingresos brutos totales. Valor introducido: <strong>${v.toLocaleString(`es-ES`)}%</strong>.`;
+      }
+
+      const verdictEl = document.getElementById(`umbral-verdict`);
+      const listEl = document.getElementById(`umbral-breakdown`);
+      if (verdictEl) verdictEl.textContent = verdict;
+      if (listEl) {
+        listEl.innerHTML = `
+          <li><strong>Disposición exacta:</strong> Decreto 624 de 1989, ${artRef}.</li>
+          <li><strong>Análisis numérico:</strong> ${ruleDetail}</li>
+          <li><strong>Nota documental:</strong> El valor en pesos de 1 UVT <em>no consta</em> en los fragmentos suministrados.</li>
+        `;
+      }
+      persistState();
+    }
+
+    // =========================================================================
+    // 6. CHART.JS INTERACTIVE COMPARISON
+    // =========================================================================
+    function buildOrUpdateChart(mode) {
+      activeChartMode = mode;
+      const btnPct = document.getElementById(`chart-btn-pct`);
+      const btnUvt = document.getElementById(`chart-btn-uvt`);
+      if (btnPct) btnPct.classList.toggle(`is-active`, mode === `pct`);
+      if (btnUvt) btnUvt.classList.toggle(`is-active`, mode === `uvt`);
+
+      const canvas = document.getElementById(`statuteChart`);
+      if (!canvas || typeof Chart === `undefined`) return;
+
+      const styles = getComputedStyle(document.documentElement);
+      const c1 = styles.getPropertyValue(`--data-1`).trim();
+      const c2 = styles.getPropertyValue(`--data-2`).trim();
+      const c3 = styles.getPropertyValue(`--data-3`).trim();
+      const cGrid = styles.getPropertyValue(`--outline-variant`).trim();
+      const cInk = styles.getPropertyValue(`--on-surface`).trim();
+
+      const pctData = {
+        labels: [
+          `PES opción bruto (Art. 20-3)`,
+          `Utilidad CIIU SIMPLE`,
+          `Renta fija port. (Art. 18-1)`,
+          `Portafolio gral. (Art. 18-1)`,
+          `Editoriales libros (Art. 235-2)`,
+          `Pasivos excl. SIMPLE`,
+          `Paraíso / div. (Art. 18-1)`,
+          `Div. pasivo (Art. 12-1)`,
+          `Residencia nac. (Art. 10)`,
+          `Part. estatal (Art. 191)`,
+          `Origen sede ef. (Art. 12-1)`
+        ],
+        values: [3, 3, 5, 14, 15, 20, 25, 25, 50, 51, 80],
+        unit: `%`
+      };
+
+      const uvtData = {
+        labels: [
+          `Dependiente ingresos (num. 4-5)`,
+          `IVA contratos Estado (Art. 437)`,
+          `PES bienes exterior (Art. 20-3)`,
+          `Economía naranja tope (Art. 235-2)`,
+          `Memoria econ. RTE (Art. 19)`
+        ],
+        values: [260, 4000, 31300, 80000, 160000],
+        unit: ` UVT`
+      };
+
+      const current = mode === `pct` ? pctData : uvtData;
+      const captionEl = document.getElementById(`chart-caption`);
+      if (captionEl) {
+        captionEl.textContent = mode === `pct`
+          ? `Serie activa: tarifas y porcentajes literales (%) verificados en el Decreto 624 de 1989. Las tablas progresivas del Art. 241 no constan en la fuente.`
+          : `Serie activa: umbrales en Unidades de Valor Tributario (UVT) verificados en la fuente (de 260 UVT a 160.000 UVT). Valor COP de 1 UVT: no consta.`;
+      }
+
+      if (statuteChartInstance) {
+        statuteChartInstance.destroy();
+      }
+
+      statuteChartInstance = new Chart(canvas.getContext(`2d`), {
+        type: `bar`,
+        data: {
+          labels: current.labels,
+          datasets: [{
+            label: mode === `pct` ? `Porcentaje normativo (%)` : `Umbral en UVT`,
+            data: current.values,
+            backgroundColor: current.values.map((_, idx) => idx % 3 === 0 ? c1 : (idx % 3 === 1 ? c2 : c3)),
+            borderRadius: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: mode === `pct` ? `y` : `x`,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  return `${ctx.parsed[mode === `pct` ? `x` : `y`].toLocaleString(`es-ES`)}${current.unit}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: cGrid },
+              ticks: { color: cInk }
+            },
+            y: {
+              grid: { color: cGrid },
+              ticks: { color: cInk }
+            }
+          }
+        }
+      });
+    }
+
+    function switchChartDataset(mode) {
+      buildOrUpdateChart(mode);
+    }
+
+    // =========================================================================
+    // 7. INTERACTIVE TIMELINE
+    // =========================================================================
+    function filterTimeline(cat, btnEl) {
+      activeTimelineCat = cat;
+      const btns = document.querySelectorAll(`#timeline-filter-bar .filter-btn`);
+      btns.forEach(b => b.classList.remove(`is-active`));
+      if (btnEl) btnEl.classList.add(`is-active`);
+      selectedTimelineIndex = 0;
+      renderTimeline();
+    }
+
+    function selectTimelineNode(idx) {
+      selectedTimelineIndex = idx;
+      renderTimeline();
+    }
+
+    function renderTimeline() {
+      const track = document.getElementById(`timeline-track`);
+      const detail = document.getElementById(`timeline-detail-card`);
+      if (!track || !detail) return;
+
+      const items = TIMELINE_EVENTS.filter(ev => activeTimelineCat === `all` || ev.cat === activeTimelineCat);
+      if (selectedTimelineIndex >= items.length) selectedTimelineIndex = 0;
+
+      track.innerHTML = items.map((ev, idx) => {
+        const selected = idx === selectedTimelineIndex;
+        return `<button type="button" class="timeline-node ${selected ? `is-selected` : ``}" onclick="selectTimelineNode(${idx})">
+          <span class="timeline-year">${ev.year}</span>
+          <strong>${ev.title}</strong>
+        </button>`;
+      }).join(``);
+
+      const active = items[selectedTimelineIndex];
+      if (active) {
+        detail.innerHTML = `
+          <span class="stamp-tag">${active.year} · ${active.source}</span>
+          <h3 style="font-family: var(--font-headline); font-weight: 700; margin: var(--space-xs) 0 0 0;">${active.title}</h3>
+          <p style="margin: 0;">${active.detail}</p>
+        `;
+      }
+    }
+
+    // =========================================================================
+    // 8. EVALUABLE INTERACTIVE QUIZ (12 Questions · A=3, B=3, C=3, D=3)
+    // =========================================================================
+    function renderQuiz() {
+      const container = document.getElementById(`quiz-questions-container`);
+      const countEl = document.getElementById(`quiz-answered-count`);
+      const scoreEl = document.getElementById(`quiz-score-container`);
+      if (!container || !countEl || !scoreEl) return;
+
+      const answeredCount = Object.keys(appState.quizAnswers).length;
+      countEl.textContent = `${answeredCount} de ${QUIZ_QUESTIONS.length} preguntas respondidas`;
+
+      container.innerHTML = QUIZ_QUESTIONS.map(q => {
+        const chosen = appState.quizAnswers[q.id];
+        const optionKeys = [`A`, `B`, `C`, `D`];
+        const optsHtml = optionKeys.map(key => {
+          const text = q.options[key];
+          const isExternal = text.includes(`fuera de tus fuentes`);
+          const cleanText = text.replace(` (fuera de tus fuentes`, ` (`).replace(` (fuera de tus fuentes)`, ``);
+          let statusClass = ``;
+          if (appState.quizSubmitted) {
+            if (key === q.correct) statusClass = `is-correct`;
+            else if (chosen === key) statusClass = `is-wrong`;
+          }
+          return `<label class="option-label ${statusClass}">
+            <input type="radio" name="q_${q.id}" value="${key}" ${chosen === key ? `checked` : ``} ${appState.quizSubmitted ? `disabled` : ``} onchange="selectQuizOption(${q.id}, '${key}')">
+            <span>
+              <strong>${key}.</strong> ${cleanText}
+              ${isExternal ? `<span class="external-tag">Fuera de tus fuentes</span>` : ``}
+            </span>
+          </label>`;
+        }).join(``);
+
+        const feedbackHtml = appState.quizSubmitted
+          ? `<div class="option-feedback">
+              <strong>${chosen === q.correct ? `Correcto (${q.correct})` : `Respuesta correcta: ${q.correct} (seleccionasteis ${chosen || `ninguna`})`}.</strong>
+              ${q.rationale}
+            </div>`
+          : ``;
+
+        return `<article class="question-card">
+          <div class="question-header">
+            <span class="label-kicker">Pregunta ${q.id} de ${QUIZ_QUESTIONS.length}</span>
+            <span class="stamp-tag">${q.book}</span>
+          </div>
+          <p class="question-stem">${q.stem}</p>
+          <div class="options-list">${optsHtml}</div>
+          ${feedbackHtml}
+        </article>`;
+      }).join(``);
+
+      if (appState.quizSubmitted) {
+        let correctHits = 0;
+        QUIZ_QUESTIONS.forEach(q => {
+          if (appState.quizAnswers[q.id] === q.correct) correctHits += 1;
+        });
+        const grade10 = ((correctHits / QUIZ_QUESTIONS.length) * 10).toFixed(1).replace(`.`, `,`);
+        const pct = Math.round((correctHits / QUIZ_QUESTIONS.length) * 100);
+        scoreEl.style.display = `block`;
+        scoreEl.innerHTML = `<div class="quiz-score-panel">
+          <span class="label-kicker">Resultado final de evaluación</span>
+          <p class="figure-value" style="font-size: 2rem;">Nota final: ${grade10} / 10 (${correctHits} de ${QUIZ_QUESTIONS.length} aciertos · ${pct}%)</p>
+          <p style="margin: 0;">Revisad debajo la justificación literal de cada pregunta y las opciones etiquetadas como «fuera de tus fuentes».</p>
+        </div>`;
+      } else {
+        scoreEl.style.display = `none`;
+        scoreEl.innerHTML = ``;
+      }
+    }
+
+    function selectQuizOption(qId, optKey) {
+      appState.quizAnswers[qId] = optKey;
+      const countEl = document.getElementById(`quiz-answered-count`);
+      if (countEl) {
+        countEl.textContent = `${Object.keys(appState.quizAnswers).length} de ${QUIZ_QUESTIONS.length} preguntas respondidas`;
+      }
+      persistState();
+    }
+
+    function gradeQuiz() {
+      appState.quizSubmitted = true;
+      renderQuiz();
+      persistState();
+      const scoreEl = document.getElementById(`quiz-score-container`);
+      if (scoreEl) scoreEl.scrollIntoView({ behavior: `smooth`, block: `nearest` });
+    }
+
+    function resetQuiz(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Pulsad de nuevo para reiniciar test`;
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `Reiniciar test`;
+      appState.quizAnswers = {};
+      appState.quizSubmitted = false;
+      renderQuiz();
+      persistState();
+    }
+
+    // =========================================================================
+    // 9. SCROLL REVEAL OBSERVER
+    // =========================================================================
+    function initRevealObserver() {
+      const items = document.querySelectorAll(`.reveal-item`);
+      if (!(`IntersectionObserver` in window)) {
+        items.forEach(el => el.classList.add(`is-visible`));
+        return;
+      }
+      const obs = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(`is-visible`);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      items.forEach(el => obs.observe(el));
+    }
+
+    // =========================================================================
+    // 10. INITIALIZATION
+    // =========================================================================
+    function syncUiFromState() {
+      const sldDays = document.getElementById(`slider-days`);
+      const inpDays = document.getElementById(`input-days`);
+      if (sldDays) sldDays.value = String(appState.calcDays);
+      if (inpDays) inpDays.value = String(appState.calcDays);
+
+      const selNat = document.getElementById(`select-nationality`);
+      if (selNat) selNat.value = appState.calcNationality;
+
+      const sldInc = document.getElementById(`slider-income-pct`);
+      const inpInc = document.getElementById(`input-income-pct`);
+      if (sldInc) sldInc.value = String(appState.calcIncomePct);
+      if (inpInc) inpInc.value = String(appState.calcIncomePct);
+
+      const chkFam = document.getElementById(`chk-family-or-haven`);
+      const chkPar2 = document.getElementById(`chk-par2-exception`);
+      if (chkFam) chkFam.checked = Boolean(appState.calcFamilyOrHaven);
+      if (chkPar2) chkPar2.checked = Boolean(appState.calcPar2Exception);
+
+      const selReg = document.getElementById(`select-intl-regime`);
+      const sldUvt = document.getElementById(`slider-uvt-base`);
+      const inpUvt = document.getElementById(`input-uvt-base`);
+      const inpUsr = document.getElementById(`input-pes-users`);
+      const chkCop = document.getElementById(`chk-pes-cop`);
+      if (selReg) selReg.value = appState.pesRegime;
+      if (sldUvt) sldUvt.value = String(Math.min(150000, appState.pesUvtBase));
+      if (inpUvt) inpUvt.value = String(appState.pesUvtBase);
+      if (inpUsr) inpUsr.value = String(appState.pesUsers);
+      if (chkCop) chkCop.checked = Boolean(appState.pesCop);
+
+      const selUmb = document.getElementById(`select-threshold-type`);
+      const inpUmb = document.getElementById(`input-umbral-val`);
+      if (selUmb) selUmb.value = appState.umbralType;
+      if (inpUmb) inpUmb.value = String(appState.umbralVal);
+
+      switchCalcMode(appState.calcMode || `residencia`);
+    }
+
+    document.addEventListener(`DOMContentLoaded`, async function() {
+      await loadPersistedState();
+      syncUiFromState();
+      renderProgress();
+      renderTopicFilters();
+      renderSearchResults();
+      updateResidenciaCalc();
+      updatePesCalc();
+      updateUmbralCalc();
+      buildOrUpdateChart(`pct`);
+      renderTimeline();
+      renderQuiz();
+      initRevealObserver();
+
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    });
+  </script>
+</body>
+</html>

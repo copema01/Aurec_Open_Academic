@@ -1,0 +1,2452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="charter">
+  <title>El poder en la mente subconsciente — Edición Ejecutiva Charter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Charter) */
+      --background: #f7f4ec;
+      --surface-container-low: #fffdf8;
+      --surface-container: #ece5d4;
+      --surface-container-high: #e3dac4;
+
+      /* Ink */
+      --on-surface: #1c1f26;
+      --on-surface-variant: #4f5360;
+
+      /* Rules */
+      --outline: #b08d57;
+      --outline-variant: #d9cfb8;
+
+      /* Accents */
+      --primary: #14213d;
+      --on-primary: #f7f4ec;
+      --primary-container: #e3e6ee;
+      --on-primary-container: #14213d;
+      --secondary: #2d5a4a;
+      --tertiary: #8a6a35;
+      --error: #9b2c2c;
+      --on-error: #f7f4ec;
+
+      /* Data series */
+      --data-1: #14213d;
+      --data-2: #8a6a35;
+      --data-3: #2d5a4a;
+      --data-4: #5b7aa0;
+      --data-context: #c2bba9;
+
+      /* Derived surface / mix tokens */
+      --brass-on-navy: color-mix(in srgb, var(--outline) 75%, var(--on-primary));
+      --lede-on-navy: color-mix(in srgb, var(--on-primary) 82%, var(--primary));
+      --positive-bg: color-mix(in srgb, var(--secondary) 10%, var(--surface-container-low));
+      --warning: #7c5812;
+      --warning-bg: color-mix(in srgb, var(--outline) 14%, var(--surface-container-low));
+      --error-bg: color-mix(in srgb, var(--error) 8%, var(--surface-container-low));
+
+      /* Shared semantic & focus */
+      --positive: var(--secondary);
+      --focus: var(--primary);
+
+      /* Fonts */
+      --font-headline: 'Libre Caslon Text', serif;
+      --font-body: 'Inter', sans-serif;
+      --font-label: 'Inter', sans-serif;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.125rem;
+      --rounded-full: 0.125rem;
+
+      /* Style effects */
+      --brass-rule: 2px solid var(--outline);
+      --brass-bottom: 3px solid var(--outline);
+      --hairline: 1px solid var(--outline-variant);
+      --leaf-underline: 0 1px 0 var(--outline-variant);
+
+      /* High-legibility Executive Type Scale (Large body 18-20px) */
+      --display-size: clamp(2.35rem, 1.5rem + 3vw, 3.65rem);
+      --headline-size: clamp(1.65rem, 1.25rem + 1.4vw, 2.3rem);
+      --subhead-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --body-size: clamp(1.125rem, 1.05rem + 0.25vw, 1.25rem);
+      --label-size: clamp(0.78rem, 0.75rem + 0.12vw, 0.85rem);
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Title Band (Charter Treatment #1 & #2) */
+    .title-band {
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+      border-bottom: var(--brass-bottom);
+    }
+    .title-band-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .title-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brass-on-navy);
+      margin: 0 0 var(--space-md) 0;
+    }
+    .title-band h1 {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: var(--display-size);
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      color: var(--on-primary);
+      margin: 0 0 var(--space-md) 0;
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--outline);
+      max-width: 24ch;
+    }
+    .title-band .lede {
+      font-size: clamp(1.15rem, 1.05rem + 0.35vw, 1.35rem);
+      line-height: 1.55;
+      color: var(--lede-on-navy);
+      max-width: 65ch;
+      margin: 0 0 var(--space-md) 0;
+    }
+    .title-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--brass-on-navy);
+      letter-spacing: 0.03em;
+      margin: 0;
+    }
+
+    /* Page Grid */
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
+      padding: var(--space-xl) var(--space-lg) var(--space-3xl);
+      max-width: 1180px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Advisory & Progress Strip */
+    .advisory-box {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      border-left: 4px solid var(--tertiary);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+    }
+    .advisory-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--tertiary);
+      margin: 0 0 var(--space-xs) 0;
+    }
+    .advisory-box p {
+      margin: 0;
+      font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+      color: var(--on-surface);
+      max-width: 78ch;
+    }
+
+    .progress-panel {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .progress-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-md);
+    }
+    .progress-title {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+    .progress-stat {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 400;
+      font-variant-numeric: tabular-nums lining-nums;
+      color: var(--primary);
+    }
+    .progress-track {
+      width: 100%;
+      height: var(--space-sm);
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .toc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      padding-top: var(--space-xs);
+    }
+    .toc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      background: var(--surface-container);
+      color: var(--primary);
+      text-decoration: none;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-radius: var(--rounded);
+      border-bottom: 2px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .toc-link:hover {
+      background: var(--surface-container-high);
+      border-bottom-color: var(--outline);
+    }
+    .toc-link.is-done {
+      background: var(--positive-bg);
+      color: var(--secondary);
+      border-bottom-color: var(--secondary);
+    }
+
+    /* Statement Figure Cards (Charter Treatment #3 & #4) */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-lg);
+    }
+    .figure-card {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .figure-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+    .figure-value {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: clamp(1.9rem, 1.5rem + 1.2vw, 2.5rem);
+      line-height: 1.15;
+      font-variant-numeric: tabular-nums lining-nums;
+      color: var(--on-surface);
+      margin: var(--space-xs) 0;
+    }
+    .figure-note {
+      font-size: clamp(0.95rem, 0.9rem + 0.15vw, 1.02rem);
+      color: var(--tertiary);
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Sections (Charter Treatment #5) */
+    .report-section {
+      display: grid;
+      gap: var(--space-lg);
+      padding-top: var(--space-md);
+    }
+    .section-head {
+      border-top: var(--brass-rule);
+      padding-top: var(--space-md);
+      border-bottom: var(--hairline);
+      padding-bottom: var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+    }
+    .section-head-main {
+      max-width: 68ch;
+    }
+    .section-kicker {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--tertiary);
+      margin: 0 0 var(--space-xs) 0;
+    }
+    .section-head h2 {
+      font-family: var(--font-headline);
+      font-weight: 400;
+      font-size: var(--headline-size);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--on-surface);
+      margin: 0;
+    }
+
+    /* Editorial prose & asymmetrical two-column layout */
+    .editorial-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .editorial-split {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .prose-col {
+      max-width: 66ch;
+      display: grid;
+      gap: var(--space-md);
+    }
+    .prose-col p {
+      margin: 0;
+    }
+    .prose-col h3, .leaf-panel h3 {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      line-height: 1.25;
+      color: var(--primary);
+      margin: var(--space-sm) 0 0 0;
+    }
+    .prose-col ul, .leaf-panel ul {
+      margin: 0;
+      padding-left: var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .margin-notes {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .leaf-panel {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .quote-leaf {
+      background: var(--surface-container-low);
+      border-left: 3px solid var(--outline);
+      box-shadow: var(--leaf-underline);
+      padding: var(--space-md) var(--space-lg);
+      margin: 0;
+    }
+    .quote-leaf blockquote {
+      margin: 0 0 var(--space-xs) 0;
+      font-family: var(--font-headline);
+      font-size: clamp(1.1rem, 1.04rem + 0.25vw, 1.25rem);
+      line-height: 1.5;
+      color: var(--on-surface);
+    }
+    .quote-leaf figcaption {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--tertiary);
+    }
+
+    .no-consta-note {
+      background: var(--warning-bg);
+      border-left: 3px solid var(--warning);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--rounded);
+      font-size: clamp(1rem, 0.96rem + 0.15vw, 1.08rem);
+    }
+    .no-consta-tag {
+      display: inline-block;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--warning);
+      border: 1px solid var(--outline);
+      padding: 0 var(--space-sm);
+      border-radius: var(--rounded);
+      margin-right: var(--space-xs);
+    }
+
+    .stamp-tag {
+      display: inline-block;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--tertiary);
+      border: 1px solid var(--outline);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--rounded);
+      background: transparent;
+    }
+
+    /* Tables (Charter style) */
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: clamp(1rem, 0.95rem + 0.2vw, 1.1rem);
+    }
+    thead th {
+      background: var(--surface-container-high);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface);
+      padding: var(--space-md);
+      border-bottom: var(--brass-rule);
+    }
+    tbody td {
+      padding: var(--space-md);
+      border-bottom: var(--hairline);
+      vertical-align: top;
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .num-col {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    /* Buttons */
+    .btn-primary, .btn-secondary, .btn-done {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      font-family: var(--font-label);
+      font-size: clamp(0.88rem, 0.85rem + 0.12vw, 0.95rem);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-primary:hover {
+      background: color-mix(in srgb, var(--primary) 85%, var(--on-surface));
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-secondary:hover {
+      background: var(--primary-container);
+    }
+    .btn-secondary.is-active {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-done {
+      background: var(--surface-container);
+      color: var(--primary);
+      border: 1px solid var(--outline);
+    }
+    .btn-done:hover {
+      background: var(--surface-container-high);
+    }
+    .btn-done.is-completed {
+      background: var(--secondary);
+      color: var(--on-primary);
+      border-color: var(--secondary);
+    }
+
+    /* Inputs & Controls */
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .field-group {
+      display: grid;
+      gap: var(--space-xs);
+      flex: 1 1 220px;
+    }
+    .field-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+    }
+    .text-input, .select-input, .number-input {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      width: 100%;
+    }
+    .select-input {
+      padding-right: var(--space-xl);
+    }
+    .text-input:focus, .select-input:focus, .number-input:focus {
+      border-color: var(--primary);
+      outline: 2px solid var(--focus);
+      outline-offset: 1px;
+    }
+
+    /* Search & Quote Explorer */
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+    .quotes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .quote-card {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+      align-content: start;
+    }
+    .quote-card-text {
+      margin: 0;
+      font-size: clamp(1rem, 0.96rem + 0.2vw, 1.12rem);
+    }
+    .quote-card-cite {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--tertiary);
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Interactive Flowchart */
+    .flow-wrapper {
+      container-type: inline-size;
+    }
+    .flow-svg-box {
+      background: var(--surface-container-low);
+      border: var(--hairline);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      overflow-x: auto;
+    }
+    .flow-svg {
+      width: 100%;
+      min-width: 620px;
+      height: auto;
+      display: block;
+    }
+    .flow-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .flow-step-card {
+      background: var(--background);
+      border-top: var(--brass-rule);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+    }
+    .flow-step-card.is-blocked {
+      border-top-color: var(--secondary);
+      background: var(--positive-bg);
+    }
+    .flow-step-card.is-danger {
+      border-top-color: var(--error);
+      background: var(--error-bg);
+    }
+
+    /* Interactive Timeline */
+    .timeline-track {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(135px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .timeline-btn {
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border: 1px solid var(--outline-variant);
+      border-top: 3px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .timeline-btn:hover {
+      background: var(--surface-container-high);
+      border-top-color: var(--outline);
+    }
+    .timeline-btn.is-active {
+      background: var(--surface-container-low);
+      border-color: var(--primary);
+      border-top: 3px solid var(--primary);
+    }
+    .timeline-year {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--tertiary);
+      font-variant-numeric: tabular-nums;
+    }
+    .timeline-name {
+      font-family: var(--font-headline);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .timeline-detail {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    /* Simulator / Calculator */
+    .sim-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .sim-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .sim-inputs {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .slider-pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: var(--space-md);
+      align-items: center;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      min-height: 44px;
+      cursor: pointer;
+    }
+    .sim-results {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .sim-metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .sim-metric-box {
+      background: var(--background);
+      padding: var(--space-md);
+      border-top: 2px solid var(--outline-variant);
+    }
+    .sim-bar-svg {
+      width: 100%;
+      min-height: 190px;
+      display: block;
+    }
+
+    /* Quiz Evaluation */
+    .quiz-list {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .quiz-card {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      box-shadow: var(--leaf-underline);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .quiz-q-title {
+      font-family: var(--font-headline);
+      font-weight: 700;
+      font-size: var(--subhead-size);
+      color: var(--primary);
+      margin: 0;
+    }
+    .quiz-options {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      min-height: 44px;
+      padding: var(--space-md);
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+    }
+    .quiz-option:hover {
+      background: var(--surface-container);
+    }
+    .quiz-option input[type="radio"] {
+      margin-top: var(--space-xs);
+      accent-color: var(--primary);
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+    }
+    .quiz-option.is-correct {
+      background: var(--positive-bg);
+      border-color: var(--secondary);
+    }
+    .quiz-option.is-wrong {
+      background: var(--error-bg);
+      border-color: var(--error);
+    }
+    .quiz-feedback {
+      padding: var(--space-md);
+      border-left: 3px solid var(--primary);
+      background: var(--primary-container);
+      font-size: clamp(0.98rem, 0.94rem + 0.15vw, 1.06rem);
+      display: none;
+    }
+    .quiz-feedback.is-visible {
+      display: block;
+    }
+    .quiz-score-banner {
+      background: var(--surface-container-low);
+      border-top: var(--brass-rule);
+      border-bottom: var(--brass-rule);
+      padding: var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    /* Footer */
+    .report-footer {
+      border-top: var(--brass-rule);
+      padding-top: var(--space-lg);
+      color: var(--on-surface-variant);
+      font-size: clamp(0.95rem, 0.9rem + 0.15vw, 1.02rem);
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    @media (max-width: 640px) {
+      .title-band {
+        padding: var(--space-xl) var(--space-md) var(--space-lg);
+      }
+      .page-grid {
+        padding: var(--space-lg) var(--space-md) var(--space-2xl);
+        gap: var(--space-lg);
+      }
+      .slider-pair {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="title-band">
+    <div class="title-band-inner">
+      <p class="title-kicker">Tratado de psicología aplicada · Edición ejecutiva Charter</p>
+      <h1>El poder en la mente subconsciente</h1>
+      <p class="lede">
+        Su mayor activo estratégico permanece infrautilizado: la interacción sincronizada entre la razón consciente que decide y la potencia creadora subconsciente que ejecuta. Un compendio crítico y riguroso para directivos, profesionales y estudiantes de posgrado.
+      </p>
+      <p class="title-meta">
+        Fuente exclusiva: Joseph Murphy (D.R.S., D.D., Ph.D., LL.D.), «El poder de la mente subconsciente» (adaptación de C.P. Edgar Julián Martínez Aristizábal).
+      </p>
+    </div>
+  </header>
+
+  <main class="page-grid">
+
+    <!-- Aviso orientativo obligatorio -->
+    <aside class="advisory-box" aria-label="Aviso metodológico y orientativo">
+      <p class="advisory-label">Aviso metodológico y carácter orientativo</p>
+      <p>
+        Este recurso y su calculadora interactiva son <strong>puramente orientativos y pedagógicos</strong>; sintetizan exclusivamente las tesis y relatos expuestos en los extractos disponibles de la obra de Joseph Murphy y no constituyen diagnóstico médico, terapia clínica ni asesoramiento financiero. En cumplimiento estricto del rigor documental, todo dato o apartado que no aparezca desarrollado en la fuente proporcionada se señala explícitamente como <strong>«no consta»</strong>.
+      </p>
+    </aside>
+
+    <!-- Barra de progreso y sumario -->
+    <section class="progress-panel" aria-label="Progreso de lectura y navegación">
+      <div class="progress-header">
+        <div>
+          <p class="progress-title">Avance del programa ejecutivo</p>
+          <div class="progress-stat" id="progress-counter">0 de 7 secciones completadas (0 %)</div>
+        </div>
+        <button type="button" class="btn-secondary" id="btn-reset-progress" onclick="handleResetProgress(this)">
+          Reiniciar progreso
+        </button>
+      </div>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar-aria">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <nav class="toc-nav" aria-label="Índice de secciones">
+        <a href="#sec-1" class="toc-link" data-toc="sec-1">1. Tesoro interior</a>
+        <a href="#sec-2" class="toc-link" data-toc="sec-2">2. Evidencia histórica</a>
+        <a href="#sec-3" class="toc-link" data-toc="sec-3">3. Ingeniería mental</a>
+        <a href="#sec-4" class="toc-link" data-toc="sec-4">4. Capital subconsciente</a>
+        <a href="#sec-5" class="toc-link" data-toc="sec-5">5. Socio y sueño</a>
+        <a href="#sec-6" class="toc-link" data-toc="sec-6">6. Gobierno interior</a>
+        <a href="#sec-7" class="toc-link" data-toc="sec-7">7. Evaluación final</a>
+      </nav>
+    </section>
+
+    <!-- Cifras declarativas de referencia -->
+    <section aria-label="Cifras clave declaradas en el tratado">
+      <div class="card-grid">
+        <article class="figure-card">
+          <p class="figure-label">Proporción mental subconsciente</p>
+          <p class="figure-value">90 %</p>
+          <p class="figure-note">Vida mental atribuida al subconsciente (Cap. 7, p. 60)</p>
+        </article>
+        <article class="figure-card">
+          <p class="figure-label">Mortalidad postoperatoria en Bengala</p>
+          <p class="figure-value">2 % – 3 %</p>
+          <p class="figure-note">~400 cirugías bajo anestesia mental, 1843–1846 (Cap. 3, p. 31). Tasa previa sin hipnosis: no consta.</p>
+        </article>
+        <article class="figure-card">
+          <p class="figure-label">Tiempo dedicado al sueño</p>
+          <p class="figure-value">8 / 24 h</p>
+          <p class="figure-note">Una tercera parte de la vida en actividad nocturna subconsciente (Cap. 13, p. 93)</p>
+        </article>
+        <article class="figure-card">
+          <p class="figure-label">Ciclo de renovación física</p>
+          <p class="figure-value">11 meses</p>
+          <p class="figure-note">Plazo citado para la reconstrucción del cuerpo físico (Cap. 7.4, p. 62)</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Buscador y filtros temáticos de conceptos y citas -->
+    <section class="leaf-panel" aria-label="Buscador de conceptos y citas exactas">
+      <div>
+        <p class="section-kicker">Archivo analítico transversal</p>
+        <h3>Buscador de conceptos clave y citas textuales</h3>
+      </div>
+      <div class="control-row">
+        <div class="field-group">
+          <label for="search-quotes" class="field-label">Buscar término, personaje o cita</label>
+          <input type="text" id="search-quotes" class="text-input" placeholder="Ej.: celador, Coué, sarcoma, benzina, cheques…" oninput="filterQuotes()">
+        </div>
+        <div class="field-group">
+          <label for="select-category" class="field-label">Categoría temática</label>
+          <select id="select-category" class="select-input" onchange="filterQuotes()">
+            <option value="all">Todas las categorías</option>
+            <option value="arquitectura">Arquitectura dual (Prelim. y Cap. 1–3)</option>
+            <option value="historia">Evidencia histórica y fe (Cap. 4–5)</option>
+            <option value="tecnicas">Ingeniería mental y Coué (Cap. 6–8)</option>
+            <option value="prosperidad">Capital y prosperidad (Cap. 9–10)</option>
+            <option value="exito">Éxito, ciencia y sueño (Cap. 11–13)</option>
+            <option value="gobierno">Gobierno interior y hábitos (Cap. 14–20)</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-pills" id="category-pills" role="group" aria-label="Filtros rápidos por categoría">
+        <button type="button" class="btn-secondary is-active" data-cat="all" onclick="setQuoteCategory('all')">Todas</button>
+        <button type="button" class="btn-secondary" data-cat="arquitectura" onclick="setQuoteCategory('arquitectura')">Arquitectura</button>
+        <button type="button" class="btn-secondary" data-cat="historia" onclick="setQuoteCategory('historia')">Historia y fe</button>
+        <button type="button" class="btn-secondary" data-cat="tecnicas" onclick="setQuoteCategory('tecnicas')">Ingeniería y Coué</button>
+        <button type="button" class="btn-secondary" data-cat="prosperidad" onclick="setQuoteCategory('prosperidad')">Prosperidad</button>
+        <button type="button" class="btn-secondary" data-cat="exito" onclick="setQuoteCategory('exito')">Éxito y sueño</button>
+        <button type="button" class="btn-secondary" data-cat="gobierno" onclick="setQuoteCategory('gobierno')">Gobierno interior</button>
+      </div>
+      <p class="field-label" id="quotes-count-label">Mostrando 12 registros documentados</p>
+      <div class="quotes-grid" id="quotes-results"></div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 1: Preliminares y Capítulos 1–3                    -->
+    <!-- ========================================================= -->
+    <section class="report-section" id="sec-1">
+      <div class="section-head">
+        <div class="section-head-main">
+          <p class="section-kicker">Sección 1 · Preliminares y Capítulos 1–3 (pp. 11–37)</p>
+          <h2>El tesoro interior: arquitectura dual de la mente consciente y subconsciente</h2>
+        </div>
+        <button type="button" class="btn-done" data-section="sec-1" onclick="toggleSectionDone('sec-1')">
+          Marcar como hecho
+        </button>
+      </div>
+
+      <div class="editorial-split">
+        <div class="prose-col">
+          <p>
+            Joseph Murphy plantea desde el preámbulo (pp. 11–14) que la diferencia entre el éxito y el estancamiento vital no reside en factores externos fortuitos, sino en el desconocimiento de las leyes funcionales de la mente. A diferencia de la energía atómica o los viajes interplanetarios, «el secreto maestro de los años» opera en el interior del propio individuo (Cap. 1.1, p. 16). Como un trozo de acero imantado que levanta hasta <strong>12 veces su propio peso</strong> mientras que desimantado no levanta ni un alfiler (Cap. 1, p. 16), el profesional orientado por la convicción multiplica su eficacia operativa.
+          </p>
+          <p>
+            La mente no es doble, sino una sola estructura con dos esferas de actividad radicalmente distintas (Cap. 1.4, p. 18; Cap. 2.1, p. 22). La <strong>mente consciente</strong> (objetiva, voluntaria) percibe a través de los cinco sentidos, razona, compara y elige. La <strong>mente subconsciente</strong> (subjetiva, involuntaria) gobierna los latidos cardíacos, la circulación, la digestión y el crecimiento celular las 24 horas del día (Cap. 3.4, p. 34); es el asiento de las emociones, el archivo íntegro de la memoria y una instancia impersonal que acepta sin discutir ni razonar cualquier premisa o imagen mental depositada en ella (Cap. 2.1–2.4, pp. 22–24).
+          </p>
+          <p>
+            Murphy ilustra esta jerarquía mediante tres metáforas operativas: el <em>jardinero y la tierra</em> (cada pensamiento es una semilla que genera una condición como efecto, Cap. 1.5, pp. 18–19), el <em>capitán del buque y la sala de máquinas</em> (la tripulación obedece las órdenes del puente de mando aunque conduzcan contra las rocas, Cap. 1.6, p. 20) y el <em>celador a la entrada</em>, cuya función primordial es proteger al subconsciente frente a sugestiones falsas o destructivas (Cap. 2.5, p. 24; Cap. 2.17, p. 30).
+          </p>
+
+          <h3>Tabla comparativa de funciones mentales</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Dimensión operativa</th>
+                  <th>Mente consciente</th>
+                  <th>Mente subconsciente</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Denominación clásica</td>
+                  <td>Mente objetiva / yo superficial (Cap. 1.4, p. 18)</td>
+                  <td>Mente subjetiva / yo profundo (Cap. 1.4, p. 18)</td>
+                </tr>
+                <tr>
+                  <td>Metáfora directiva</td>
+                  <td>Capitán del buque, jardinero, celador (pp. 18, 20, 24)</td>
+                  <td>Sala de máquinas, tierra fértil, placa sensible (pp. 18, 20, 126)</td>
+                </tr>
+                <tr>
+                  <td>Capacidad lógica</td>
+                  <td>Razona, deduce, elige y rechaza (Cap. 2.1, p. 22)</td>
+                  <td>No discute ni razona; obedece al pie de la letra (Cap. 2.4, 2.7, pp. 24–25)</td>
+                </tr>
+                <tr>
+                  <td>Órgano o centro nervioso</td>
+                  <td>Cerebro / sistema cerebroespinal (Cap. 3.1, p. 32; Cap. 7.1, p. 60)</td>
+                  <td>Plexo solar / sistema simpático (Cap. 3.1, p. 32; Cap. 7.1, p. 60)</td>
+                </tr>
+                <tr>
+                  <td>Disponibilidad horaria</td>
+                  <td>Activa en vigilia; suspendida en sueño o sopor (Cap. 2.3, p. 23)</td>
+                  <td>Trabaja las 24 horas del día sin descanso (Cap. 1.6, p. 20; Cap. 3, p. 31)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <aside class="margin-notes">
+          <figure class="quote-leaf">
+            <blockquote>«Tal como el hombre haya pensado en su mente subconsciente, así será él.»</blockquote>
+            <figcaption>Preliminares · Cómo puede este libro hacer prodigios (p. 11)</figcaption>
+          </figure>
+          <div class="leaf-panel">
+            <h3>Casos clave documentados (Prelim. y Cap. 1–3)</h3>
+            <ul>
+              <li><strong>Sarcoma y cáncer de piel del autor:</strong> Murphy relata haberse curado hace unos 40 años de un tumor maligno (sarcoma, p. 12) y de un cáncer de piel en 3 meses mediante oraciones de 5 minutos, 2 o 3 veces al día (Cap. 3.3, pp. 33–34).</li>
+              <li><strong>Enrico Caruso:</strong> venció el pánico escénico imponiendo su «yo grande» sobre su «pequeño yo» (Cap. 1.5, pp. 19–20).</li>
+              <li><strong>Literalidad subconsciente:</strong> un padre repitió durante dos años «daré mi brazo derecho cuando vea a mi hija curada»; tras un accidente perdió el brazo y la hija sanó de artritis y enfermedad cutánea (Cap. 2.7, p. 25).</li>
+              <li><strong>Vidente y muerte por sugestión:</strong> un familiar sano aceptó la profecía de muerte en la próxima luna nueva y falleció sin resistencia al ceder su mente consciente (Cap. 2.14, pp. 27–28).</li>
+              <li><strong>Recuperación en 3 semanas:</strong> una mujer de 75 años restauró su memoria sustituyendo la queja por autosugestión diaria (Cap. 2.9, p. 26), y otra viuda de 75 años contrajo matrimonio tras dos semanas de práctica (Cap. 1.7, pp. 20–21).</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Diagrama interactivo de flujo de sugestiones -->
+      <div class="leaf-panel flow-wrapper" aria-label="Diagrama de flujo de sugestiones">
+        <div>
+          <p class="section-kicker">Simulación estructural interactiva · Cap. 2.5–2.6 y Cap. 3.1</p>
+          <h3>Flujo de sugestiones: del estímulo al celador consciente y al plexo solar</h3>
+          <p>Seleccione un escenario clínico o cotidiano documentado en la obra para observar cómo actúa el celador consciente antes de que la impresión alcance el plexo solar (cerebro abdominal).</p>
+        </div>
+
+        <div class="filter-pills" role="group" aria-label="Selector de escenarios del diagrama de sugestiones">
+          <button type="button" class="btn-secondary is-active" data-scen="marinero" onclick="selectFlowScenario('marinero')">
+            1. El marinero (Bloqueo en el celador)
+          </button>
+          <button type="button" class="btn-secondary" data-scen="pasajero" onclick="selectFlowScenario('pasajero')">
+            2. Pasajero sugestionable
+          </button>
+          <button type="button" class="btn-secondary" data-scen="cantante" onclick="selectFlowScenario('cantante')">
+            3. Autosugestión serena (Cantante)
+          </button>
+          <button type="button" class="btn-secondary" data-scen="premisa" onclick="selectFlowScenario('premisa')">
+            4. Cheque sin fondos / Duda
+          </button>
+        </div>
+
+        <div class="flow-svg-box">
+          <svg class="flow-svg" viewBox="0 0 820 210" role="img" aria-label="Diagrama de flujo entre estímulo, mente consciente o celador, y mente subconsciente o plexo solar">
+            <!-- Nodos base -->
+            <rect x="16" y="45" width="165" height="100" rx="2" fill="var(--surface-container)" stroke="var(--outline)" stroke-width="2"/>
+            <text x="98" y="75" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="var(--tertiary)">1. ESTÍMULO / IDEA</text>
+            <text id="svg-node-1a" x="98" y="100" text-anchor="middle" font-family="Libre Caslon Text, serif" font-size="13" fill="var(--on-surface)">Sugestión externa</text>
+            <text id="svg-node-1b" x="98" y="120" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--on-surface-variant)">«Se va a marear»</text>
+
+            <!-- Flecha 1 -> 2 -->
+            <line x1="181" y1="95" x2="232" y2="95" stroke="var(--primary)" stroke-width="2"/>
+            <polygon points="232,90 244,95 232,100" fill="var(--primary)"/>
+
+            <!-- Nodo 2: Celador -->
+            <rect id="svg-box-2" x="246" y="30" width="210" height="130" rx="2" fill="var(--surface-container-low)" stroke="var(--primary)" stroke-width="2.5"/>
+            <text x="351" y="56" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="var(--primary)">2. MENTE CONSCIENTE (CELADOR)</text>
+            <text id="svg-node-2a" x="351" y="84" text-anchor="middle" font-family="Libre Caslon Text, serif" font-size="14" font-weight="700" fill="var(--secondary)">Rechazo activo en la puerta</text>
+            <text id="svg-node-2b" x="351" y="108" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--on-surface)">Convicción previa de inmunidad</text>
+            <text id="svg-node-2c" x="351" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--on-surface-variant)">(Cap. 2.6, p. 24)</text>
+
+            <!-- Flecha 2 -> 3 (puede mostrar bloqueo o paso) -->
+            <line id="svg-line-23" x1="456" y1="95" x2="516" y2="95" stroke="var(--outline)" stroke-width="2" stroke-dasharray="5,4"/>
+            <polygon id="svg-arrow-23" points="516,90 528,95 516,100" fill="var(--data-context)"/>
+            <g id="svg-block-badge">
+              <rect x="462" y="64" width="60" height="22" rx="2" fill="var(--secondary)"/>
+              <text x="492" y="79" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="700" fill="var(--on-primary)">BLOQUEO</text>
+            </g>
+
+            <!-- Nodo 3: Subconsciente / Plexo solar -->
+            <rect id="svg-box-3" x="530" y="30" width="274" height="130" rx="2" fill="var(--surface-container)" stroke="var(--outline-variant)" stroke-width="2"/>
+            <text x="667" y="56" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="700" fill="var(--tertiary)">3. SUBCONSCIENTE / PLEXO SOLAR</text>
+            <text id="svg-node-3a" x="667" y="84" text-anchor="middle" font-family="Libre Caslon Text, serif" font-size="14" fill="var(--on-surface)">Inalterado — Sin impresión</text>
+            <text id="svg-node-3b" x="667" y="108" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--on-surface-variant)">La sugestión cae en oídos sordos;</text>
+            <text id="svg-node-3c" x="667" y="128" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="var(--on-surface-variant)">el marinero ríe o sigue intacto.</text>
+
+            <!-- Pie explicativo -->
+            <text id="svg-footer" x="410" y="190" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--primary)">
+              Principio: «La sugestión no puede imponer algo contra el deseo de la mente consciente» (Cap. 2.6, p. 24).
+            </text>
+          </svg>
+        </div>
+
+        <div class="flow-detail-grid" id="flow-detail-cards"></div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 2: Capítulos 4–5                                  -->
+    <!-- ========================================================= -->
+    <section class="report-section" id="sec-2">
+      <div class="section-head">
+        <div class="section-head-main">
+          <p class="section-kicker">Sección 2 · Capítulos 4–5 (pp. 38–50)</p>
+          <h2>Evidencia histórica, sugestión y el principio único de convicción</h2>
+        </div>
+        <button type="button" class="btn-done" data-section="sec-2" onclick="toggleSectionDone('sec-2')">
+          Marcar como hecho
+        </button>
+      </div>
+
+      <div class="editorial-split">
+        <div class="prose-col">
+          <p>
+            Al examinar curaciones en templos antiguos (ritos de Hécate, santuario de Diabutsu en Japón, reliquias) y experimentos clínicos modernos, Murphy concluye que distintas escuelas y credos atribuyen sus resultados a teorías incompatibles entre sí, cuando en realidad operan mediante un <strong>único agente curativo</strong> (el subconsciente) y un <strong>único proceso</strong>: la fe o convicción (Cap. 4.3–4.4, pp. 40–41; Cap. 5.1, pp. 45–46).
+          </p>
+          <p>
+            Esta tesis se apoya en la máxima de Paracelso —«sea el objetivo de su fe real o falso, el resultado obtenido será siempre el mismo» (Cap. 4.5, p. 42)— y en la demostración empírica de Hippolyte Bernheim en Nancy (1910–1919), quien resolvió una parálisis lingual simulando un instrumento nuevo con un termómetro de bolsillo y produjo una ampolla en la espalda aplicando un simple sello de correos bajo sugestión verbal (Cap. 4.6–4.7, pp. 42–43). Incluso las hemorragias o estigmas inducidos por el Dr. M. Bourru a las cuatro de la tarde confirman la docilidad fisiológica del subconsciente (Cap. 4.8, p. 43).
+          </p>
+          <p>
+            En la práctica contemporánea, Murphy distingue entre la <em>fe ciega</em> (obtener resultados sin conocer las leyes mentales, como en el mesmerismo) y la <em>plegaria científica</em> o <em>fe subjetiva</em>: una acción sincronizada entre consciente y subconsciente que elimina la resistencia crítica objetiva mediante la relajación o el sopor (Cap. 5.3–5.4, pp. 46–48). Esta dinámica explica asimismo el tratamiento a distancia —ejemplificado en el caso de una madre con trombosis coronaria en Nueva York y su hija orando desde Los Ángeles (Cap. 5.5, p. 49)— y la curación de un psicólogo con tuberculosis pulmonar en menos de un mes al afirmar salud antes de dormir sin nombrar la enfermedad (Cap. 5.6, pp. 49–50).
+          </p>
+        </div>
+
+        <aside class="margin-notes">
+          <figure class="quote-leaf">
+            <blockquote>«Sólo hay un proceso en la curación: la fe. Sólo hay un medio de curación: su mente subconsciente.»</blockquote>
+            <figcaption>Capítulo 4.4 · Teorías enormemente diferentes (p. 41)</figcaption>
+          </figure>
+          <div class="leaf-panel">
+            <h3>Regla de higiene frente al entorno</h3>
+            <p>
+              Al comentar San Mateo 9:28-30 («que ningún hombre lo sepa»), Murphy subraya que divulgar prematuramente un propósito o curación expone la mente a la crítica escéptica ajena, neutralizando el estado de convicción interna (Cap. 4.1, p. 39). Igualmente, nombrar repetidamente los síntomas alimenta aquello que se teme (Cap. 5.6, p. 50).
+            </p>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Línea de tiempo interactiva -->
+      <div class="leaf-panel" aria-label="Línea de tiempo histórica citada en el tratado">
+        <div>
+          <p class="section-kicker">Cronología documentada · Cap. 3, 4, 5, 6 y 7</p>
+          <h3>Línea de tiempo interactiva de hitos históricos</h3>
+          <p>Pulse cada hito para consultar la evidencia exacta registrada en la fuente, su contexto histórico y las precisiones de rigor.</p>
+        </div>
+        <div class="timeline-track" role="tablist" aria-label="Hitos históricos">
+          <button type="button" class="timeline-btn is-active" data-tl="paracelso" onclick="selectTimeline('paracelso')">
+            <span class="timeline-year">1493–1541</span>
+            <span class="timeline-name">Paracelso</span>
+          </button>
+          <button type="button" class="timeline-btn" data-tl="mesmer" onclick="selectTimeline('mesmer')">
+            <span class="timeline-year">1734–1815</span>
+            <span class="timeline-name">Mesmer</span>
+          </button>
+          <button type="button" class="timeline-btn" data-tl="esdaile" onclick="selectTimeline('esdaile')">
+            <span class="timeline-year">1843–1846</span>
+            <span class="timeline-name">Bengala (Esdaile)</span>
+          </button>
+          <button type="button" class="timeline-btn" data-tl="quimby" onclick="selectTimeline('quimby')">
+            <span class="timeline-year">1849–1869</span>
+            <span class="timeline-name">Quimby</span>
+          </button>
+          <button type="button" class="timeline-btn" data-tl="sanfrancisco" onclick="selectTimeline('sanfrancisco')">
+            <span class="timeline-year">18 abr 1906</span>
+            <span class="timeline-name">San Francisco</span>
+          </button>
+          <button type="button" class="timeline-btn" data-tl="baudoin" onclick="selectTimeline('baudoin')">
+            <span class="timeline-year">1910</span>
+            <span class="timeline-name">Baudoin</span>
+          </button>
+          <button type="button" class="timeline-btn" data-tl="lourdes" onclick="selectTimeline('lourdes')">
+            <span class="timeline-year">Nov 1955 (publ.)</span>
+            <span class="timeline-name">Lourdes</span>
+          </button>
+        </div>
+        <article class="timeline-detail" id="timeline-detail-box" aria-live="polite"></article>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 3: Capítulos 6–8                                  -->
+    <!-- ========================================================= -->
+    <section class="report-section" id="sec-3">
+      <div class="section-head">
+        <div class="section-head-main">
+          <p class="section-kicker">Sección 3 · Capítulos 6–8 (pp. 51–68)</p>
+          <h2>Ingeniería mental: técnicas prácticas y la ley de reversión del esfuerzo</h2>
+        </div>
+        <button type="button" class="btn-done" data-section="sec-3" onclick="toggleSectionDone('sec-3')">
+          Marcar como hecho
+        </button>
+      </div>
+
+      <div class="editorial-split">
+        <div class="prose-col">
+          <p>
+            Al igual que el ingeniero jefe del puente Golden Gate proyectó cálculos matemáticos y planos mentales antes de erigir la obra física (Cap. 6, p. 51), Murphy sistematiza protocolos precisos para trasladar órdenes claras al subconsciente sin fricción mental. El denominador común de las técnicas más eficaces es reducir la resistencia analítica de la mente consciente mediante la relajación física y el estado de somnolencia o sopor (Cap. 6.1, 6.5–6.7, pp. 51, 53–55).
+          </p>
+          <p>
+            Desde la perspectiva neurofisiológica expuesta en el Capítulo 7 (pp. 60–61), Murphy y el Dr. Judge Thomas Troward conectan la actividad voluntaria del sistema cerebroespinal (asociado a la porción frontal) con el sistema simpático involuntario centrado en el <strong>plexo solar</strong> a través del <strong>nervio vago</strong>. Como la tendencia innata del subconsciente es preservar la vida (Cap. 7.3–7.5, pp. 61–63), el fracaso no proviene de falta de potencia sino de dos errores operativos: la pérdida de confianza y el <strong>esfuerzo mental excesivo</strong> (Cap. 8, p. 65).
+          </p>
+          <p>
+            Émile Coué formuló esta dinámica en su célebre <strong>Ley de reversión del esfuerzo</strong>: «Cuando sus deseos y su imaginación están en conflicto, gana siempre la imaginación» (Cap. 8.4, p. 66). Quien intenta forzar un resultado a golpe de voluntad («tensión») presupone una oposición y activa el miedo a caer, igual que quien camina sobre un tablón suspendido en el aire entre dos muros (p. 67). La solución reside en los tres pasos del Capítulo 8.3 (p. 66): examinar el problema, transferir la solución al subconsciente y descansar en la convicción de su cumplimiento.
+          </p>
+
+          <div class="no-consta-note">
+            <span class="no-consta-tag">Nota de rigor documental</span>
+            En el índice del Capítulo 6 (p. 5) figura el apartado <em>«9. El método afirmativo»</em> antes del método argumentativo; sin embargo, en el cuerpo del texto (p. 56) se salta del apartado 8 directamente al método argumentativo. Por ello, <strong>el desarrollo extenso del «método afirmativo» en el Cap. 6 no consta</strong> en la fuente, disponiéndose únicamente de su definición sintética en el punto 10 del resumen (p. 59: <em>«Afirmar es establecer que algo es así…»</em>). Asimismo, el relato del Mal de Pott de Frederick Elías Andrews (Cap. 7.6, p. 63) presenta un recorte textual intermedio cuyos detalles faltantes <strong>no constan</strong>.
+          </div>
+        </div>
+
+        <aside class="margin-notes">
+          <div class="leaf-panel">
+            <h3>Repertorio de técnicas del Cap. 6</h3>
+            <ul>
+              <li><strong>Traslado en ensueño (6.1, p. 51):</strong> aquietar la mente y ver el alivio como presente («se está disipando ahora, ya se disipó»).</li>
+              <li><strong>Visualización y cinematógrafo mental (6.4–6.5, pp. 53–54):</strong> dramatizar el desenlace concreto antes de dormir (caso del hotel en Spokane, Washington).</li>
+              <li><strong>Técnica de Baudoin (6.6, pp. 54–55):</strong> condensar la meta en una frase breve repetida en somnolencia hasta dormir (ej. 10 noches en pleito hereditario).</li>
+              <li><strong>Agradecimiento (6.8, pp. 55–56):</strong> dar gracias anticipadas por lo ya concedido en la mente (caso Sr. Broke, 3 semanas).</li>
+              <li><strong>Método argumentativo de Quimby (6.9–6.11, pp. 56–58):</strong> razonar psicoterápicamente disolviendo temores erróneos (caso de la paralítica).</li>
+              <li><strong>Método absoluto y resolutivo (6.10, 6.12, pp. 57–58):</strong> contemplación serena o decreto firme sin coacción.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Calculadora / Simulador orientativo de constancia y Ley de Coué -->
+      <div class="leaf-panel" aria-label="Simulador orientativo de constancia en autosugestión y riesgo de Ley de Coué">
+        <div>
+          <p class="section-kicker">Simulador pedagógico · Cap. 2, 6 y 8 (pp. 25–26, 54–56, 66–67)</p>
+          <h3>Simulador orientativo de constancia en autosugestión y riesgo de la Ley de Coué</h3>
+          <div class="no-consta-note">
+            <span class="no-consta-tag">Uso estrictamente orientativo</span>
+            Esta herramienta es <strong>puramente orientativa y pedagógica</strong>. Traduce a parámetros visuales las pautas cualitativas y plazos descritos en los casos del libro (sin que exista una fórmula matemática en el texto original de Murphy).
+          </div>
+        </div>
+
+        <div class="sim-grid">
+          <div class="sim-inputs">
+            <div class="field-group">
+              <label for="sim-freq-num" class="field-label">Sesiones diarias de práctica (referencia texto: 2 a 4 veces/día)</label>
+              <div class="slider-pair">
+                <input type="range" id="sim-freq-range" min="1" max="10" step="1" value="3" oninput="syncFreqFromSlider(this.value)">
+                <input type="number" id="sim-freq-num" class="number-input" min="1" max="10" step="1" value="3" oninput="syncFreqFromNumber(this.value)">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="sim-min-num" class="field-label">Duración por sesión en minutos (referencia texto: 5 a 10 min)</label>
+              <div class="slider-pair">
+                <input type="range" id="sim-min-range" min="1" max="20" step="1" value="5" oninput="syncMinFromSlider(this.value)">
+                <input type="number" id="sim-min-num" class="number-input" min="1" max="20" step="1" value="5" oninput="syncMinFromNumber(this.value)">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="sim-days-num" class="field-label">Constancia acumulada en días (casos citados: 7 a 90 días)</label>
+              <div class="slider-pair">
+                <input type="range" id="sim-days-range" min="1" max="90" step="1" value="21" oninput="syncDaysFromSlider(this.value)">
+                <input type="number" id="sim-days-num" class="number-input" min="1" max="90" step="1" value="21" oninput="syncDaysFromNumber(this.value)">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="sim-relax-num" class="field-label">Estado de relajación somnolienta frente a tensión voluntarista (%)</label>
+              <div class="slider-pair">
+                <input type="range" id="sim-relax-range" min="0" max="100" step="5" value="75" oninput="syncRelaxFromSlider(this.value)">
+                <input type="number" id="sim-relax-num" class="number-input" min="0" max="100" step="5" value="75" oninput="syncRelaxFromNumber(this.value)">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="sim-doubt-num" class="field-label">Duda, miedo o «desenterrar la semilla» tras la práctica (%)</label>
+              <div class="slider-pair">
+                <input type="range" id="sim-doubt-range" min="0" max="100" step="5" value="20" oninput="syncDoubtFromSlider(this.value)">
+                <input type="number" id="sim-doubt-num" class="number-input" min="0" max="100" step="5" value="20" oninput="syncDoubtFromNumber(this.value)">
+              </div>
+            </div>
+          </div>
+
+          <div class="sim-results" aria-live="polite">
+            <div class="sim-metrics-row">
+              <div class="sim-metric-box">
+                <p class="figure-label">Coherencia orientativa</p>
+                <p class="figure-value" id="sim-out-coherence">72 / 100</p>
+                <p class="figure-note" id="sim-out-hours">Tiempo total acumulado: 315 min</p>
+              </div>
+              <div class="sim-metric-box">
+                <p class="figure-label">Riesgo Ley de Coué</p>
+                <p class="figure-value" id="sim-out-coue">Bajo</p>
+                <p class="figure-note" id="sim-out-coue-note">Predomina la imagen serena sobre el temor</p>
+              </div>
+            </div>
+
+            <p id="sim-diagnosis" style="margin: 0;"></p>
+
+            <div>
+              <p class="field-label" style="margin-bottom: var(--space-xs);">Comparativa orientativa frente a plazos de referencia citados en la obra (en días)</p>
+              <svg class="sim-bar-svg" id="sim-chart" viewBox="0 0 520 190" role="img" aria-label="Comparativa orientativa de días de constancia frente a casos citados en el libro"></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 4: Capítulos 9–10                                 -->
+    <!-- ========================================================= -->
+    <section class="report-section" id="sec-4">
+      <div class="section-head">
+        <div class="section-head-main">
+          <p class="section-kicker">Sección 4 · Capítulos 9–10 (pp. 69–79)</p>
+          <h2>Capital subconsciente: prosperidad, interés compuesto y psicología de la riqueza</h2>
+        </div>
+        <button type="button" class="btn-done" data-section="sec-4" onclick="toggleSectionDone('sec-4')">
+          Marcar como hecho
+        </button>
+      </div>
+
+      <div class="editorial-split">
+        <div class="prose-col">
+          <p>
+            Murphy aborda la economía personal desde la convicción subconsciente: un directivo de Los Ángeles percibía un salario diez veces superior al de sus empleados —algunos incluso más versados técnicamente en el negocio— porque había persuadido a su subconsciente de que merecía esa remuneración y cultivaba ideas creadoras (Cap. 9, p. 69). Los mercados bursátiles o los salarios son únicamente canales externos; los «medios invisibles de apoyo» residen en las ideas que la mente subconsciente genera de manera continua (Cap. 9.2, 9.9, pp. 69, 71).
+          </p>
+          <p>
+            En este terreno rige una estricta contabilidad mental: el subconsciente funciona como una institución financiera que <strong>multiplica a interés compuesto</strong> todo aquello que se deposita habitualmente en él (Cap. 9.3, 9.7, pp. 70–71). Afirmar «carecemos de todo» o temer no poder afrontar la hipoteca equivale a <strong>«girar cheques sin fondos»</strong> que el subconsciente toma como instrucciones de escasez (Cap. 9.6, p. 71). Del mismo modo, lanzar una afirmación próspera y dudar minutos después equivale a sembrar una semilla y volverla a desenterrar (Cap. 9.8, p. 71).
+          </p>
+          <p>
+            En el Capítulo 10, Murphy corrige el prejuicio moral contra el dinero: el dinero es un mero símbolo de intercambio, tan neutro como el cobre, el hierro o el estaño; hacer de él la única meta es un error, pero la pobreza no encierra virtud alguna y se define como una «enfermedad mental» (Cap. 10, pp. 74, 78–79). Nadie puede recibir algo por nada (p. 79), y criticar a quien prospera o albergar resentimiento silencioso contra la propia empresa activa una respuesta negativa que bloquea la promoción profesional (Cap. 9.10–9.11, p. 72; Cap. 10.10, p. 75).
+          </p>
+        </div>
+
+        <aside class="margin-notes">
+          <figure class="quote-leaf">
+            <blockquote>«Quien disfrute del sentimiento de riqueza, mayor riqueza obtendrá; quien disfrute del sentimiento de pobreza mayor pobreza tendrá.»</blockquote>
+            <figcaption>Capítulo 9.7 · El subconsciente produce a interés compuesto (p. 71)</figcaption>
+          </figure>
+          <div class="leaf-panel">
+            <h3>Protocolo financiero del Cap. 9–10</h3>
+            <ul>
+              <li><strong>Evitar la promesa futura:</strong> sustituir «voy a ser próspero» por convicción presente («Riqueza, éxito» 5 min, 3–4 veces/día; «Día y noche prosperaré en todos mis asuntos», Cap. 9.3, 9.8, pp. 70–71).</li>
+              <li><strong>Neutralizar la envidia:</strong> al perturbarse por la fortuna ajena, desearle mayor prosperidad para desbloquear el flujo propio (Cap. 9.11, p. 72).</li>
+              <li><strong>Caso Montreal:</strong> un joven con recursos limitados mantuvo la meta de ser médico-cirujano hasta recibir formación y becas de un facultativo (Cap. 10, p. 75).</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 5: Capítulos 11–13                                -->
+    <!-- ========================================================= -->
+    <section class="report-section" id="sec-5">
+      <div class="section-head">
+        <div class="section-head-main">
+          <p class="section-kicker">Sección 5 · Capítulos 11–13 (pp. 80–98)</p>
+          <h2>El subconsciente como socio de éxito, laboratorio científico y consejero nocturno</h2>
+        </div>
+        <button type="button" class="btn-done" data-section="sec-5" onclick="toggleSectionDone('sec-5')">
+          Marcar como hecho
+        </button>
+      </div>
+
+      <div class="editorial-split">
+        <div class="prose-col">
+          <p>
+            El verdadero éxito en el tratado no se reduce a la mera acumulación patrimonial, sino que exige amor al trabajo, paz interior y un ideal de servicio elevado (Cap. 11, p. 80). En el plano operativo de los negocios y las transacciones —como la compraventa inmobiliaria descrita en la Avenida Orlando de Los Ángeles o la visualización de un automóvil Cadillac (Cap. 11.8–11.10, p. 84)—, el principio consiste en aquietar el esfuerzo consciente y dar por hecho el acuerdo justo y mutuamente beneficioso.
+          </p>
+          <p>
+            En el Capítulo 12, Murphy muestra el subconsciente como laboratorio de investigación. El caso paradigmático es el del químico <strong>Friedrich von Stradonitz</strong>, quien tras trabajar sin éxito para ordenar los seis átomos de carbono y seis de hidrógeno en la fórmula de la «benzina», transfirió el problema al subconsciente; al subir a un autobús en Londres recibió la visión súbita de una serpiente mordiéndose su propia cola como una rueda sobre su eje (Cap. 12, p. 87). Dado que el subconsciente no conoce el tiempo ni el espacio, pensar que una solución tardará años retrasa la respuesta, la cual suele emerger como intuición, sentimiento o corazonada (Cap. 12.8, pp. 87–88).
+          </p>
+          <p>
+            Finalmente, dado que pasamos durmiendo <strong>8 de cada 24 horas</strong> (un tercio de la existencia), el Capítulo 13 resalta la función reparadora e intelectual del sueño (p. 93). La privación de descanso provoca memoria deficiente, pérdida de coordinación, confusión y «microsueños» peligrosos al conducir (Cap. 13, p. 98). Por el contrario, encargar una tarea antes de dormir —como hacía Robert Louis Stevenson en <em>Across the plains</em> con sus «pequeños duendes» que tejían argumentos rentables durante la noche (Cap. 13.10, p. 97)— convierte el descanso en un consejo estratégico permanente.
+          </p>
+
+          <div class="no-consta-note">
+            <span class="no-consta-tag">Nota de rigor documental</span>
+            En el apartado <em>«1. Los tres pasos hacia el éxito»</em> (Cap. 11.1, p. 80), el texto proporcionado recoge íntegramente el <strong>Paso 1</strong> (descubrir qué se desea hacer y pedir luz si no se sabe), pero debido a un recorte en las páginas 80–83, <strong>los Pasos 2 y 3 no constan</strong> en los extractos de la fuente. Igualmente, los casos 2, 3, 4 y 7 del Cap. 12 aparecen resumidos solo en el índice o fragmentados por recortes.
+          </div>
+        </div>
+
+        <aside class="margin-notes">
+          <figure class="quote-leaf">
+            <blockquote>«La ayuda o guía vendrá como un sentimiento interno, una corazonada o impulso; usted sabe que lo sabe sin saber por qué.»</blockquote>
+            <figcaption>Capítulo 12 · Resumen de puntos sobresalientes (p. 88)</figcaption>
+          </figure>
+          <div class="leaf-panel">
+            <h3>Protocolo de consulta nocturna (Cap. 12–13)</h3>
+            <ul>
+              <li>Investigar objetivamente toda la información disponible con la mente consciente.</li>
+              <li>Si no surge respuesta, transferir el problema al subconsciente justo antes de dormir sin postular demoras futuras (Cap. 12, pp. 87–88).</li>
+              <li>Confiar en que la respuesta aparecerá al despertar, como intuición o imagen creativa (Cap. 13, pp. 97–98).</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 6: Capítulos 14–20                                -->
+    <!-- ========================================================= -->
+    <section class="report-section" id="sec-6">
+      <div class="section-head">
+        <div class="section-head-main">
+          <p class="section-kicker">Sección 6 · Capítulos 14–20 (pp. 99–144)</p>
+          <h2>Gobierno interior: relaciones humanas, hábitos, erradicación del temor y plenitud</h2>
+        </div>
+        <button type="button" class="btn-done" data-section="sec-6" onclick="toggleSectionDone('sec-6')">
+          Marcar como hecho
+        </button>
+      </div>
+
+      <div class="editorial-split">
+        <div class="prose-col">
+          <p>
+            En los capítulos finales, Murphy traslada la disciplina mental al ámbito interpersonal y al autodominio. En el matrimonio y las relaciones profesionales (Cap. 14 y 16), el subconsciente actúa como una máquina grabadora sujeta a una lectura interna de la Regla Áurea: los pensamientos que emitimos sobre socios, clientes o cónyuges retornan en forma de conducta recibida (Cap. 16, pp. 111–116). La madurez emocional consiste en admitir el derecho ajeno a disentir, sentir compasión ante personas «condicionadas negativamente» y no ceder mediante el apaciguamiento ante rabietas o escenas emocionales (Cap. 16, p. 116).
+          </p>
+          <p>
+            La felicidad se cultiva como hábito deliberado, ilustrado en el granjero que practicó la gratitud cada mañana y noche durante casi cuarenta años, y en la metáfora del caballo que seguía espantándose en el camino donde había existido un tronco ya desenterrado y quemado: los obstáculos pasados solo perviven en la imaginación (Cap. 15, pp. 106–108).
+          </p>
+          <p>
+            Para erradicar hábitos arraigados —como el alcoholismo del Sr. Jones, donde la pura fuerza de voluntad agravaba las recaídas (Cap. 18.2–18.3, pp. 125–126)— se aplica la <strong>ley de sustitución</strong>: imprimir en la «placa sensible» subconsciente una escena vivida de libertad y paz (la hija felicitándolo al volver a casa). Ante el <strong>temor</strong> (Cap. 19), Murphy distingue el temor normal (protector) del temor anormal (destructivo, origen de la «amnesia sugestiva» en exámenes universitarios, p. 133). La respuesta combina la máxima de Emerson —«haga aquello que usted teme hacer y lo eliminará» (p. 132)— con la sustitución inmediata del miedo por su deseo opuesto y el examen sereno del «cliente fantasma» tras la puerta (pp. 134, 138). Finalmente, en el Capítulo 20 se advierte que la juventud espiritual no depende de dietas ni ejercicios aislados, sino de conservar la curiosidad, los sueños y no anticipar el deterioro por miedo a la vejez (pp. 142–144).
+          </p>
+
+          <div class="no-consta-note">
+            <span class="no-consta-tag">Nota de rigor documental</span>
+            En los extractos proporcionados de la obra, el contenido textual completo del <strong>Capítulo 17 («Cómo utilizar la mente subconsciente para perdonar», pp. 118–124)</strong> <strong>no consta</strong> (únicamente aparecen los títulos de sus 13 apartados en el índice general de la p. 8). Del mismo modo, gran parte del desarrollo intermedio de los capítulos 14, 15, 16 y <strong>20 (pp. 139–144)</strong> está recortado en la fuente; por ello se exponen únicamente las ideas y citas verificables en el texto disponible.
+          </div>
+        </div>
+
+        <aside class="margin-notes">
+          <figure class="quote-leaf">
+            <blockquote>«Su mente consciente es una cámara fotográfica y su mente subconsciente es la placa sensitiva sobre la cual se imprime o registra la imagen.»</blockquote>
+            <figcaption>Capítulo 18 · Resumen de puntos sobresalientes (p. 128)</figcaption>
+          </figure>
+          <div class="leaf-panel">
+            <h3>Síntesis de gobierno ejecutivo (Cap. 18–20)</h3>
+            <ul>
+              <li><strong>Amnesia sugestiva:</strong> un brillante estudiante de medicina bloqueado por miedo al fracaso superó sus exámenes imaginando la carta de felicitación de su madre (Cap. 19.4–19.5, p. 133).</li>
+              <li><strong>Ósmosis mental:</strong> al aquietar la mente consciente, los pensamientos constructivos pasan al subconsciente de manera natural (Cap. 19, p. 132).</li>
+              <li><strong>Vejez intelectual:</strong> se envejece al perder el interés en la vida, dejar de investigar y volverse irritable o escéptico (Cap. 20, pp. 142, 144).</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECCIÓN 7: Evaluación final (8 preguntas)                 -->
+    <!-- ========================================================= -->
+    <section class="report-section" id="sec-7">
+      <div class="section-head">
+        <div class="section-head-main">
+          <p class="section-kicker">Sección 7 · Comprobación de dominio textual</p>
+          <h2>Evaluación final: Test de comprensión ejecutiva (8 cuestiones sobre 10)</h2>
+        </div>
+        <button type="button" class="btn-done" data-section="sec-7" onclick="toggleSectionDone('sec-7')">
+          Marcar como hecho
+        </button>
+      </div>
+
+      <p style="max-width: 68ch; margin: 0;">
+        Responda a las ocho cuestiones basadas estrictamente en los extractos de Joseph Murphy. Conforme a los criterios de trazabilidad de esta edición, toda opción distractora que introduce conceptos, cifras o teorías ajenas al tratado incorpora la etiqueta explícita <strong>«[Fuera de tus fuentes]»</strong>.
+      </p>
+
+      <div class="quiz-score-banner" aria-live="polite">
+        <div>
+          <p class="figure-label" style="margin-bottom: var(--space-xs);">Calificación ejecutiva</p>
+          <div class="figure-value" id="quiz-score-display" style="margin: 0;">Pendiente de calificación</div>
+          <p class="figure-note" id="quiz-score-detail">Seleccione sus respuestas y pulse «Calificar evaluación».</p>
+        </div>
+        <div class="control-row" style="flex: 0 0 auto;">
+          <button type="button" class="btn-primary" onclick="gradeQuiz()">Calificar evaluación</button>
+          <button type="button" class="btn-secondary" id="btn-reset-quiz" onclick="resetQuiz(this)">Reiniciar test</button>
+        </div>
+      </div>
+
+      <div class="quiz-list" id="quiz-container"></div>
+    </section>
+
+    <footer class="report-footer">
+      <p>
+        <strong>Nota de edición y fuentes:</strong> Contenido elaborado exclusivamente a partir de los extractos disponibles de <em>El poder de la mente subconsciente</em> de Joseph Murphy (adaptación de C.P. Edgar Julián Martínez Aristizábal). Todas las referencias indican capítulo y página del documento fuente.
+      </p>
+    </footer>
+
+  </main>
+
+  <api-shim></api-shim>
+  <script>
+    /* ======================================================================
+       DATOS GROUNDED EN LA FUENTE
+       ====================================================================== */
+    const QUOTES_DATA = [
+      {
+        id: `q1`,
+        cat: `arquitectura`,
+        catLabel: `Arquitectura dual`,
+        concept: `El secreto maestro y el acero imantado`,
+        text: `Una pieza de acero imantado levanta hasta doce veces su propio peso, pero si se le quita el poder magnético no podrá levantar ni un alfiler.`,
+        cite: `Cap. 1, p. 16`
+      },
+      {
+        id: `q2`,
+        cat: `arquitectura`,
+        catLabel: `Arquitectura dual`,
+        concept: `El capitán y la sala de máquinas`,
+        text: `Su mente consciente es el capitán de su barco; los hombres situados en la sala de máquinas siguen las órdenes sin discutir y sin saber por dónde van.`,
+        cite: `Cap. 1.6, p. 20`
+      },
+      {
+        id: `q3`,
+        cat: `arquitectura`,
+        catLabel: `Arquitectura dual`,
+        concept: `El celador y la sugestión al marinero`,
+        text: `Su mente consciente es el vigilante que está en la puerta; la sugestión no puede imponer algo en la mente subconsciente contra el deseo de la mente consciente.`,
+        cite: `Cap. 2.5–2.6, p. 24`
+      },
+      {
+        id: `q4`,
+        cat: `historia`,
+        catLabel: `Evidencia histórica`,
+        concept: `Cirujano escocés en Bengala (1843–1846)`,
+        text: `Realizó unas 400 operaciones bajo anestesia mental solamente; la mortalidad postoperatoria fue de un dos a tres por ciento, sin dolor ni muertes durante las cirugías (tasa previa sin hipnosis: no consta).`,
+        cite: `Cap. 3, p. 31`
+      },
+      {
+        id: `q5`,
+        cat: `historia`,
+        catLabel: `Evidencia histórica`,
+        concept: `Principio único de Paracelso y Mesmer`,
+        text: `Paracelso sentó el principio: «Sea el objetivo de su fe real o falso, el resultado obtenido será siempre el mismo». Sólo hay un proceso de curación: la fe.`,
+        cite: `Cap. 4.4–4.5, pp. 41–42`
+      },
+      {
+        id: `q6`,
+        cat: `tecnicas`,
+        catLabel: `Ingeniería mental`,
+        concept: `Técnica de Charles Baudoin (1910)`,
+        text: `Condensar la idea en una frase breve fácil de grabar en la memoria y repetirla una y otra vez en el estado de somnolencia que precede al sueño.`,
+        cite: `Cap. 6.6, p. 54`
+      },
+      {
+        id: `q7`,
+        cat: `tecnicas`,
+        catLabel: `Ingeniería mental`,
+        concept: `Ley de reversión del esfuerzo (Émile Coué)`,
+        text: `Cuando sus deseos y su imaginación están en conflicto, gana siempre la imaginación. El esfuerzo mental excesivo produce la derrota a sí mismo.`,
+        cite: `Cap. 8.4, pp. 66–67`
+      },
+      {
+        id: `q8`,
+        cat: `prosperidad`,
+        catLabel: `Prosperidad`,
+        concept: `Cheques sin fondos e interés compuesto`,
+        text: `El subconsciente multiplica y aumenta lo que en él se deposita, es decir, produce a interés compuesto. Afirmar «carecemos de todo» es firmar cheques sin fondos.`,
+        cite: `Cap. 9.6–9.7, p. 71`
+      },
+      {
+        id: `q9`,
+        cat: `prosperidad`,
+        catLabel: `Prosperidad`,
+        concept: `El dinero como símbolo y la pobreza`,
+        text: `No existe virtud en la pobreza; es una enfermedad mental. El dinero no es impuro así como no lo es el cobre, hierro o estaño que hallamos en la tierra.`,
+        cite: `Cap. 10, pp. 78–79`
+      },
+      {
+        id: `q10`,
+        cat: `exito`,
+        catLabel: `Éxito y sueño`,
+        concept: `Descubrimiento de la «benzina» (Stradonitz)`,
+        text: `Al abordar un bus en Londres, su subconsciente le presentó la visión de una serpiente mordiéndose su propia cola girando alrededor como una rueda en su eje.`,
+        cite: `Cap. 12, p. 87`
+      },
+      {
+        id: `q11`,
+        cat: `exito`,
+        catLabel: `Éxito y sueño`,
+        concept: `Los «pequeños duendes» de R. L. Stevenson`,
+        text: `Acostumbraba antes de dormirse suplicarle a su subconsciente que le diese argumentos rentables para sus cuentos mientras él dormía.`,
+        cite: `Cap. 7, p. 60; Cap. 13.10, p. 97`
+      },
+      {
+        id: `q12`,
+        cat: `gobierno`,
+        catLabel: `Gobierno interior`,
+        concept: `Placa sensitiva y ley de sustitución`,
+        text: `Su mente consciente es una cámara fotográfica y su mente subconsciente es la placa sensitiva. Cuando el temor toque a la puerta, contrarréstelo con su deseo opuesto.`,
+        cite: `Cap. 18, p. 128; Cap. 19, p. 138`
+      }
+    ];
+
+    const FLOW_SCENARIOS = {
+      marinero: {
+        node1a: `Sugestión externa`,
+        node1b: `«Está pálido, se va a marear»`,
+        node2a: `Bloqueo activo en la puerta`,
+        node2b: `Convicción firme de inmunidad al mareo`,
+        node2c: `(Cap. 2.6, p. 24)`,
+        blocked: true,
+        danger: false,
+        node3a: `Inalterado — Sin impresión`,
+        node3b: `La sugestión cae en oídos sordos;`,
+        node3c: `el marinero ríe y conserva su equilibrio.`,
+        footer: `Principio: «La sugestión no puede imponer algo contra el deseo de la mente consciente» (Cap. 2.6, p. 24).`,
+        cards: [
+          { title: `1. Estímulo recibido`, body: `Un pasajero afirma afablemente que el marinero tiene aspecto enfermizo y va a marearse (Cap. 2.6, p. 24).`, cls: `` },
+          { title: `2. Decisión del celador`, body: `Su mente consciente conoce su inmunidad y rechaza de inmediato la sugestión negativa.`, cls: `is-blocked` },
+          { title: `3. Resultado en plexo solar`, body: `No se genera temor ni impresión subjetiva: la sugestión carece de poder propio (Cap. 2.6, pp. 24–25).`, cls: `` }
+        ]
+      },
+      pasajero: {
+        node1a: `Sugestión externa`,
+        node1b: `«Luce enfermo, le ayudaré»`,
+        node2a: `El celador cede por miedo`,
+        node2b: `Acepta la idea y pierde confianza`,
+        node2c: `(Cap. 2.5, p. 24)`,
+        blocked: false,
+        danger: true,
+        node3a: `Ejecución literal en plexo solar`,
+        node3b: `Se unen sugestión y temor subjetivo;`,
+        node3c: `el pasajero palidece y sufre mareo real.`,
+        footer: `Advertencia: «Su mente subconsciente no razona ni discute; obedece a las impresiones aceptadas» (Cap. 2.4–2.5, p. 24).`,
+        cards: [
+          { title: `1. Estímulo recibido`, body: `Un compañero de viaje en barco, tren o autobús sugiere debilidad y mareo inminente (Cap. 2.5, p. 24).`, cls: `` },
+          { title: `2. Fallo del celador`, body: `La mente consciente no filtra la premisa falsa y se entrega al dominio ajeno por miedo.`, cls: `is-danger` },
+          { title: `3. Respuesta orgánica`, body: `El plexo solar recibe el miedo como orden válida y reproduce los síntomas físicos del mareo.`, cls: `is-danger` }
+        ]
+      },
+      cantante: {
+        node1a: `Autosugestión deliberada`,
+        node1b: `«Canto bien, estoy serena»`,
+        node2a: `Relajación pasiva receptiva`,
+        node2b: `Inercia física en sillón (5–10 veces/día)`,
+        node2c: `(Cap. 2.8, p. 25)`,
+        blocked: false,
+        danger: false,
+        node3a: `Impresión constructiva aceptada`,
+        node3b: `El temor escénico se disuelve en 1 semana;`,
+        node3c: `el recital concluye con éxito.`,
+        footer: `Mecanismo: «La inercia física favorece la pasividad mental y deja a la mente más receptiva» (Cap. 2.8, p. 25).`,
+        cards: [
+          { title: `1. Condición previa`, body: `Joven cantante que había fracasado tres veces por autosugestión involuntaria de miedo (Cap. 2.8, p. 25).`, cls: `` },
+          { title: `2. Maniobra del celador`, body: `Tres veces al día se relaja en un sillón y sustituye el temor por afirmación serena y fe.`, cls: `is-blocked` },
+          { title: `3. Manifestación`, body: `Al cabo de siete días, su subconsciente expresa calma y seguridad plena ante el auditorio.`, cls: `is-blocked` }
+        ]
+      },
+      premisa: {
+        node1a: `Afirmación en conflicto`,
+        node1b: `«Quiero prosperar, pero hay escasez»`,
+        node2a: `Contradicción consciente`,
+        node2b: `Esfuerzo forzado + duda antagonista`,
+        node2c: `(Cap. 8.4, p. 66; Cap. 9.6, p. 71)`,
+        blocked: false,
+        danger: true,
+        node3a: `Prevalece la imagen de temor`,
+        node3b: `Ley de Coué + cheque sin fondos:`,
+        node3c: `se neutraliza el deseo y surgen bloqueos.`,
+        footer: `Regla: «Cuando sus deseos y su imaginación están en conflicto, gana siempre la imaginación» (Cap. 8.4, p. 66).`,
+        cards: [
+          { title: `1. Señal ambigua`, body: `Se repite una fórmula positiva pero acto seguido se afirma «no podré pagar» (Cap. 9.6–9.8, p. 71).`, cls: `` },
+          { title: `2. Conflicto en la puerta`, body: `El celador envía direcciones opuestas, como un pasajero que da seis destinos distintos al taxista (Cap. 8, p. 65).`, cls: `is-danger` },
+          { title: `3. Efecto Coué`, body: `La emoción dominante (miedo/carencia) se imprime en el subconsciente y bloquea la solución.`, cls: `is-danger` }
+        ]
+      }
+    };
+
+    const TIMELINE_DATA = {
+      paracelso: {
+        title: `Paracelso (Philippus Paracelsus, 1493–1541)`,
+        cite: `Capítulo 4.5 · Breve síntesis sobre Paracelso (p. 42)`,
+        summary: `Alquimista y médico suizo que formuló la neutralidad del objeto de creencia frente al mecanismo de la fe: «Sea el objetivo de su fe real o falso, el resultado obtenido será siempre el mismo».`,
+        detail: `Murphy cita asimismo al filósofo italiano del siglo XVI Pietro Pomponazzi para respaldar la tesis de Paracelso: si se sustituyesen los huesos de un santo por otros cualesquiera, el creyente obtendría la misma curación porque quien opera el cambio es la imaginación unida a la sugestión en el subconsciente (p. 42).`
+      },
+      mesmer: {
+        title: `Franz Anton Mesmer (1734–1815) · París, 1776`,
+        cite: `Capítulo 4.4 (p. 41) y Capítulo 5.3 (p. 47)`,
+        summary: `Médico austriaco establecido en París que aplicó imanes y desarrolló la teoría del «magnetismo animal» (un fluido universal proyectado del terapeuta al paciente).`,
+        detail: `El Gobierno francés nombró una comisión investigadora con médicos y miembros de la Academia de Ciencias (entre ellos Benjamin Franklin). El informe reconoció la realidad de las curaciones, pero dictaminó ausencia de pruebas de fluido magnético, atribuyéndolas a la imaginación de los pacientes. Posteriormente, el Dr. Braid de Manchester demostró que los efectos provenían del sueño hipnótico inducido por sugestión (p. 47).`
+      },
+      esdaile: {
+        title: `Cirujano escocés en Bengala [referencia histórica: Esdaile] (1843–1846)`,
+        cite: `Capítulo 3 · El milagroso poder de trabajo de su subconsciente (p. 31)`,
+        summary: `Entre 1843 y 1846 realizó unas 400 intervenciones quirúrgicas (amputaciones, tumores, cáncer, ojos, oídos y garganta) empleando únicamente anestesia mental/hipnótica antes del descubrimiento del éter.`,
+        detail: `Según el testimonio recogido por Murphy de un cirujano de Bombay en 1955, la mortalidad postoperatoria fue del 2 % al 3 %, sin dolor ni muertes durante las operaciones, y sin infecciones pese a ser anterior a Pasteur y Lister. Nota de rigor: el texto fuente lo denomina «un cirujano escocés que trabajó en Bengala» (sin mencionar su apellido) y la tasa de mortalidad previa sin hipnosis en Bengala no consta en la fuente.`
+      },
+      quimby: {
+        title: `Dr. Phineas Parkhurst Quimby (1849–1869) · Belfast, Maine`,
+        cite: `Capítulo 6.9 y 6.11 · El método argumentativo (pp. 56–58)`,
+        summary: `Pionero de la medicina psicosomática que aplicó el método argumentativo psicoterapéutico entre 1849 y 1869 (recopilado en «Los Manuscritos de Quimby», 1921, ed. Horatio Dresser).`,
+        detail: `Quimby razonaba con el paciente sin discutir, demostrando que su malestar obedecía a falsas creencias y temores distorsionados. En el caso de una anciana paralítica aprisionada por una lectura literal y atemorizante de versículos bíblicos, su reinterpretación clara produjo un cambio mental inmediato tras el cual la paciente caminó sin muletas (pp. 57–58).`
+      },
+      sanfrancisco: {
+        title: `Terremoto e incendio de San Francisco (18 de abril de 1906)`,
+        cite: `Capítulo 7 · La permanente conservación del cuerpo (p. 60)`,
+        summary: `Durante la catástrofe del 18 de abril de 1906 en San Francisco de California, inválidos y paralíticos postrados durante largo tiempo se levantaron y ejecutaron actos asombrosos de salvamento.`,
+        detail: `Murphy cita este hecho para demostrar el impulso supremo de preservación de la vida alojado en el subconsciente: cuando el intenso deseo de salvar a otros inundó su mente, el subconsciente respondió liberando la energía motora bloqueada (p. 60).`
+      },
+      baudoin: {
+        title: `Charles Baudoin (1910) · Instituto Rousseau / Escuela de Nancy`,
+        cite: `Capítulo 6.6 · La técnica de Baudoin (pp. 54–55)`,
+        summary: `Psicoterapeuta y profesor del Instituto Rousseau de París y director de investigación en la Nueva Escuela Curativa de Nancy; en 1910 sistematizó la sugestión en somnolencia.`,
+        detail: `Demostró que el momento óptimo para impresionar el subconsciente es el estado de sopor previo al sueño, reduciendo al mínimo el esfuerzo consciente. Su método consiste en condensar la meta en una frase breve fácil de recordar y repetirla sosegadamente hasta dormir (ejemplificado en el pleito sucesorio resuelto al día 11 tras 10 noches de práctica, pp. 54–55).`
+      },
+      lourdes: {
+        title: `Santuario de Lourdes · Caso Madame Bire (citado en MacCall's, nov. 1955)`,
+        cite: `Capítulo 3.6 · Restaura nervios ópticos atrofiados (p. 35)`,
+        summary: `Caso documentado en los archivos médicos de Lourdes (Francia) e investigado por Ruth Cranston en la revista MacCall's de noviembre de 1955.`,
+        detail: `Madame Bire acudió a Lourdes ciega, con los nervios ópticos atrofiados e inútiles, y recobró una visión normal comprobada por los médicos pese a que «estaba viviendo con unos ojos muertos». Murphy concluye que no fue la acción física de unas aguas, sino la respuesta de su propio subconsciente a su fe y convencimiento absoluto (p. 35).`
+      }
+    };
+
+    const QUIZ_QUESTIONS = [
+      {
+        id: `q1`,
+        prompt: `1. En la metáfora del navío (Cap. 1.6, p. 20) y la función del «celador a la entrada» (Cap. 2.5, p. 24), ¿qué papel desempeña la mente consciente frente al subconsciente?`,
+        correct: `A`,
+        options: {
+          A: `Actúa como el capitán del barco y el vigilante a la entrada: razona, elige y filtra las ideas antes de que pasen al subconsciente, el cual obedece sin discutir.`,
+          B: `Activa la neuroplasticidad sináptica mediante neurotransmisores inhibitorios GABA en la amígdala cerebral. [Fuera de tus fuentes]`,
+          C: `Funciona como la sala de máquinas que ejecuta automáticamente las órdenes emitidas por el plexo solar sin capacidad de elección.`,
+          D: `Se desconecta mediante terapia de choque eléctrico para permitir la reprogramación de los ganglios basales. [Fuera de tus fuentes]`
+        },
+        explanation: `Correcta: A. En Cap. 1.6 (p. 20) la mente consciente es el capitán que da órdenes a la sala de máquinas (subconsciente), y en Cap. 2.5 (p. 24) es el celador que protege al subconsciente de impresiones falsas.`
+      },
+      {
+        id: `q2`,
+        prompt: `2. ¿Qué cifra de mortalidad postoperatoria atribuye la fuente al cirujano escocés que operó en Bengala entre 1843 y 1846 bajo anestesia mental (Cap. 3, p. 31), y qué dictaminó la comisión francesa sobre Mesmer (Cap. 5.3, p. 47)?`,
+        correct: `B`,
+        options: {
+          A: `Redujo la mortalidad del 45 % previo al 2 %–3 % y la comisión confirmó la existencia física del fluido magnético. [Fuera de tus fuentes]`,
+          B: `Registró un 2 % a 3 % de mortalidad postoperatoria (sin constar en el texto la tasa previa sin hipnosis), y la comisión atribuyó las curaciones de Mesmer a la imaginación de los pacientes.`,
+          C: `Logró cero muertes postoperatorias en las 400 intervenciones gracias a los instrumentos esterilizados por Joseph Lister. [Fuera de tus fuentes]`,
+          D: `Obtuvo un 15 % de mortalidad postoperatoria y la comisión prohibió el término «hipnotismo» acuñado por Paracelso. [Fuera de tus fuentes]`
+        },
+        explanation: `Correcta: B. El Cap. 3 (p. 31) señala un 2 % a 3 % de mortalidad postoperatoria en ~400 cirugías (sin indicar tasa previa sin hipnosis), y el Cap. 5.3 (p. 47) detalla que la comisión francesa (con Benjamin Franklin) atribuyó las curaciones de Mesmer a la imaginación.`
+      },
+      {
+        id: `q3`,
+        prompt: `3. Según la ley de reversión del esfuerzo formulada por Émile Coué en el Capítulo 8 (pp. 66–67), ¿qué sucede cuando los deseos conscientes y la imaginación entran en conflicto?`,
+        correct: `C`,
+        options: {
+          A: `Prevalece la fuerza de voluntad consciente gracias al cortisol liberado por la tensión volitiva. [Fuera de tus fuentes]`,
+          B: `Se anulan mutuamente en el nervio vago hasta que el sujeto aplica la técnica de respiración diafragmática 4-7-8. [Fuera de tus fuentes]`,
+          C: `Gana siempre la imaginación, de modo que el esfuerzo mental excesivo y la coerción suelen producir el resultado contrario al pedido.`,
+          D: `El subconsciente solicita una segunda confirmación verbal en estado de vigilia activa para resolver la duda. [Fuera de tus fuentes]`
+        },
+        explanation: `Correcta: C. Coué definió así la ley de reversión del esfuerzo en Cap. 8.4 (pp. 66–67): «Cuando sus deseos y su imaginación están en conflicto, gana siempre la imaginación» (ejemplificado con el tablón sobre dos muros).`
+      },
+      {
+        id: `q4`,
+        prompt: `4. ¿En qué consiste la técnica de Charles Baudoin descrita en el Capítulo 6 (pp. 54–55) y cuándo resulta más eficaz?`,
+        correct: `D`,
+        options: {
+          A: `En redactar un informe detallado de objetivos financieros y leerlo en voz alta justo después de desayunar. [Fuera de tus fuentes]`,
+          B: `En aplicar ondas ultrasónicas acústicas junto con electroencefalograma de ondas theta antes de dormir. [Fuera de tus fuentes]`,
+          C: `En mantener un debate lógico continuo con un interlocutor escéptico para convencer a la mente objetiva. [Fuera de tus fuentes]`,
+          D: `En condensar la idea deseada en una frase breve fácil de memorizar y repetirla sosegadamente en el estado de somnolencia previo al sueño.`
+        },
+        explanation: `Correcta: D. Baudoin (1910, Cap. 6.6, pp. 54–55) propuso condensar la idea en una frase breve fácil de recordar y repetirla al entrar en sopor antes de dormir, reduciendo al mínimo el esfuerzo consciente.`
+      },
+      {
+        id: `q5`,
+        prompt: `5. En los Capítulos 9 y 10 (pp. 71–79), ¿qué significa «girar cheques sin fondos» y cómo repercute criticar la riqueza de otros?`,
+        correct: `A`,
+        options: {
+          A: `Expresar carencia o temor («hay escasez», «no podré pagar») imprime limitaciones en el subconsciente, mientras que la envidia y la crítica a quien prospera alejan la riqueza de uno mismo.`,
+          B: `Invertir en mercados bursátiles volátiles sin diversificar en bonos del Tesoro ni fondos indexados. [Fuera de tus fuentes]`,
+          C: `Solicitar préstamos bancarios a interés compuesto superior al 12 % anual sin garantías hipotecarias. [Fuera de tus fuentes]`,
+          D: `Ahorrar más del 30 % del salario mensual manteniendo el capital inmovilizado en cuentas corrientes sin inflación. [Fuera de tus fuentes]`
+        },
+        explanation: `Correcta: A. Cap. 9.6 (p. 71) compara las afirmaciones de escasez y temor con «firmar cheques sin fondos», y Cap. 9.10–9.11 (p. 72) señala que la envidia y criticar a los ricos constituyen la piedra de tropiezo que aleja la prosperidad.`
+      },
+      {
+        id: `q6`,
+        prompt: `6. ¿Qué episodio ilustra el uso científico del subconsciente en el Capítulo 12 (p. 87) y qué función desempeña el sueño en el Capítulo 13 (pp. 93–97)?`,
+        correct: `B`,
+        options: {
+          A: `Isaac Newton formuló la gravitación universal tras una siesta de 20 minutos, y el sueño reduce la actividad subconsciente a cero. [Fuera de tus fuentes]`,
+          B: `El químico Friedrich von Stradonitz resolvió la fórmula de la benzina al visualizar una serpiente mordiéndose la cola en Londres, y durante el sueño (un tercio de la vida) el subconsciente refuerza al individuo y aporta soluciones, como relató Robert Louis Stevenson.`,
+          C: `Louis Pasteur descubrió la penicilina durante la fase REM tras aplicar el método resolutivo de Quimby. [Fuera de tus fuentes]`,
+          D: `Friedrich von Stradonitz resolvió la estructura del ADN gracias a la terapia de grupo en la Universidad de Oxford. [Fuera de tus fuentes]`
+        },
+        explanation: `Correcta: B. Cap. 12 (p. 87) narra el hallazgo de la benzina por Friedrich von Stradonitz en Londres, y Cap. 13 (pp. 93, 97) explica que dormimos 8 de cada 24 horas y cita los «pequeños duendes» nocturnos de Stevenson.`
+      },
+      {
+        id: `q7`,
+        prompt: `7. En el caso del Sr. Jones contra el alcoholismo (Cap. 18, pp. 125–128) y el abordaje del temor (Cap. 19, pp. 132–138), ¿qué principio sustituye al mero esfuerzo de voluntad?`,
+        correct: `C`,
+        options: {
+          A: `El aislamiento clínico prolongado con terapia aversiva farmacológica para borrar los recuerdos infantiles. [Fuera de tus fuentes]`,
+          B: `La aplicación de terapia cognitivo-conductual de tercera generación basada en exposición clínica gradual. [Fuera de tus fuentes]`,
+          C: `La ley de sustitución: aquietar el cuerpo e imprimir una nueva imagen mental de libertad y paz (como placa sensible), enfrentando además el temor anormal con su deseo opuesto y haciendo lo que se teme.`,
+          D: `La práctica obligatoria de tres horas diarias de ejercicio físico anaeróbico para frenar el envejecimiento celular. [Fuera de tus fuentes]`
+        },
+        explanation: `Correcta: C. En Cap. 18.2–18.3 y 18.12 (pp. 125–128) la pura fuerza de voluntad fracasaba y se sustituyó por imagen mental serena; en Cap. 19.2 y 19.12 (pp. 132, 138) la gran ley de sustitución y la máxima de Emerson disuelven el temor.`
+      },
+      {
+        id: `q8`,
+        prompt: `8. Atendiendo estrictamente a los extractos fuente del tratado utilizados en esta edición, ¿cuál de los siguientes contenidos SÍ consta desarrollado en el texto disponible?`,
+        correct: `D`,
+        options: {
+          A: `Los datos estadísticos detallados de los 13 subapartados completos del Capítulo 17 sobre el perdón. [Fuera de tus fuentes]`,
+          B: `El desarrollo completo paso a paso del «Método afirmativo» (punto 9 del índice del Cap. 6) con tres casos clínicos detallados. [Fuera de tus fuentes]`,
+          C: `La tasa exacta de mortalidad hospitalaria previa sin hipnosis registrada en Bengala antes de 1843. [Fuera de tus fuentes]`,
+          D: `El método argumentativo de Phineas Parkhurst Quimby ilustrado con el caso de la mujer paralítica que volvió a caminar sin muletas (Cap. 6.9–6.11, pp. 56–58).`
+        },
+        explanation: `Correcta: D. El método argumentativo de Quimby y el caso de la mujer paralítica constan desarrollados en Cap. 6 (pp. 56–58). En cambio, la tasa previa de Bengala, el desarrollo del método afirmativo en Cap. 6 y el cuerpo del Cap. 17 no constan en los extractos.`
+      }
+    ];
+
+    /* ======================================================================
+       ESTADO GLOBAL Y PERSISTENCIA (notebookAppApi)
+       ====================================================================== */
+    const DEFAULT_STATE = {
+      completedSections: [],
+      selectedScenario: `marinero`,
+      selectedTimeline: `paracelso`,
+      quoteCategory: `all`,
+      quoteSearch: ``,
+      sim: {
+        freq: 3,
+        minutes: 5,
+        days: 21,
+        relax: 75,
+        doubt: 20
+      },
+      quizAnswers: {},
+      quizSubmitted: false
+    };
+
+    let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (err) {
+        // Silencioso en entorno sin host activo
+      }
+    }
+
+    async function loadInitialState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = {
+              ...DEFAULT_STATE,
+              ...saved,
+              sim: { ...DEFAULT_STATE.sim, ...(saved.sim || {}) },
+              quizAnswers: { ...(saved.quizAnswers || {}) },
+              completedSections: Array.isArray(saved.completedSections) ? saved.completedSections : []
+            };
+          }
+        }
+      } catch (err) {
+        // Fallback a estado por defecto
+      }
+
+      applyStateToUI();
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+          window.notebookAppApi.notifyAppReady();
+        }
+      } catch (err) {
+        // Ignorar si no está disponible
+      }
+    }
+
+    function applyStateToUI() {
+      // Progreso
+      updateProgressUI();
+
+      // Buscador y citas
+      const searchInput = document.getElementById(`search-quotes`);
+      const selectCat = document.getElementById(`select-category`);
+      if (searchInput) searchInput.value = appState.quoteSearch || ``;
+      if (selectCat) selectCat.value = appState.quoteCategory || `all`;
+      updateCategoryPills(appState.quoteCategory || `all`);
+      renderQuotes();
+
+      // Diagrama flujo
+      selectFlowScenario(appState.selectedScenario || `marinero`, true);
+
+      // Línea de tiempo
+      selectTimeline(appState.selectedTimeline || `paracelso`, true);
+
+      // Simulador
+      setSimInputsToDOM(appState.sim);
+      updateSimulatorCalculations(true);
+
+      // Quiz
+      renderQuiz();
+      if (appState.quizSubmitted) {
+        gradeQuiz(true);
+      }
+    }
+
+    /* ======================================================================
+       PROGRESO Y MARCADO DE SECCIONES
+       ====================================================================== */
+    function toggleSectionDone(sectionId) {
+      const idx = appState.completedSections.indexOf(sectionId);
+      if (idx === -1) {
+        appState.completedSections.push(sectionId);
+      } else {
+        appState.completedSections.splice(idx, 1);
+      }
+      updateProgressUI();
+      persistState();
+    }
+
+    function updateProgressUI() {
+      const total = 7;
+      const doneCount = appState.completedSections.length;
+      const pct = Math.round((doneCount / total) * 100);
+
+      const counterEl = document.getElementById(`progress-counter`);
+      if (counterEl) {
+        counterEl.textContent = `${doneCount} de ${total} secciones completadas (${pct} %)`;
+      }
+
+      const fillEl = document.getElementById(`progress-fill`);
+      if (fillEl) {
+        fillEl.style.width = `${pct}%`;
+      }
+
+      const ariaEl = document.getElementById(`progress-bar-aria`);
+      if (ariaEl) {
+        ariaEl.setAttribute(`aria-valuenow`, String(pct));
+      }
+
+      const btns = document.querySelectorAll(`.btn-done[data-section]`);
+      btns.forEach(function (btn) {
+        const sec = btn.getAttribute(`data-section`);
+        const isDone = appState.completedSections.includes(sec);
+        btn.classList.toggle(`is-completed`, isDone);
+        btn.textContent = isDone ? `Completada ✓` : `Marcar como hecho`;
+      });
+
+      const tocLinks = document.querySelectorAll(`.toc-link[data-toc]`);
+      tocLinks.forEach(function (link) {
+        const sec = link.getAttribute(`data-toc`);
+        const isDone = appState.completedSections.includes(sec);
+        link.classList.toggle(`is-done`, isDone);
+      });
+    }
+
+    function handleResetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Confirmar reinicio`;
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `Reiniciar progreso`;
+      appState.completedSections = [];
+      updateProgressUI();
+      persistState();
+    }
+
+    /* ======================================================================
+       BUSCADOR Y FILTROS DE CITAS
+       ====================================================================== */
+    function setQuoteCategory(cat) {
+      appState.quoteCategory = cat;
+      const selectCat = document.getElementById(`select-category`);
+      if (selectCat) selectCat.value = cat;
+      updateCategoryPills(cat);
+      renderQuotes();
+      persistState();
+    }
+
+    function updateCategoryPills(cat) {
+      const pills = document.querySelectorAll(`#category-pills button[data-cat]`);
+      pills.forEach(function (btn) {
+        btn.classList.toggle(`is-active`, btn.getAttribute(`data-cat`) === cat);
+      });
+    }
+
+    function filterQuotes() {
+      const searchInput = document.getElementById(`search-quotes`);
+      const selectCat = document.getElementById(`select-category`);
+      appState.quoteSearch = searchInput ? searchInput.value : ``;
+      appState.quoteCategory = selectCat ? selectCat.value : `all`;
+      updateCategoryPills(appState.quoteCategory);
+      renderQuotes();
+      persistState();
+    }
+
+    function renderQuotes() {
+      const container = document.getElementById(`quotes-results`);
+      const countLabel = document.getElementById(`quotes-count-label`);
+      if (!container) return;
+
+      const query = (appState.quoteSearch || ``).trim().toLowerCase();
+      const cat = appState.quoteCategory || `all`;
+
+      const filtered = QUOTES_DATA.filter(function (item) {
+        const catOk = cat === `all` || item.cat === cat;
+        if (!catOk) return false;
+        if (!query) return true;
+        const haystack = `${item.concept} ${item.text} ${item.cite} ${item.catLabel}`.toLowerCase();
+        return haystack.includes(query);
+      });
+
+      if (countLabel) {
+        countLabel.textContent = `Mostrando ${filtered.length} de ${QUOTES_DATA.length} registros documentados`;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="quote-card" style="grid-column: 1 / -1;"><p class="quote-card-text">No hay citas que coincidan con «${escapeHTML(appState.quoteSearch)}» en esta categoría. Pruebe otra palabra clave o pulse «Todas».</p></div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(function (item) {
+        return `<article class="quote-card">
+          <div><span class="stamp-tag">${escapeHTML(item.catLabel)}</span></div>
+          <h4 style="margin: 0; font-family: var(--font-headline); font-weight: 700; color: var(--primary);">${escapeHTML(item.concept)}</h4>
+          <p class="quote-card-text">«${escapeHTML(item.text)}»</p>
+          <p class="quote-card-cite">${escapeHTML(item.cite)}</p>
+        </article>`;
+      }).join(``);
+    }
+
+    /* ======================================================================
+       DIAGRAMA DE FLUJO DE SUGESTIONES
+       ====================================================================== */
+    function selectFlowScenario(scenKey, skipPersist) {
+      const data = FLOW_SCENARIOS[scenKey] || FLOW_SCENARIOS.marinero;
+      appState.selectedScenario = scenKey;
+
+      const btns = document.querySelectorAll(`button[data-scen]`);
+      btns.forEach(function (btn) {
+        btn.classList.toggle(`is-active`, btn.getAttribute(`data-scen`) === scenKey);
+      });
+
+      setText(`svg-node-1a`, data.node1a);
+      setText(`svg-node-1b`, data.node1b);
+      setText(`svg-node-2a`, data.node2a);
+      setText(`svg-node-2b`, data.node2b);
+      setText(`svg-node-2c`, data.node2c);
+      setText(`svg-node-3a`, data.node3a);
+      setText(`svg-node-3b`, data.node3b);
+      setText(`svg-node-3c`, data.node3c);
+      setText(`svg-footer`, data.footer);
+
+      const blockBadge = document.getElementById(`svg-block-badge`);
+      const line23 = document.getElementById(`svg-line-23`);
+      const arrow23 = document.getElementById(`svg-arrow-23`);
+      const box3 = document.getElementById(`svg-box-3`);
+      const node2aEl = document.getElementById(`svg-node-2a`);
+
+      if (blockBadge) {
+        blockBadge.style.display = data.blocked ? `inline` : `none`;
+      }
+      if (line23) {
+        line23.setAttribute(`stroke-dasharray`, data.blocked ? `5,4` : `none`);
+        line23.setAttribute(`stroke`, data.blocked ? `var(--data-context)` : (data.danger ? `var(--error)` : `var(--secondary)`));
+      }
+      if (arrow23) {
+        arrow23.setAttribute(`fill`, data.blocked ? `var(--data-context)` : (data.danger ? `var(--error)` : `var(--secondary)`));
+      }
+      if (box3) {
+        box3.setAttribute(`stroke`, data.blocked ? `var(--outline-variant)` : (data.danger ? `var(--error)` : `var(--secondary)`));
+        box3.setAttribute(`fill`, data.blocked ? `var(--surface-container)` : `var(--surface-container-low)`);
+      }
+      if (node2aEl) {
+        node2aEl.setAttribute(`fill`, data.danger ? `var(--error)` : `var(--secondary)`);
+      }
+
+      const cardsWrap = document.getElementById(`flow-detail-cards`);
+      if (cardsWrap) {
+        cardsWrap.innerHTML = data.cards.map(function (c) {
+          return `<div class="flow-step-card ${c.cls}">
+            <p class="field-label" style="margin: 0 0 var(--space-xs) 0;">${escapeHTML(c.title)}</p>
+            <p style="margin: 0; font-size: 1rem;">${escapeHTML(c.body)}</p>
+          </div>`;
+        }).join(``);
+      }
+
+      if (!skipPersist) persistState();
+    }
+
+    /* ======================================================================
+       LÍNEA DE TIEMPO HISTÓRICA
+       ====================================================================== */
+    function selectTimeline(tlKey, skipPersist) {
+      const data = TIMELINE_DATA[tlKey] || TIMELINE_DATA.paracelso;
+      appState.selectedTimeline = tlKey;
+
+      const btns = document.querySelectorAll(`.timeline-btn[data-tl]`);
+      btns.forEach(function (btn) {
+        btn.classList.toggle(`is-active`, btn.getAttribute(`data-tl`) === tlKey);
+      });
+
+      const detailBox = document.getElementById(`timeline-detail-box`);
+      if (detailBox) {
+        detailBox.innerHTML = `
+          <p class="section-kicker" style="margin: 0;">${escapeHTML(data.cite)}</p>
+          <h4 style="font-family: var(--font-headline); font-weight: 700; font-size: var(--subhead-size); color: var(--primary); margin: 0;">${escapeHTML(data.title)}</h4>
+          <p style="margin: 0; font-weight: 600;">${escapeHTML(data.summary)}</p>
+          <p style="margin: 0; color: var(--on-surface-variant);">${escapeHTML(data.detail)}</p>
+        `;
+      }
+
+      if (!skipPersist) persistState();
+    }
+
+    /* ======================================================================
+       CALCULADORA / SIMULADOR ORIENTATIVO (HANDLERS DEDICADOS)
+       ====================================================================== */
+    function clampNum(val, min, max) {
+      const n = Number(val);
+      if (Number.isNaN(n)) return min;
+      return Math.min(max, Math.max(min, n));
+    }
+
+    function setSimInputsToDOM(sim) {
+      setVal(`sim-freq-range`, sim.freq);
+      setVal(`sim-freq-num`, sim.freq);
+      setVal(`sim-min-range`, sim.minutes);
+      setVal(`sim-min-num`, sim.minutes);
+      setVal(`sim-days-range`, sim.days);
+      setVal(`sim-days-num`, sim.days);
+      setVal(`sim-relax-range`, sim.relax);
+      setVal(`sim-relax-num`, sim.relax);
+      setVal(`sim-doubt-range`, sim.doubt);
+      setVal(`sim-doubt-num`, sim.doubt);
+    }
+
+    function syncFreqFromSlider(val) {
+      const v = clampNum(val, 1, 10);
+      appState.sim.freq = v;
+      setVal(`sim-freq-num`, v);
+      updateSimulatorCalculations();
+    }
+    function syncFreqFromNumber(val) {
+      const v = clampNum(val, 1, 10);
+      appState.sim.freq = v;
+      setVal(`sim-freq-range`, v);
+      updateSimulatorCalculations();
+    }
+
+    function syncMinFromSlider(val) {
+      const v = clampNum(val, 1, 20);
+      appState.sim.minutes = v;
+      setVal(`sim-min-num`, v);
+      updateSimulatorCalculations();
+    }
+    function syncMinFromNumber(val) {
+      const v = clampNum(val, 1, 20);
+      appState.sim.minutes = v;
+      setVal(`sim-min-range`, v);
+      updateSimulatorCalculations();
+    }
+
+    function syncDaysFromSlider(val) {
+      const v = clampNum(val, 1, 90);
+      appState.sim.days = v;
+      setVal(`sim-days-num`, v);
+      updateSimulatorCalculations();
+    }
+    function syncDaysFromNumber(val) {
+      const v = clampNum(val, 1, 90);
+      appState.sim.days = v;
+      setVal(`sim-days-range`, v);
+      updateSimulatorCalculations();
+    }
+
+    function syncRelaxFromSlider(val) {
+      const v = clampNum(val, 0, 100);
+      appState.sim.relax = v;
+      setVal(`sim-relax-num`, v);
+      updateSimulatorCalculations();
+    }
+    function syncRelaxFromNumber(val) {
+      const v = clampNum(val, 0, 100);
+      appState.sim.relax = v;
+      setVal(`sim-relax-range`, v);
+      updateSimulatorCalculations();
+    }
+
+    function syncDoubtFromSlider(val) {
+      const v = clampNum(val, 0, 100);
+      appState.sim.doubt = v;
+      setVal(`sim-doubt-num`, v);
+      updateSimulatorCalculations();
+    }
+    function syncDoubtFromNumber(val) {
+      const v = clampNum(val, 0, 100);
+      appState.sim.doubt = v;
+      setVal(`sim-doubt-range`, v);
+      updateSimulatorCalculations();
+    }
+
+    function updateSimulatorCalculations(skipPersist) {
+      const s = appState.sim;
+      const totalMinutes = s.freq * s.minutes * s.days;
+
+      // Modelo puramente orientativo pedagógico basado en las reglas de Cap. 2, 6, 8 y 9
+      const habitScore = Math.min(35, Math.round((s.days / 30) * 25 + Math.min(s.freq, 4) * 2.5));
+      const relaxScore = Math.round((s.relax / 100) * 35);
+      const clarityScore = Math.round(((100 - s.doubt) / 100) * 30);
+      const coherence = Math.max(0, Math.min(100, habitScore + relaxScore + clarityScore));
+
+      // Riesgo Coué (conflicto deseo vs imaginación / esfuerzo forzado + duda)
+      const tension = 100 - s.relax;
+      const couePressure = Math.round(s.doubt * 0.65 + tension * 0.35);
+
+      let coueLabel = `Bajo`;
+      let coueNote = `Baja fricción consciente; la relajación favorece el traslado (Cap. 6.6, p. 54).`;
+      let coueColor = `var(--secondary)`;
+      if (couePressure >= 60) {
+        coueLabel = `Alto`;
+        coueNote = `Conflicto elevado entre deseo e imaginación; riesgo de efecto inverso (Cap. 8.4, p. 66).`;
+        coueColor = `var(--error)`;
+      } else if (couePressure >= 35) {
+        coueLabel = `Moderado`;
+        coueNote = `Reduzca la tensión volitiva y evite dudar tras la sesión (Cap. 9.8, p. 71).`;
+        coueColor = `var(--warning)`;
+      }
+
+      setText(`sim-out-coherence`, `${coherence} / 100`);
+      setText(`sim-out-hours`, `Volumen orientativo: ${totalMinutes} min (${s.days} días)`);
+      const coueEl = document.getElementById(`sim-out-coue`);
+      if (coueEl) {
+        coueEl.textContent = coueLabel;
+        coueEl.style.color = coueColor;
+      }
+      setText(`sim-out-coue-note`, coueNote);
+
+      let diag = ``;
+      if (s.doubt >= 50) {
+        diag = `Atención pedagógica: un nivel alto de duda (${s.doubt} %) equivale en la obra a «desenterrar la semilla» tras sembrarla (Cap. 9.8, p. 71) y activa el riesgo de la Ley de Coué.`;
+      } else if (s.relax < 45) {
+        diag = `Atención pedagógica: practicar con poca relajación (${s.relax} %) incrementa el esfuerzo mental excesivo, que Murphy señala como una de las causas principales de fracaso (Cap. 8, pp. 65–67).`;
+      } else {
+        diag = `Configuración pedagógica alineada con el tratado: constancia de ${s.days} días, ${s.freq} veces/día en estado relajado (${s.relax} %), evitando coacción mental (Cap. 6.6–6.7, pp. 54–55).`;
+      }
+      setText(`sim-diagnosis`, diag);
+
+      renderSimChart(s.days);
+
+      if (!skipPersist) persistState();
+    }
+
+    function renderSimChart(userDays) {
+      const svg = document.getElementById(`sim-chart`);
+      if (!svg) return;
+
+      const refs = [
+        { label: `Su plan actual`, days: userDays, color: `var(--data-1)` },
+        { label: `Cantante (Cap. 2.8, p. 25)`, days: 7, color: `var(--data-context)` },
+        { label: `Baudoin pleito (Cap. 6.6, p. 55)`, days: 10, color: `var(--data-context)` },
+        { label: `Memoria / Broke (pp. 26, 56)`, days: 21, color: `var(--data-2)` },
+        { label: `Pulmón / Humor (pp. 26, 49)`, days: 30, color: `var(--data-context)` },
+        { label: `Piel Murphy (Cap. 3.3, p. 34)`, days: 90, color: `var(--data-3)` }
+      ];
+
+      const maxDays = 90;
+      const barStartX = 185;
+      const maxBarW = 285;
+      let html = ``;
+
+      refs.forEach(function (r, idx) {
+        const y = 14 + idx * 28;
+        const w = Math.max(4, Math.round((r.days / maxDays) * maxBarW));
+        html += `
+          <text x="175" y="${y + 13}" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="var(--on-surface)">${escapeHTML(r.label)}</text>
+          <rect x="${barStartX}" y="${y}" width="${maxBarW}" height="16" rx="2" fill="var(--surface-container)"/>
+          <rect x="${barStartX}" y="${y}" width="${w}" height="16" rx="2" fill="${r.color}"/>
+          <text x="${barStartX + w + 6}" y="${y + 13}" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="var(--on-surface)">${r.days} d</text>
+        `;
+      });
+
+      svg.innerHTML = html;
+    }
+
+    /* ======================================================================
+       EVALUACIÓN FINAL (8 PREGUNTAS SOBRE 10)
+       ====================================================================== */
+    function renderQuiz() {
+      const container = document.getElementById(`quiz-container`);
+      if (!container) return;
+
+      container.innerHTML = QUIZ_QUESTIONS.map(function (q) {
+        const selected = appState.quizAnswers[q.id] || ``;
+        const optionKeys = [`A`, `B`, `C`, `D`];
+        const optionsHTML = optionKeys.map(function (key) {
+          const checkedAttr = selected === key ? `checked` : ``;
+          return `
+            <label class="quiz-option" id="opt-${q.id}-${key}">
+              <input type="radio" name="quiz-${q.id}" value="${key}" ${checkedAttr} onchange="selectQuizAnswer('${q.id}', '${key}')">
+              <span><strong>${key}.</strong> ${escapeHTML(q.options[key])}</span>
+            </label>
+          `;
+        }).join(``);
+
+        return `
+          <article class="quiz-card" id="card-${q.id}">
+            <h3 class="quiz-q-title">${escapeHTML(q.prompt)}</h3>
+            <div class="quiz-options">${optionsHTML}</div>
+            <div class="quiz-feedback" id="fb-${q.id}">${escapeHTML(q.explanation)}</div>
+          </article>
+        `;
+      }).join(``);
+    }
+
+    function selectQuizAnswer(qId, optKey) {
+      appState.quizAnswers[qId] = optKey;
+      if (appState.quizSubmitted) {
+        gradeQuiz(true);
+      }
+      persistState();
+    }
+
+    function gradeQuiz(skipPersist) {
+      let correctCount = 0;
+      let answeredCount = 0;
+
+      QUIZ_QUESTIONS.forEach(function (q) {
+        const chosen = appState.quizAnswers[q.id];
+        if (chosen) answeredCount += 1;
+        const isRight = chosen === q.correct;
+        if (isRight) correctCount += 1;
+
+        [`A`, `B`, `C`, `D`].forEach(function (k) {
+          const optEl = document.getElementById(`opt-${q.id}-${k}`);
+          if (!optEl) return;
+          optEl.classList.remove(`is-correct`, `is-wrong`);
+          if (k === q.correct) {
+            optEl.classList.add(`is-correct`);
+          } else if (chosen === k && !isRight) {
+            optEl.classList.add(`is-wrong`);
+          }
+        });
+
+        const fbEl = document.getElementById(`fb-${q.id}`);
+        if (fbEl) {
+          fbEl.classList.add(`is-visible`);
+        }
+      });
+
+      appState.quizSubmitted = true;
+      const scoreOver10 = ((correctCount / QUIZ_QUESTIONS.length) * 10).toFixed(2).replace(`.`, `,`);
+      setText(`quiz-score-display`, `${scoreOver10} / 10`);
+      setText(
+        `quiz-score-detail`,
+        `${correctCount} aciertos de ${QUIZ_QUESTIONS.length} cuestiones (${answeredCount} respondidas).`
+      );
+
+      if (!skipPersist) persistState();
+    }
+
+    function resetQuiz(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Confirmar reinicio`;
+        return;
+      }
+      btn.dataset.armed = `false`;
+      btn.textContent = `Reiniciar test`;
+      appState.quizAnswers = {};
+      appState.quizSubmitted = false;
+      renderQuiz();
+      setText(`quiz-score-display`, `Pendiente de calificación`);
+      setText(`quiz-score-detail`, `Seleccione sus respuestas y pulse «Calificar evaluación».`);
+      persistState();
+    }
+
+    /* ======================================================================
+       UTILIDADES DOM
+       ====================================================================== */
+    function setText(id, txt) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = txt;
+    }
+
+    function setVal(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, `&amp;`)
+        .replace(/</g, `&lt;`)
+        .replace(/>/g, `&gt;`)
+        .replace(/"/g, `&quot;`)
+        .replace(/'/g, `&#39;`);
+    }
+
+    document.addEventListener(`DOMContentLoaded`, function () {
+      loadInitialState();
+    });
+  </script>
+</body>
+</html>

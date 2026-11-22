@@ -1,0 +1,2768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="narrative">
+  <meta name="design-style" content="briefing">
+  <title>El uso de HTML y CSS — Dossier Ejecutivo</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces: warm stone-white paper */
+      --background: #faf9f5;
+      --surface-container-low: #ffffff;
+      --surface-container: #f1efe8;
+      --surface-container-high: #e6e2d6;
+
+      /* Ink */
+      --on-surface: #17181a;
+      --on-surface-variant: #56585c;
+
+      /* Rules */
+      --outline: #17181a;
+      --outline-variant: #dedad0;
+
+      /* Accents */
+      --primary: #17181a;
+      --on-primary: #faf9f5;
+      --primary-container: #f2b705;
+      --on-primary-container: #17181a;
+      --secondary: #1f4e5f;
+      --on-secondary: #ffffff;
+      --secondary-container: #e3edf0;
+      --tertiary: #785008;
+      --tertiary-container: #f5e6c4;
+      --error: #b42318;
+      --on-error: #ffffff;
+      --error-container: #fbeae8;
+
+      /* Semantic */
+      --positive: #2b6e52;
+      --positive-container: #e4f0ea;
+      --warning: #785008;
+      --warning-container: #f5e6c4;
+      --focus: #1f4e5f;
+
+      /* Data series */
+      --data-1: #1f4e5f;
+      --data-2: #d99000;
+      --data-3: #2b6e52;
+      --data-4: #b84a39;
+      --data-context: #c4bfb2;
+
+      /* Fonts */
+      --font-headline: 'Source Serif 4', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-label: 'Geist Mono', monospace;
+
+      /* Type scale - generous executive reading */
+      --display-size: clamp(2.5rem, 1.5rem + 3.8vw, 4.1rem);
+      --headline-size: clamp(1.75rem, 1.25rem + 1.8vw, 2.35rem);
+      --subhead-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --body-size: clamp(1.125rem, 1.05rem + 0.25vw, 1.22rem);
+      --label-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.85rem);
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Shape & elevation */
+      --rounded: 0.375rem;
+      --rounded-lg: 0.625rem;
+      --rounded-full: 0.25rem;
+      --badge-radius: 3px;
+      --section-rule: 1.5px solid var(--outline);
+      --card-border: 1px solid var(--outline-variant);
+      --card-shadow: 0 2px 10px rgba(23, 24, 26, 0.05);
+      --card-shadow-hover: 0 6px 18px rgba(23, 24, 26, 0.08);
+      --heading-tracking: -0.02em;
+      --label-tracking: 0.08em;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Layout shell */
+    .page-shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: var(--space-xl) var(--space-lg) var(--space-3xl);
+      display: grid;
+      gap: var(--space-2xl);
+    }
+    .page-shell * { min-width: 0; }
+
+    /* Dossier bar */
+    .dossier-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .dossier-bar-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .dossier-pill {
+      background-color: var(--primary-container);
+      color: var(--on-primary-container);
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: var(--label-tracking);
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--badge-radius);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .dossier-meta {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-family: var(--font-headline);
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .hero-title {
+      font-size: var(--display-size);
+      font-weight: 600;
+      letter-spacing: var(--heading-tracking);
+      line-height: 1.08;
+      margin-bottom: var(--space-md);
+    }
+    .standfirst {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: var(--subhead-size);
+      line-height: 1.45;
+      color: var(--secondary);
+      max-width: 68ch;
+      margin: 0 0 var(--space-lg) 0;
+    }
+    .section-title {
+      font-size: var(--headline-size);
+      font-weight: 600;
+      letter-spacing: var(--heading-tracking);
+      line-height: 1.15;
+    }
+    .subhead {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      line-height: 1.25;
+      margin-bottom: var(--space-sm);
+    }
+    p {
+      margin: 0 0 var(--space-md) 0;
+      max-width: 68ch;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    /* Notice banner */
+    .notice-banner {
+      background-color: var(--tertiary-container);
+      border: 1px solid var(--tertiary);
+      border-left: 5px solid var(--tertiary);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      color: var(--on-surface);
+      box-shadow: var(--card-shadow);
+    }
+    .notice-banner strong {
+      color: var(--tertiary);
+    }
+
+    /* Figure cards & KPI strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .figure-card {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-md) var(--space-lg);
+      box-shadow: var(--card-shadow);
+      transition: box-shadow var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out);
+    }
+    .figure-card:hover {
+      box-shadow: var(--card-shadow-hover);
+    }
+    .figure-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: var(--label-tracking);
+      color: var(--on-surface-variant);
+      display: block;
+      margin-bottom: var(--space-xs);
+    }
+    .figure-value {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem);
+      font-variant-numeric: lining-nums tabular-nums;
+      color: var(--on-surface);
+      line-height: 1.15;
+    }
+    .figure-note {
+      font-size: 0.92rem;
+      color: var(--secondary);
+      margin-top: var(--space-xs);
+      font-weight: 500;
+    }
+
+    /* Progress bar */
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background-color: var(--surface-container);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      margin-top: var(--space-sm);
+      border: var(--card-border);
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background-color: var(--secondary);
+      transition: width var(--dur-long) var(--ease-out);
+    }
+
+    /* Buttons */
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: 0.6rem 1.15rem;
+      border-radius: var(--rounded);
+      font-family: var(--font-body);
+      font-size: 0.98rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-in-out),
+                  color var(--dur-micro) var(--ease-in-out),
+                  box-shadow var(--dur-micro) var(--ease-in-out);
+    }
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background-color: var(--secondary);
+    }
+    .btn-secondary {
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-secondary:hover {
+      background-color: var(--surface-container);
+    }
+    .btn-accent {
+      background-color: var(--secondary);
+      color: var(--on-secondary);
+    }
+    .btn-accent:hover {
+      background-color: var(--primary);
+    }
+    .btn-done {
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-done.is-completed {
+      background-color: var(--positive-container);
+      color: var(--positive);
+      border-color: var(--positive);
+    }
+    .btn-done:hover {
+      box-shadow: var(--card-shadow);
+    }
+    .btn-sm {
+      min-height: 44px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.9rem;
+    }
+
+    /* Tags & badges */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--badge-radius);
+      background-color: var(--tertiary-container);
+      color: var(--tertiary);
+    }
+    .tag-petrol {
+      background-color: var(--secondary-container);
+      color: var(--secondary);
+    }
+    .tag-positive {
+      background-color: var(--positive-container);
+      color: var(--positive);
+    }
+    .tag-missing {
+      background-color: var(--surface-container);
+      color: var(--on-surface-variant);
+      border: 1px dashed var(--outline-variant);
+    }
+    .index-num {
+      font-family: var(--font-label);
+      font-weight: 600;
+      font-size: var(--label-size);
+      color: var(--secondary);
+      background-color: var(--secondary-container);
+      padding: 0.25rem 0.55rem;
+      border-radius: var(--badge-radius);
+    }
+
+    /* Control toolbar: Search & Filter */
+    .control-panel {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-shadow);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--space-md);
+      align-items: end;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .field-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface);
+    }
+    .text-input, .select-input {
+      min-height: 44px;
+      padding: 0.65rem 0.9rem;
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      background-color: var(--surface-container-low);
+      color: var(--on-surface);
+      font-size: 1rem;
+      width: 100%;
+    }
+    .select-input {
+      padding-right: 2.2rem;
+    }
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+    .filter-pill {
+      min-height: 44px;
+      padding: 0.45rem 1rem;
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background-color: var(--surface-container);
+      color: var(--on-surface);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-in-out), color var(--dur-micro) var(--ease-in-out);
+    }
+    .filter-pill:hover {
+      background-color: var(--surface-container-high);
+    }
+    .filter-pill.is-active {
+      background-color: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+
+    /* Reference catalog grid */
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .catalog-card {
+      background-color: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .catalog-code {
+      font-family: var(--font-label);
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--secondary);
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      padding: 0.35rem 0.55rem;
+      border-radius: var(--badge-radius);
+      word-break: break-word;
+    }
+    .catalog-source {
+      font-family: var(--font-label);
+      font-size: 0.78rem;
+      color: var(--on-surface-variant);
+      border-top: 1px solid var(--outline-variant);
+      padding-top: var(--space-xs);
+    }
+
+    /* Interactive Timeline */
+    .timeline-wrapper {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-shadow);
+    }
+    .timeline-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(155px, 100%), 1fr));
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+    .timeline-btn {
+      min-height: 58px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      border: 1px solid var(--outline-variant);
+      background-color: var(--surface-container);
+      color: var(--on-surface);
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      transition: background-color var(--dur-micro) var(--ease-in-out), box-shadow var(--dur-micro) var(--ease-in-out);
+    }
+    .timeline-btn:hover {
+      background-color: var(--surface-container-high);
+    }
+    .timeline-btn.is-active {
+      background-color: var(--secondary);
+      color: var(--on-secondary);
+      border-color: var(--secondary);
+      box-shadow: var(--card-shadow);
+    }
+    .timeline-btn.is-active .timeline-step-num {
+      color: var(--primary-container);
+    }
+    .timeline-step-num {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      font-weight: 600;
+      color: var(--secondary);
+    }
+    .timeline-step-title {
+      font-weight: 600;
+      font-size: 0.94rem;
+      line-height: 1.25;
+    }
+    .timeline-detail {
+      background-color: var(--surface-container);
+      border-top: var(--section-rule);
+      border-radius: var(--rounded);
+      padding: var(--space-lg);
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    /* Narrative sections */
+    .narrative-section {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      box-shadow: var(--card-shadow);
+      display: grid;
+      gap: var(--space-lg);
+      transition: opacity var(--dur-short) var(--ease-out);
+    }
+    .narrative-section.is-dimmed {
+      opacity: 0.42;
+    }
+    .narrative-section.is-hidden-filter {
+      display: none;
+    }
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+      border-bottom: var(--section-rule);
+      padding-bottom: var(--space-md);
+    }
+    .section-header-main {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      max-width: 72ch;
+    }
+    .section-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: var(--space-xl);
+      align-items: start;
+    }
+
+    /* Editorial tables */
+    .table-wrap {
+      overflow-x: auto;
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      background-color: var(--surface-container-low);
+    }
+    table.dossier-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.98rem;
+      text-align: left;
+    }
+    .dossier-table thead th {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background-color: var(--surface-container);
+      color: var(--on-surface);
+      padding: 0.85rem 1rem;
+      border-bottom: var(--section-rule);
+    }
+    .dossier-table tbody td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--outline-variant);
+      vertical-align: top;
+    }
+    .dossier-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .num-cell {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* Code blocks */
+    .code-box {
+      background-color: var(--surface-container);
+      border: var(--card-border);
+      border-left: 4px solid var(--secondary);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      overflow-x: auto;
+    }
+    .code-box-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: var(--space-xs);
+      display: block;
+      font-weight: 600;
+    }
+    pre {
+      margin: 0;
+      font-family: var(--font-label);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: var(--on-surface);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Aside / methodology & checklists */
+    .aside-box {
+      background-color: var(--surface-container);
+      border-top: var(--section-rule);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .checklist-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: 0.65rem 0.85rem;
+    }
+    .checklist-item input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      margin-top: 0.15rem;
+      accent-color: var(--positive);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .checklist-item label {
+      cursor: pointer;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      flex: 1;
+    }
+    .source-citation {
+      background-color: var(--background);
+      border-top: 1px solid var(--outline-variant);
+      padding-top: var(--space-sm);
+      font-family: var(--font-label);
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* Visual schematic mockups inside sections 3, 4, 5 */
+    .wireframe-box {
+      background-color: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .wf-block {
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--badge-radius);
+      padding: 0.5rem 0.75rem;
+      font-family: var(--font-label);
+      font-size: 0.85rem;
+    }
+    .wf-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+    .wf-flex-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-sm);
+    }
+
+    /* Calculator & Dynamic Chart */
+    .calc-shell {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: var(--space-xl);
+      align-items: start;
+    }
+    .calc-controls {
+      background-color: var(--surface-container);
+      border-radius: var(--rounded);
+      border-top: var(--section-rule);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .slider-pair {
+      display: grid;
+      grid-template-columns: 1fr 105px;
+      gap: var(--space-md);
+      align-items: center;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--secondary);
+      cursor: pointer;
+      min-height: 44px;
+    }
+    .chart-card {
+      background-color: var(--surface-container-low);
+      border: var(--card-border);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--card-shadow);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .chart-canvas-wrap {
+      position: relative;
+      min-height: 360px;
+      height: 360px;
+      width: 100%;
+    }
+
+    /* Quiz section */
+    .quiz-list {
+      display: grid;
+      gap: var(--space-lg);
+    }
+    .quiz-card {
+      background-color: var(--background);
+      border: var(--card-border);
+      border-radius: var(--rounded);
+      padding: var(--space-lg);
+      display: grid;
+      gap: var(--space-md);
+    }
+    .quiz-options {
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      min-height: 44px;
+      padding: 0.7rem 0.9rem;
+      background-color: var(--surface-container-low);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      cursor: pointer;
+      transition: background-color var(--dur-micro) var(--ease-in-out);
+    }
+    .quiz-option:hover {
+      background-color: var(--surface-container);
+    }
+    .quiz-option input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 0.15rem;
+      accent-color: var(--secondary);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .quiz-option.is-correct {
+      background-color: var(--positive-container);
+      border-color: var(--positive);
+    }
+    .quiz-option.is-wrong {
+      background-color: var(--error-container);
+      border-color: var(--error);
+    }
+    .quiz-feedback {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--rounded);
+      font-size: 0.95rem;
+      display: none;
+    }
+    .quiz-feedback.is-visible {
+      display: block;
+    }
+    .quiz-feedback.ok {
+      background-color: var(--positive-container);
+      color: var(--positive);
+    }
+    .quiz-feedback.bad {
+      background-color: var(--error-container);
+      color: var(--error);
+    }
+    .quiz-score-panel {
+      background-color: var(--surface-container);
+      border-top: var(--section-rule);
+      border-radius: var(--rounded);
+      padding: var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .section-grid,
+      .timeline-detail,
+      .calc-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .page-shell {
+        padding: var(--space-md);
+        gap: var(--space-xl);
+      }
+      .narrative-section {
+        padding: var(--space-lg);
+      }
+      .search-row,
+      .slider-pair,
+      .wf-grid-3,
+      .wf-flex-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+
+    <!-- MASTHEAD & EXECUTIVE THESIS -->
+    <header>
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="dossier-pill">DOSSIER EJECUTIVO</span>
+          <span class="dossier-meta">HTML5 &amp; CSS3 · DESDE CERO A PRODUCCIÓN · 18 NOV 2026</span>
+        </div>
+        <span class="dossier-meta">AUDIENCIA: EJECUTIVOS · PROFESIONALES · POST-GRADO</span>
+      </div>
+
+      <h1 class="hero-title">El uso de HTML y CSS</h1>
+      <p class="standfirst">
+        Cómo transformar una capacidad digital latente —ya disponible en cualquier ordenador convencional mediante un editor estándar y archivos de texto— en plataformas web estructuradas, navegables y publicadas en Internet sin dependencias técnicas ocultas.
+      </p>
+
+      <div class="notice-banner" role="note" aria-label="Aviso de carácter orientativo">
+        <i data-lucide="info" aria-hidden="true" style="flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <strong>Aviso: El contenido y los cálculos de esta plataforma son de carácter orientativo.</strong>
+          Todo el fundamento técnico de este dossier procede estrictamente de la transcripción del vídeo tutorial
+          <em>«CÓMO HACER UNA PÁGINA WEB EN HTML Y CSS VISUAL STUDIO CODE DESDE CERO»</em> (canal Byspel - Iván L.).
+          Cuando un dato numérico, tarifa comercial o detalle técnico no figure en dicha fuente, se indicará expresamente como <strong>«no consta»</strong>.
+        </div>
+      </div>
+    </header>
+
+    <!-- KPI OVERVIEW -->
+    <section aria-label="Indicadores clave del activo digital">
+      <div class="kpi-grid">
+        <div class="figure-card">
+          <span class="figure-label">Arquitectura del sitio base</span>
+          <div class="figure-value">5 páginas</div>
+          <div class="figure-note">index, reviews, comparativas, tutoriales y contacto (.html)</div>
+        </div>
+        <div class="figure-card">
+          <span class="figure-label">Etapas de despliegue</span>
+          <div class="figure-value">6 fases</div>
+          <div class="figure-note">De documento .txt en local a GitHub Pages (rama main)</div>
+        </div>
+        <div class="figure-card">
+          <span class="figure-label">Editores citados en fuente</span>
+          <div class="figure-value">3 opciones</div>
+          <div class="figure-note">Bloc de notas (preinstalado), Sublime Text y VS Code</div>
+        </div>
+        <div class="figure-card">
+          <span class="figure-label">Avance de lectura y práctica</span>
+          <div class="figure-value" id="kpi-progress-text">0 / 6</div>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="kpi-progress-bar"></div>
+          </div>
+          <div class="figure-note" id="kpi-tasks-text">0 de 18 hitos marcados</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEARCH & FILTER EXPLORER -->
+    <section class="control-panel" aria-label="Buscador y filtros por categoría">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="index-num">EXPLORADOR</span>
+          <h2 class="subhead" style="margin:0;">Buscador interactivo de etiquetas, conceptos y secciones</h2>
+        </div>
+        <span class="dossier-meta" id="filter-status-meta">Mostrando todas las categorías</span>
+      </div>
+
+      <div class="search-row">
+        <div class="field-group">
+          <label class="field-label" for="search-input">Buscar etiqueta HTML, propiedad CSS, concepto o sección</label>
+          <input type="search" id="search-input" class="text-input" placeholder="Ej.: iframe, grid, multipart, main, hover, GitHub..." oninput="applySearchAndFilter()">
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="resetSearchAndFilter()">
+          <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+          Limpiar filtros
+        </button>
+      </div>
+
+      <div class="filter-pills" role="group" aria-label="Filtrar contenido por categoría">
+        <button type="button" class="filter-pill is-active" data-cat="all" aria-pressed="true" onclick="setCategoryFilter('all', this)">Todas</button>
+        <button type="button" class="filter-pill" data-cat="Estructura" aria-pressed="false" onclick="setCategoryFilter('Estructura', this)">Estructura</button>
+        <button type="button" class="filter-pill" data-cat="Estilo" aria-pressed="false" onclick="setCategoryFilter('Estilo', this)">Estilo</button>
+        <button type="button" class="filter-pill" data-cat="Multimedia" aria-pressed="false" onclick="setCategoryFilter('Multimedia', this)">Multimedia</button>
+        <button type="button" class="filter-pill" data-cat="Despliegue" aria-pressed="false" onclick="setCategoryFilter('Despliegue', this)">Despliegue</button>
+      </div>
+
+      <div id="catalog-results" class="catalog-grid" aria-live="polite"></div>
+    </section>
+
+    <!-- INTERACTIVE TIMELINE -->
+    <section class="timeline-wrapper" aria-label="Línea de tiempo interactiva del flujo de desarrollo">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="index-num">HOJA DE RUTA</span>
+          <h2 class="subhead" style="margin:0;">Línea de tiempo interactiva: de cero a la publicación en Internet</h2>
+        </div>
+        <span class="dossier-meta">Pulse una etapa para inspeccionar entregables</span>
+      </div>
+
+      <div class="timeline-steps" id="timeline-steps-bar" role="tablist" aria-label="Pasos del flujo de trabajo"></div>
+      <div class="timeline-detail" id="timeline-detail-panel" aria-live="polite"></div>
+    </section>
+
+    <!-- SECTION 1 -->
+    <article class="narrative-section" id="sec-1" data-category="Estructura" data-keywords="carpeta pagina web index.html txt extension vista bloc de notas sublime text visual studio code vsc ver codigo fuente">
+      <div class="section-header">
+        <div class="section-header-main">
+          <div class="section-meta-row">
+            <span class="index-num">01</span>
+            <span class="tag tag-petrol">Estructura</span>
+            <span class="tag tag-positive" id="badge-sec-1" style="display:none;">Completada</span>
+          </div>
+          <h2 class="section-title">Preparación del Entorno y Archivo Principal</h2>
+        </div>
+        <button type="button" class="btn btn-done" id="btn-done-sec-1" onclick="toggleSectionDone('sec-1')">
+          <i data-lucide="check-circle" aria-hidden="true"></i>
+          Marcar como hecho
+        </button>
+      </div>
+
+      <p>
+        Todo equipo informático convencional dispone ya de la infraestructura elemental para iniciar un activo web propio sin necesidad de contratar software especializado. En el flujo documentado, el punto de partida consiste en crear una carpeta dedicada en el ordenador (denominada en el ejemplo <em>página web</em> o <em>mi página web</em>) y generar dentro un documento de texto plano mediante clic derecho &rarr; Nuevo &rarr; Documento de texto.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3 class="subhead">Conversión de extensión e interpretación del navegador</h3>
+          <p>
+            Para que el sistema operativo y el navegador reconozcan el archivo como página web, es imprescindible activar en el explorador la opción <strong>Vista &rarr; Extensiones de nombre de archivo</strong>, lo que revela la terminación <code>.txt</code> y permite renombrar el fichero a <code>index.html</code>. Al confirmar el cambio de extensión, el navegador pasa a abrir el documento con doble clic porque HTML es el lenguaje que interpreta directamente.
+          </p>
+          <p>
+            Asimismo, haciendo clic derecho dentro de la página abierta en el navegador y seleccionando <em>Ver código fuente de la página</em>, cualquier responsable o estudiante puede auditar en tiempo real las instrucciones HTML inmersas en el documento.
+          </p>
+
+          <div class="table-wrap" style="margin-top:var(--space-md);">
+            <table class="dossier-table">
+              <thead>
+                <tr>
+                  <th>Editor en fuente</th>
+                  <th>Disponibilidad</th>
+                  <th>Valor operativo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Bloc de notas</strong></td>
+                  <td>Ya instalado en Windows</td>
+                  <td>Funcional para ediciones iniciales; incómodo porque no colorea ni renderiza las etiquetas.</td>
+                </tr>
+                <tr>
+                  <td><strong>Sublime Text</strong></td>
+                  <td>Descargable en <code>sublimetext.com</code> (coste: <em>no consta</em>)</td>
+                  <td>Colorea cada etiqueta HTML; si falta un símbolo de cierre <code>&gt;</code>, el código inferior deja de colorearse y delata el fallo al instante.</td>
+                </tr>
+                <tr>
+                  <td><strong>Visual Studio Code</strong></td>
+                  <td>Instalación rápida (tarifa/licencia: <em>no consta</em>)</td>
+                  <td>Permite abrir la carpeta completa (<em>File &rarr; Open Folder</em>), gestionar múltiples archivos en el panel lateral y acelerar el desarrollo del sitio.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <aside class="aside-box">
+          <h3 class="subhead">Checklist operativa de la fase 01</h3>
+          <ul class="checklist-list">
+            <li class="checklist-item">
+              <input type="checkbox" id="task-1-1" onchange="toggleTask('task-1-1')">
+              <label for="task-1-1">Crear la carpeta raíz del proyecto y habilitar <em>Extensiones de nombre de archivo</em>.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-1-2" onchange="toggleTask('task-1-2')">
+              <label for="task-1-2">Convertir el documento de texto <code>.txt</code> en <code>index.html</code> y comprobar apertura en navegador.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-1-3" onchange="toggleTask('task-1-3')">
+              <label for="task-1-3">Abrir la carpeta en Visual Studio Code mediante <em>File &rarr; Open Folder</em> (o Sublime Text).</label>
+            </li>
+          </ul>
+          <div class="code-box">
+            <span class="code-box-label">Estructura inicial en disco</span>
+            <pre>página web/
+└── index.html   (convertido desde .txt)</pre>
+          </div>
+        </aside>
+      </div>
+
+      <div class="source-citation">
+        <i data-lucide="book-open" aria-hidden="true"></i>
+        <span><strong>Procedencia:</strong> Vídeo «CÓMO HACER UNA PÁGINA WEB EN HTML Y CSS VISUAL STUDIO CODE DESDE CERO» (Byspel - Iván L.), pasajes «Creación de carpeta e index.html con Bloc de notas», «Instalación de Sublime Text» e «Inicio en Visual Studio Code».</span>
+      </div>
+    </article>
+
+    <!-- SECTION 2 -->
+    <article class="narrative-section" id="sec-2" data-category="Estructura" data-keywords="doctype html head title body h1 h2 h3 h4 h5 h6 p br etiqueta vacia img src alt width height a href target blank">
+      <div class="section-header">
+        <div class="section-header-main">
+          <div class="section-meta-row">
+            <span class="index-num">02</span>
+            <span class="tag tag-petrol">Estructura</span>
+            <span class="tag tag-positive" id="badge-sec-2" style="display:none;">Completada</span>
+          </div>
+          <h2 class="section-title">Estructura Arquitectónica en HTML</h2>
+        </div>
+        <button type="button" class="btn btn-done" id="btn-done-sec-2" onclick="toggleSectionDone('sec-2')">
+          <i data-lucide="check-circle" aria-hidden="true"></i>
+          Marcar como hecho
+        </button>
+      </div>
+
+      <p>
+        Los elementos en HTML se articulan mediante una arquitectura explícita: una etiqueta de apertura, un contenido y una etiqueta de cierre. El esqueleto arranca con la declaración <code>&lt;!DOCTYPE html&gt;</code> para indicar al navegador el tipo de documento, seguida de la etiqueta principal <code>&lt;html&gt;</code>, que encapsula todo el árbol de etiquetas.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3 class="subhead">Jerarquía de documento, buenas prácticas y medios básicos</h3>
+          <p>
+            Dentro de <code>&lt;html&gt;</code> conviven dos bloques diferenciados: el encabezado técnico <code>&lt;head&gt;</code> —donde reside <code>&lt;title&gt;</code> para definir el texto de la pestaña del navegador— y el cuerpo <code>&lt;body&gt;</code>, único ámbito cuyo contenido (títulos, párrafos, imágenes, vídeos y enlaces) se muestra visualmente en pantalla.
+          </p>
+          <p>
+            Para la jerarquía textual se emplean encabezados desde <code>&lt;h1&gt;</code> (máxima relevancia y tamaño) hasta <code>&lt;h6&gt;</code> (mínima jerarquía), junto con párrafos <code>&lt;p&gt;</code>. Existen también <strong>etiquetas vacías</strong> sin contenido interno ni etiqueta de cierre, como <code>&lt;br&gt;</code>, destinadas a ejecutar una acción concreta como el salto de línea.
+          </p>
+          <p>
+            <strong>Reglas de rigor señaladas en la fuente:</strong> aunque el navegador tolera ciertas omisiones de cierre en páginas elementales y no distingue entre mayúsculas y minúsculas (<code>&lt;P&gt;</code> y <code>&lt;p&gt;</code> funcionan), el estándar recomienda escribir todas las etiquetas en <strong>minúsculas</strong> y <strong>cerrarlas siempre</strong> para evitar «errores extraños» cuando conviven imágenes, enlaces, vídeos y estilos.
+          </p>
+          <p>
+            La inserción de imágenes con <code>&lt;img&gt;</code> admite rutas locales en carpeta dedicada (<code>img/imagen1.jpg</code>) o direcciones externas completas; la fuente advierte que las rutas externas dejan de verse si el servidor de origen retira el archivo. Se acompaña de <code>width</code> y <code>height</code> (ejemplo citado: <code>300</code> por <code>200</code>) y del atributo descriptivo <code>alt</code>. Para la navegación se emplea <code>&lt;a href="..."&gt;</code>, opcionalmente con atributo <code>target</code> en valor <code>_blank</code> (nueva pestaña) y <code>title="..."</code> (descripción emergente tipo <em>tooltip</em>).
+          </p>
+        </div>
+
+        <aside class="aside-box">
+          <h3 class="subhead">Plantilla base y checklist fase 02</h3>
+          <div class="code-box">
+            <span class="code-box-label">Esqueleto arquitectónico mínimo</span>
+            <pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Bienvenido&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Bienvenido&lt;/h1&gt;
+    &lt;p&gt;Mi primera página web&lt;br&gt;Actualizada&lt;/p&gt;
+    &lt;img src="img/imagen1.jpg" width="300" height="200" alt="Imagen principal"&gt;
+    &lt;a href="reviews.html" title="Ver reseñas"&gt;Reseñas&lt;/a&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+          </div>
+          <ul class="checklist-list">
+            <li class="checklist-item">
+              <input type="checkbox" id="task-2-1" onchange="toggleTask('task-2-1')">
+              <label for="task-2-1">Definir <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;title&gt;</code> y <code>&lt;body&gt;</code> en minúsculas.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-2-2" onchange="toggleTask('task-2-2')">
+              <label for="task-2-2">Estructurar jerarquía <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code>, párrafos <code>&lt;p&gt;</code> y salto de línea <code>&lt;br&gt;</code>.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-2-3" onchange="toggleTask('task-2-3')">
+              <label for="task-2-3">Incorporar <code>&lt;img src="..." alt="..."&gt;</code> desde carpeta local <code>img/</code> y enlaces <code>&lt;a href="..."&gt;</code>.</label>
+            </li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="source-citation">
+        <i data-lucide="book-open" aria-hidden="true"></i>
+        <span><strong>Procedencia:</strong> Vídeo citado (Byspel - Iván L.), pasajes «Etiquetas básicas DOCTYPE/head/body», «Elementos, variaciones H1-H6, etiquetas vacías BR y minúsculas» e «Inclusión de imágenes locales/externas y dimensiones».</span>
+      </div>
+    </article>
+
+    <!-- SECTION 3 -->
+    <article class="narrative-section" id="sec-3" data-category="Estructura" data-keywords="header nav ul li main footer navegacion multipagina index.html reviews.html comparativas.html tutoriales.html contacto.html">
+      <div class="section-header">
+        <div class="section-header-main">
+          <div class="section-meta-row">
+            <span class="index-num">03</span>
+            <span class="tag tag-petrol">Estructura</span>
+            <span class="tag tag-positive" id="badge-sec-3" style="display:none;">Completada</span>
+          </div>
+          <h2 class="section-title">Navegación y Contenidos Estructurados</h2>
+        </div>
+        <button type="button" class="btn btn-done" id="btn-done-sec-3" onclick="toggleSectionDone('sec-3')">
+          <i data-lucide="check-circle" aria-hidden="true"></i>
+          Marcar como hecho
+        </button>
+      </div>
+
+      <p>
+        El salto desde una página aislada hacia un portal corporativo o académico completo se produce al adoptar etiquetas semánticas de distribución y una arquitectura multipágina coherente. El proyecto modelo desarrollado en la fuente —un sitio sobre <em>Tecnología y Gadgets</em>— organiza cada pantalla en tres grandes bloques dentro de <code>&lt;body&gt;</code>:
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <div class="table-wrap" style="margin-bottom:var(--space-md);">
+            <table class="dossier-table">
+              <thead>
+                <tr>
+                  <th>Bloque semántico</th>
+                  <th>Función en el sitio</th>
+                  <th>Etiquetas asociadas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>&lt;header&gt;</code></td>
+                  <td>Cabecera del portal con el título principal y el menú de navegación.</td>
+                  <td><code>&lt;h1&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;li&gt;</code>, <code>&lt;a&gt;</code></td>
+                </tr>
+                <tr>
+                  <td><code>&lt;main&gt;</code></td>
+                  <td>Contenido diferencial y central de cada sección (bienvenida, tablas, vídeos, formulario).</td>
+                  <td><code>&lt;h2&gt;</code>, <code>&lt;p&gt;</code>, módulos específicos</td>
+                </tr>
+                <tr>
+                  <td><code>&lt;footer&gt;</code></td>
+                  <td>Banda inferior para información institucional o aviso legal («Todos los derechos reservados»).</td>
+                  <td><code>&lt;p&gt;</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            <strong>Arquitectura de 5 páginas interconectadas:</strong> manteniendo el mismo encabezado y pie en todas ellas y variando únicamente el interior de <code>&lt;main&gt;</code>, se crean cinco ficheros en la raíz: <code>index.html</code> (página de inicio, con el logotipo de la carpeta <code>img/</code>), <code>reviews.html</code>, <code>comparativas.html</code>, <code>tutoriales.html</code> y <code>contacto.html</code>. La fuente recalca una regla crítica de integridad: los nombres escritos en el atributo <code>href</code> deben coincidir exactamente con los nombres reales de los ficheros en la carpeta; de lo contrario, el enlace falla.
+          </p>
+        </div>
+
+        <aside class="aside-box">
+          <h3 class="subhead">Esquema multipágina y checklist fase 03</h3>
+          <div class="wireframe-box" aria-label="Diagrama esquemático de la estructura multipágina">
+            <div class="wf-block"><strong>&lt;header&gt;</strong> — Título «Tecnología y Gadgets» + <code>&lt;nav&gt;&lt;ul&gt;&lt;li&gt;&lt;a&gt;</code></div>
+            <div class="wf-block" style="background-color:var(--secondary-container);">
+              <strong>&lt;main&gt;</strong> (Cambia según archivo)<br>
+              1. <code>index.html</code> · 2. <code>reviews.html</code> · 3. <code>comparativas.html</code> · 4. <code>tutoriales.html</code> · 5. <code>contacto.html</code>
+            </div>
+            <div class="wf-block"><strong>&lt;footer&gt;</strong> — Todos los derechos reservados</div>
+          </div>
+
+          <ul class="checklist-list">
+            <li class="checklist-item">
+              <input type="checkbox" id="task-3-1" onchange="toggleTask('task-3-1')">
+              <label for="task-3-1">Implementar <code>&lt;header&gt;</code>, <code>&lt;nav&gt;&lt;ul&gt;&lt;li&gt;</code>, <code>&lt;main&gt;</code> y <code>&lt;footer&gt;</code>.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-3-2" onchange="toggleTask('task-3-2')">
+              <label for="task-3-2">Crear <code>reviews.html</code>, <code>comparativas.html</code>, <code>tutoriales.html</code> y <code>contacto.html</code>.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-3-3" onchange="toggleTask('task-3-3')">
+              <label for="task-3-3">Verificar coincidencia exacta entre los <code>href</code> del menú y los nombres de archivo.</label>
+            </li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="source-citation">
+        <i data-lucide="book-open" aria-hidden="true"></i>
+        <span><strong>Procedencia:</strong> Vídeo citado (Byspel - Iván L.), apartado «Implementación de navegación entre páginas: header, nav, main, footer y archivos reviews, comparativas, tutoriales y contacto».</span>
+      </div>
+    </article>
+
+    <!-- SECTION 4 -->
+    <article class="narrative-section" id="sec-4" data-category="Estilo" data-keywords="css style.css link rel stylesheet background-color background-image cover no-repeat center hover flexbox css grid 1fr tarjetas google fonts icons boton flotante fixed">
+      <div class="section-header">
+        <div class="section-header-main">
+          <div class="section-meta-row">
+            <span class="index-num">04</span>
+            <span class="tag">Estilo</span>
+            <span class="tag tag-positive" id="badge-sec-4" style="display:none;">Completada</span>
+          </div>
+          <h2 class="section-title">Diseño y Estilos Visuales con CSS</h2>
+        </div>
+        <button type="button" class="btn btn-done" id="btn-done-sec-4" onclick="toggleSectionDone('sec-4')">
+          <i data-lucide="check-circle" aria-hidden="true"></i>
+          Marcar como hecho
+        </button>
+      </div>
+
+      <p>
+        La eficiencia operativa de una plataforma web radica en separar el contenido (HTML) de la presentación visual (CSS). Aunque es posible incrustar estilos internos mediante la etiqueta <code>&lt;style&gt;</code> dentro de un HTML, la fuente subraya que dichos estilos no son reutilizables. La solución estandarizada consiste en crear la carpeta <code>css/</code> con el fichero <code>style.css</code> y vincularlo mediante <code>&lt;link rel="stylesheet" href="css/style.css"&gt;</code> en el <code>&lt;head&gt;</code> de cada una de las páginas del sitio.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3 class="subhead">Sistema visual centralizado, Flexbox y CSS Grid</h3>
+          <ul style="margin:0 0 var(--space-md) 0; padding-left:1.3rem;">
+            <li><strong>Base tipográfica y fondos:</strong> en <code>body</code> se fijan la familia tipográfica, color de fondo (<code>background-color</code>), color de texto y eliminación de márgenes predeterminados. Para imágenes de fondo se utiliza <code>background-image: url(...)</code> combinada con <code>background-repeat: no-repeat</code>, <code>background-position: center</code> y <code>background-size: cover</code>.</li>
+            <li><strong>Navegación e interactividad:</strong> eliminación de viñetas (<code>list-style-type: none</code>), disposición horizontal en línea con márgenes laterales, supresión de subrayados y pseudoclase <code>:hover</code> para cambiar de color al pasar el ratón.</li>
+            <li><strong>Iconografía gratuita:</strong> inserción de iconos mediante Google Fonts Icons (<code>fonts.google.com/icons</code>), enlazando su hoja CSS en el <code>&lt;head&gt;</code> y añadiendo el código del icono a los ítems del menú (<em>Inicio</em>, <em>Reviews</em>, <em>Comparativas</em>, <em>Tutoriales</em>, <em>Contacto</em>).</li>
+            <li><strong>Maquetación en Flexbox y CSS Grid:</strong> <code>display: flex</code> con <code>gap: 20px</code> organiza columnas paralelas (formulario y mapa en <code>contacto.html</code>); <code>display: grid</code> con <code>grid-template-columns: repeat(3, 1fr)</code>, <code>gap: 10px</code> y <code>max-width: 900px</code> estructura las 4 tarjetas de producto de <code>comparativas.html</code>.</li>
+            <li><strong>Botón flotante de contacto:</strong> enlace con clase <code>.boton-flotante</code> e icono PNG de WhatsApp fijado en la esquina inferior derecha mediante <code>position: fixed</code>, <code>bottom: 20px</code>, <code>right: 20px</code>, dimensiones <code>50px × 50px</code>, <code>border-radius: 50%</code>, sombra y <code>z-index: 100</code>.</li>
+          </ul>
+
+          <div class="wireframe-box" aria-label="Vista esquemática de CSS Grid de tarjetas de la fuente">
+            <span class="code-box-label">Esquema visual: .card-container (CSS Grid · 3 columnas 1fr · gap 10px)</span>
+            <div class="wf-grid-3">
+              <div class="wf-block"><strong>Producto 1</strong><br>Descripción · Precio · Lista <code>ul</code> · Botón Comprar</div>
+              <div class="wf-block"><strong>Producto 2</strong><br>Descripción · Precio · Lista <code>ul</code> · Botón Comprar</div>
+              <div class="wf-block"><strong>Producto 3</strong><br>Descripción · Precio · Lista <code>ul</code> · Botón Comprar</div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="aside-box">
+          <h3 class="subhead">Sintaxis clave y checklist fase 04</h3>
+          <div class="code-box">
+            <span class="code-box-label">css/style.css — Reglas destacadas</span>
+            <pre>/* Enlace en &lt;head&gt; de las 5 páginas */
+&lt;link rel="stylesheet" href="css/style.css"&gt;
+
+/* Grid de tarjetas en comparativas.html */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 900px;
+  margin: 0 auto 50px auto;
+}
+.card {
+  border-radius: 8px;
+  padding: 20px;
+}</pre>
+          </div>
+          <ul class="checklist-list">
+            <li class="checklist-item">
+              <input type="checkbox" id="task-4-1" onchange="toggleTask('task-4-1')">
+              <label for="task-4-1">Crear <code>css/style.css</code> y enlazarlo mediante <code>&lt;link&gt;</code> en las 5 páginas HTML.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-4-2" onchange="toggleTask('task-4-2')">
+              <label for="task-4-2">Aplicar estilos de cabecera, navegación con <code>:hover</code>, pie fijo e iconos de Google Fonts.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-4-3" onchange="toggleTask('task-4-3')">
+              <label for="task-4-3">Maquetar tarjetas de producto con CSS Grid (<code>1fr</code>) y botón flotante <code>position: fixed</code>.</label>
+            </li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="source-citation">
+        <i data-lucide="book-open" aria-hidden="true"></i>
+        <span><strong>Procedencia:</strong> Vídeo citado (Byspel - Iván L.), pasajes «Enlace de style.css y estilos base», «Imagen de fondo», «Iconos de Google Fonts», «Botón flotante» y «Tarjetas de contenido con CSS Grid».</span>
+      </div>
+    </article>
+
+    <!-- SECTION 5 -->
+    <article class="narrative-section" id="sec-5" data-category="Multimedia" data-keywords="table thead tbody tr th td iframe youtube video controls mp4 pdf google docs viewer form post multipart/form-data input email file select textarea google maps flexbox">
+      <div class="section-header">
+        <div class="section-header-main">
+          <div class="section-meta-row">
+            <span class="index-num">05</span>
+            <span class="tag tag-petrol">Multimedia</span>
+            <span class="tag tag-positive" id="badge-sec-5" style="display:none;">Completada</span>
+          </div>
+          <h2 class="section-title">Componentes Avanzados e Integraciones</h2>
+        </div>
+        <button type="button" class="btn btn-done" id="btn-done-sec-5" onclick="toggleSectionDone('sec-5')">
+          <i data-lucide="check-circle" aria-hidden="true"></i>
+          Marcar como hecho
+        </button>
+      </div>
+
+      <p>
+        Con la estructura multipágina y el sistema visual operativo, cada sección del sitio adquiere capacidades funcionales propias de un portal corporativo: catálogos tabulares, reproducción audiovisual nativa o embebida, visores documentales PDF y captura de solicitudes con geolocalización.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <div class="table-wrap" style="margin-bottom:var(--space-md);">
+            <table class="dossier-table">
+              <thead>
+                <tr>
+                  <th>Componente / Página</th>
+                  <th>Etiquetas y atributos clave en fuente</th>
+                  <th>Detalles de estilizado y conducta</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Tablas de reseñas</strong><br><code>reviews.html</code></td>
+                  <td><code>&lt;table&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;th&gt;</code>, <code>&lt;td&gt;</code></td>
+                  <td>4 columnas (Producto, Descripción, Puntuación ej. <code>9 de 10</code>, Más información); clase <code>.product-img</code> y enlace-botón <code>.review-link</code>; fila con <code>:hover</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>Vídeos</strong><br><code>tutoriales.html</code></td>
+                  <td><code>&lt;iframe&gt;</code> (YouTube Incorporar) y <code>&lt;video controls&gt;</code> con <code>type="video/mp4"</code></td>
+                  <td>Carpeta <code>videos/vid1.mp4</code>; texto de respaldo si el navegador no soporta la etiqueta; clase <code>.video-container</code> (<code>max-width: 800px</code>).</td>
+                </tr>
+                <tr>
+                  <td><strong>Documentos PDF</strong><br><code>reviews.html</code></td>
+                  <td><code>&lt;iframe src="archivos/..."&gt;</code>, enlace con atributo <code>target</code> (<code>_blank</code>) o Google Docs Viewer</td>
+                  <td>Carpeta <code>archivos/</code> (ej. <code>Redmi 9a</code>); el visor de Google Docs añade controles de zoom, paginación, impresión y descarga.</td>
+                </tr>
+                <tr>
+                  <td><strong>Formulario</strong><br><code>contacto.html</code></td>
+                  <td><code>&lt;form method="post" enctype="multipart/form-data"&gt;</code>, <code>label</code>, <code>input</code> (<code>text</code>, <code>email</code>, <code>file</code>, <code>submit</code>), <code>select</code>, <code>textarea</code></td>
+                  <td><code>enctype="multipart/form-data"</code> es obligatorio al usar <code>type="file"</code>; validación nativa con <code>required</code> y <code>type="email"</code>; <code>textarea</code> de <code>33</code> cols × <code>5</code> filas. Lenguaje de servidor tras el envío: <em>no consta</em> ejemplo concreto.</td>
+                </tr>
+                <tr>
+                  <td><strong>Google Maps + Flexbox</strong><br><code>contacto.html</code></td>
+                  <td>Contenedor <code>.contenedor</code> con 2 columnas y etiqueta <code>&lt;iframe&gt;</code> de Google Maps</td>
+                  <td><code>display: flex</code> y <code>gap: 20px</code> sitúan el formulario (<code>max-width: 400px</code>) y el mapa (ej. Torre Eiffel o sede) lado a lado al <code>100%</code> de cada columna.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="wireframe-box" aria-label="Esquema Flexbox de contacto.html">
+            <span class="code-box-label">Esquema visual: .contenedor en contacto.html (display: flex · gap 20px)</span>
+            <div class="wf-flex-2">
+              <div class="wf-block"><strong>Columna 1: &lt;form&gt;</strong><br>Nombre · Solicitud (<code>select</code>) · Email · Archivo (<code>file</code>) · Descripción (<code>textarea</code>) · Enviar</div>
+              <div class="wf-block" style="background-color:var(--secondary-container);"><strong>Columna 2: Google Maps</strong><br><code>&lt;iframe&gt;</code> integrado al 100% del ancho de columna</div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="aside-box">
+          <h3 class="subhead">Formulario con adjuntos y checklist fase 05</h3>
+          <div class="code-box">
+            <span class="code-box-label">contacto.html — Estructura del formulario</span>
+            <pre>&lt;form action="" method="post" enctype="multipart/form-data"&gt;
+  &lt;label for="nombre"&gt;Nombre&lt;/label&gt;
+  &lt;input type="text" id="nombre" name="nombre" required&gt;
+
+  &lt;label for="tipo"&gt;Tipo de solicitud&lt;/label&gt;
+  &lt;select id="tipo"&gt;
+    &lt;option value="soporte"&gt;Soporte&lt;/option&gt;
+    &lt;option value="ventas"&gt;Ventas&lt;/option&gt;
+    &lt;option value="cotizacion"&gt;Cotización&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;input type="email" required&gt;
+  &lt;input type="file" required&gt;
+  &lt;textarea cols="33" rows="5"&gt;&lt;/textarea&gt;
+  &lt;input type="submit" value="Enviar solicitud"&gt;
+&lt;/form&gt;</pre>
+          </div>
+          <ul class="checklist-list">
+            <li class="checklist-item">
+              <input type="checkbox" id="task-5-1" onchange="toggleTask('task-5-1')">
+              <label for="task-5-1">Construir tabla de reseñas (<code>thead</code>/<code>tbody</code>) y visor PDF en <code>reviews.html</code>.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-5-2" onchange="toggleTask('task-5-2')">
+              <label for="task-5-2">Integrar vídeo de YouTube (<code>&lt;iframe&gt;</code>) y vídeo MP4 local (<code>&lt;video controls&gt;</code>).</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-5-3" onchange="toggleTask('task-5-3')">
+              <label for="task-5-3">Montar formulario con <code>multipart/form-data</code> y mapa embebido en dos columnas Flexbox.</label>
+            </li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="source-citation">
+        <i data-lucide="book-open" aria-hidden="true"></i>
+        <span><strong>Procedencia:</strong> Vídeo citado (Byspel - Iván L.), apartados «Tabla HTML para reviews», «Cómo añadir vídeos», «Formulario de contacto», «Incorporación de Google Maps» e «Inserción de documentos PDF».</span>
+      </div>
+    </article>
+
+    <!-- SECTION 6 -->
+    <article class="narrative-section" id="sec-6" data-category="Despliegue" data-keywords="github pages repositorio publico commit index.html settings pages branch main root despliegue enlace publico">
+      <div class="section-header">
+        <div class="section-header-main">
+          <div class="section-meta-row">
+            <span class="index-num">06</span>
+            <span class="tag tag-positive">Despliegue</span>
+            <span class="tag tag-positive" id="badge-sec-6" style="display:none;">Completada</span>
+          </div>
+          <h2 class="section-title">Despliegue e Infraestructura Digital</h2>
+        </div>
+        <button type="button" class="btn btn-done" id="btn-done-sec-6" onclick="toggleSectionDone('sec-6')">
+          <i data-lucide="check-circle" aria-hidden="true"></i>
+          Marcar como hecho
+        </button>
+      </div>
+
+      <p>
+        Un activo digital desarrollado en local solo genera retorno organizativo cuando se vuelve accesible mediante una dirección web compartible. La fuente documenta la publicación abierta en Internet mediante <strong>GitHub</strong> (<code>github.com</code>) y <strong>GitHub Pages</strong>, permitiendo compartir el enlace operativo con clientes, dirección o profesorado sin contratar servidores dedicados. Nota de contexto de la fuente: en el ejemplo de publicación mostrado en vídeo se sube un proyecto previo maquetado con Bootstrap (secciones de catálogos, promociones y contacto), verificando que el mismo procedimiento rige para cualquier sitio HTML/CSS.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3 class="subhead">Flujo de publicación y control de versiones</h3>
+          <div class="table-wrap">
+            <table class="dossier-table">
+              <thead>
+                <tr>
+                  <th>Paso</th>
+                  <th>Acción en GitHub</th>
+                  <th>Requisito crítico</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="num-cell">01</td>
+                  <td>Registro y verificación en <code>github.com</code> (<em>Sign up</em>)</td>
+                  <td>Correo electrónico, contraseña, nombre de usuario, resolución de captcha y código de confirmación recibido por correo.</td>
+                </tr>
+                <tr>
+                  <td class="num-cell">02</td>
+                  <td>Creación del repositorio (<em>Create repository</em>)</td>
+                  <td>Nombre identificativo (ej. <code>web-game-store-mi-primera</code>), descripción y visibilidad marcada como <strong>Public</strong>.</td>
+                </tr>
+                <tr>
+                  <td class="num-cell">03</td>
+                  <td>Subida de ficheros (<em>Upload existing files</em>) y <em>Commit</em></td>
+                  <td>Incluir obligatoriamente <code>index.html</code> como archivo raíz que busca GitHub, junto con la carpeta <code>img/</code> y demás activos; documentar el envío en el mensaje de <em>commit</em>.</td>
+                </tr>
+                <tr>
+                  <td class="num-cell">04</td>
+                  <td>Activación en <em>Settings &rarr; Pages</em></td>
+                  <td>En el apartado <em>Branch</em>, cambiar de <code>None</code> a la rama <code>main</code>, mantener la carpeta <code>/ (root)</code> y pulsar <em>Save</em>.</td>
+                </tr>
+                <tr>
+                  <td class="num-cell">05</td>
+                  <td>Verificación de despliegue y obtención del enlace</td>
+                  <td>Esperar a que el estado del procesamiento en la pestaña <em>Code</em> cambie a verde y abrir la URL generada en <em>Pages</em>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:var(--space-md); font-size:0.95rem; color:var(--on-surface-variant);">
+            <strong>Transparencia documental:</strong> Límites de almacenamiento, ancho de banda mensual, dominio personalizado o tarifas de planes empresariales de GitHub: <em>no consta</em> en la fuente.
+          </p>
+        </div>
+
+        <aside class="aside-box">
+          <h3 class="subhead">Checklist de puesta en producción</h3>
+          <ul class="checklist-list">
+            <li class="checklist-item">
+              <input type="checkbox" id="task-6-1" onchange="toggleTask('task-6-1')">
+              <label for="task-6-1">Crear repositorio público en GitHub tras verificar la cuenta por correo electrónico.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-6-2" onchange="toggleTask('task-6-2')">
+              <label for="task-6-2">Subir <code>index.html</code> junto con carpetas <code>img/</code>, <code>css/</code> y recursos, realizando el <em>commit</em>.</label>
+            </li>
+            <li class="checklist-item">
+              <input type="checkbox" id="task-6-3" onchange="toggleTask('task-6-3')">
+              <label for="task-6-3">Configurar <em>Settings &rarr; Pages &rarr; Branch: main / (root)</em> y validar la URL en vivo.</label>
+            </li>
+          </ul>
+          <div class="code-box">
+            <span class="code-box-label">Parámetros exactos en GitHub Pages</span>
+            <pre>Visibilidad: Public
+Archivo raíz: index.html (+ img/)
+Branch:       main
+Directorio:   / (root)</pre>
+          </div>
+        </aside>
+      </div>
+
+      <div class="source-citation">
+        <i data-lucide="book-open" aria-hidden="true"></i>
+        <span><strong>Procedencia:</strong> Vídeo citado (Byspel - Iván L.), apartado final «Publicar página web en Internet con GitHub Pages».</span>
+      </div>
+    </article>
+
+    <!-- INTERACTIVE CALCULATOR & DYNAMIC CHART -->
+    <section class="narrative-section" id="sec-calculadora" aria-label="Calculadora orientativa de activo digital y gráfico dinámico">
+      <div class="section-header">
+        <div class="section-header-main">
+          <div class="section-meta-row">
+            <span class="index-num">SIMULADOR</span>
+            <span class="tag">Cálculo Orientativo</span>
+          </div>
+          <h2 class="section-title">Calculadora del Activo Digital No Utilizado y Métricas Dinámicas</h2>
+        </div>
+      </div>
+
+      <div class="notice-banner" role="note">
+        <i data-lucide="alert-circle" aria-hidden="true" style="flex-shrink:0; margin-top:2px;"></i>
+        <div>
+          <strong>Aviso: El contenido y los cálculos de esta plataforma son de carácter orientativo.</strong>
+          Los volúmenes de páginas y componentes se basan en la arquitectura multipágina de la fuente (5 páginas base y módulos HTML/CSS); el parámetro de presupuesto externo es una <em>hipótesis editable del usuario</em>, ya que <strong>en la fuente no consta</strong> ningún importe monetario ni tarifa de licencias.
+        </div>
+      </div>
+
+      <div class="filter-pills" role="group" aria-label="Escenarios predefinidos para la calculadora">
+        <span class="field-label" style="margin-right:var(--space-xs);">Escenarios rápidos:</span>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="applyCalcPreset(1, 5, 4, 900)">Post-Grado (1 equipo)</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="applyCalcPreset(10, 5, 4, 1500)">Equipo PyME (10 equipos)</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="applyCalcPreset(35, 6, 5, 2400)">Dirección Corporativa (35 equipos)</button>
+      </div>
+
+      <div class="calc-shell">
+        <div class="calc-controls">
+          <div class="field-group">
+            <label class="field-label" for="num-teams">1. Equipos / usuarios con editor estándar (VSC o Bloc de notas)</label>
+            <div class="slider-pair">
+              <input type="range" id="slider-teams" min="1" max="100" value="10" oninput="syncTeamsFromSlider(this.value)">
+              <input type="number" id="num-teams" class="text-input" min="1" max="100" value="10" oninput="syncTeamsFromNumber(this.value)">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="num-pages">2. Páginas HTML por micrositio (base fuente: 5 archivos)</label>
+            <div class="slider-pair">
+              <input type="range" id="slider-pages" min="1" max="20" value="5" oninput="syncPagesFromSlider(this.value)">
+              <input type="number" id="num-pages" class="text-input" min="1" max="20" value="5" oninput="syncPagesFromNumber(this.value)">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="num-modules">3. Componentes funcionales por página (tablas, vídeos, formularios, mapas)</label>
+            <div class="slider-pair">
+              <input type="range" id="slider-modules" min="1" max="10" value="4" oninput="syncModulesFromSlider(this.value)">
+              <input type="number" id="num-modules" class="text-input" min="1" max="10" value="4" oninput="syncModulesFromNumber(this.value)">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="num-extcost">4. Hipótesis del usuario: coste externo evitado por portal (€ · dato en fuente: no consta)</label>
+            <div class="slider-pair">
+              <input type="range" id="slider-extcost" min="300" max="10000" step="100" value="1500" oninput="syncExtCostFromSlider(this.value)">
+              <input type="number" id="num-extcost" class="text-input" min="300" max="10000" step="100" value="1500" oninput="syncExtCostFromNumber(this.value)">
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; gap:var(--space-md);">
+          <div class="kpi-grid">
+            <div class="figure-card">
+              <span class="figure-label">Páginas HTML movilizables</span>
+              <div class="figure-value" id="out-total-pages">50</div>
+              <div class="figure-note">Equipos &times; páginas por portal</div>
+            </div>
+            <div class="figure-card">
+              <span class="figure-label">Componentes integrables</span>
+              <div class="figure-value" id="out-total-modules">200</div>
+              <div class="figure-note">Tablas, multimedia, mapas y formularios</div>
+            </div>
+            <div class="figure-card">
+              <span class="figure-label">Ahorro de edición con style.css</span>
+              <div class="figure-value" id="out-css-savings">49 archivos menos</div>
+              <div class="figure-note" id="out-css-compare">1 hoja style.css centralizada frente a 50 bloques &lt;style&gt; internos</div>
+            </div>
+            <div class="figure-card">
+              <span class="figure-label">Valor orientativo movilizado (hipótesis)</span>
+              <div class="figure-value" id="out-value-eur">15.000 €</div>
+              <div class="figure-note">Frente a 0 € en herramientas citadas gratuitas (Bloc de notas / Google Fonts Icons; tarifas de VSC/GitHub: no consta)</div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--space-sm);">
+              <div>
+                <h3 class="subhead" style="margin:0;" id="chart-heading">Gráfico dinámico: Evolución estructural del proyecto en la fuente</h3>
+                <span class="dossier-meta" id="chart-subheading">Etiquetas y archivos acumulados por fase del tutorial</span>
+              </div>
+              <div class="filter-pills" role="group" aria-label="Cambiar vista del gráfico">
+                <button type="button" class="filter-pill is-active" id="btn-chart-tutorial" onclick="setChartMode('tutorial')">Curva del tutorial</button>
+                <button type="button" class="filter-pill" id="btn-chart-projection" onclick="setChartMode('projection')">Impacto calculadora</button>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap">
+              <canvas id="metricsChart" aria-label="Gráfico interactivo de métricas HTML y CSS"></canvas>
+            </div>
+            <p style="font-size:0.88rem; color:var(--on-surface-variant); margin:0;">
+              <strong>Nota de datos:</strong> La vista «Curva del tutorial» contabiliza estrictamente los elementos introducidos en cada fase del vídeo (de 0 etiquetas en conversión <code>.txt</code> a 38 elementos acumulados en la fase de componentes y 10 recursos del proyecto en despliegue). La vista «Impacto calculadora» compara en tiempo real la carga de mantenimiento con <code>style.css</code> centralizado frente a estilos internos repetidos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE EVALUATION TEST -->
+    <section class="narrative-section" id="sec-test" aria-label="Test interactivo con nota evaluativa">
+      <div class="section-header">
+        <div class="section-header-main">
+          <div class="section-meta-row">
+            <span class="index-num">EVALUACIÓN</span>
+            <span class="tag tag-petrol">8 Cuestiones · Escala 0–10</span>
+          </div>
+          <h2 class="section-title">Test Interactivo de Comprensión Ejecutiva y Técnica</h2>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:var(--space-sm);">
+          <button type="button" class="btn btn-primary" onclick="gradeQuiz()">
+            <i data-lucide="award" aria-hidden="true"></i>
+            Corregir evaluación
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-reset-quiz" onclick="resetQuiz(this)">
+            <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+            Reiniciar test
+          </button>
+        </div>
+      </div>
+
+      <p>
+        Evalúe la asimilación de los conceptos clave del dossier. Las respuestas correctas están equilibradas entre las opciones <strong>A, B, C y D</strong>. Aquellas opciones o tecnologías que no aparecen mencionadas en la transcripción del tutorial figuran identificadas expresamente como <strong>«fuera de tus fuentes»</strong>.
+      </p>
+
+      <div class="quiz-score-panel" id="quiz-score-panel" aria-live="polite">
+        <div>
+          <span class="figure-label">Calificación actual</span>
+          <div class="figure-value" id="quiz-grade-display">Pendiente de corrección</div>
+          <div class="figure-note" id="quiz-summary-text">Responda a las 8 preguntas y pulse «Corregir evaluación».</div>
+        </div>
+        <span class="tag tag-petrol" id="quiz-answered-count">0 / 8 respondidas</span>
+      </div>
+
+      <div class="quiz-list" id="quiz-container"></div>
+    </section>
+
+    <!-- RIGOR & EXPORT FOOTER -->
+    <footer class="aside-box" aria-label="Registro de rigor documental y exportación">
+      <div class="dossier-bar">
+        <div class="dossier-bar-left">
+          <span class="index-num">RIGOR Y FUENTES</span>
+          <h2 class="subhead" style="margin:0;">Registro de procedencia y datos no presentes en la fuente</h2>
+        </div>
+        <button type="button" class="btn btn-accent btn-sm" onclick="exportProgressCSV()">
+          <i data-lucide="download" aria-hidden="true"></i>
+          Exportar avance y cálculo (CSV)
+        </button>
+      </div>
+
+      <div class="section-grid">
+        <div>
+          <p>
+            <strong>Fuente exclusiva del cuaderno:</strong> Transcripción íntegra del vídeo tutorial de YouTube <em>«CÓMO HACER UNA PÁGINA WEB EN HTML Y CSS VISUAL STUDIO CODE DESDE CERO»</em>, publicado en el canal <em>«Byspel - Iván L.»</em>.
+          </p>
+          <p>
+            <strong>Aviso: El contenido y los cálculos de esta plataforma son de carácter orientativo.</strong>
+          </p>
+        </div>
+        <div>
+          <p style="margin-bottom:var(--space-xs);"><strong>Conceptos y datos marcados como «no consta» por ausencia en la fuente:</strong></p>
+          <ul style="margin:0; padding-left:1.25rem; font-size:0.95rem; color:var(--on-surface-variant);">
+            <li>Tarifas monetarias de Visual Studio Code, Sublime Text o planes de pago en GitHub: <em>no consta</em>.</li>
+            <li>Presupuestos comerciales de desarrollo externo o salarios de mercado: <em>no consta</em>.</li>
+            <li>Lenguaje de programación backend concreto o base de datos receptora tras <code>method="post"</code>: <em>no consta</em>.</li>
+            <li>Límites de almacenamiento, ancho de banda o dominios propios en GitHub Pages: <em>no consta</em>.</li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <api-shim></api-shim>
+
+  <script>
+    // =========================================================================
+    // DATA MODELS (Strictly grounded in source transcript; template literals)
+    // =========================================================================
+    const SECTIONS_META = [
+      { id: `sec-1`, num: `01`, title: `Preparación del Entorno y Archivo Principal`, category: `Estructura` },
+      { id: `sec-2`, num: `02`, title: `Estructura Arquitectónica en HTML`, category: `Estructura` },
+      { id: `sec-3`, num: `03`, title: `Navegación y Contenidos Estructurados`, category: `Estructura` },
+      { id: `sec-4`, num: `04`, title: `Diseño y Estilos Visuales con CSS`, category: `Estilo` },
+      { id: `sec-5`, num: `05`, title: `Componentes Avanzados e Integraciones`, category: `Multimedia` },
+      { id: `sec-6`, num: `06`, title: `Despliegue e Infraestructura Digital`, category: `Despliegue` }
+    ];
+
+    const ALL_TASK_IDS = [
+      `task-1-1`, `task-1-2`, `task-1-3`,
+      `task-2-1`, `task-2-2`, `task-2-3`,
+      `task-3-1`, `task-3-2`, `task-3-3`,
+      `task-4-1`, `task-4-2`, `task-4-3`,
+      `task-5-1`, `task-5-2`, `task-5-3`,
+      `task-6-1`, `task-6-2`, `task-6-3`
+    ];
+
+    const CATALOG_ITEMS = [
+      {
+        term: `index.html (desde .txt)`,
+        category: `Estructura`,
+        code: `Vista -> Extensiones -> index.html`,
+        desc: `Archivo raíz obligatorio que interpreta el navegador en local y que GitHub Pages busca al publicar.`,
+        source: `Sección 01 · Creación del archivo inicial y Sección 06 · GitHub Pages`
+      },
+      {
+        term: `Visual Studio Code / Sublime Text`,
+        category: `Estructura`,
+        code: `File -> Open Folder`,
+        desc: `Editores de código que colorean etiquetas para detectar errores de cierre y permiten gestionar la carpeta completa del proyecto.`,
+        source: `Sección 01 · Editores de texto recomendados`
+      },
+      {
+        term: `<!DOCTYPE html>, <html>, <head>, <body>`,
+        category: `Estructura`,
+        code: `<!DOCTYPE html><html><head><title>...</title></head><body>...</body></html>`,
+        desc: `Estructura elemental: DOCTYPE declara HTML, head alberga el title de pestaña y body contiene todo lo visible en pantalla.`,
+        source: `Sección 02 · Estructura básica HTML`
+      },
+      {
+        term: `<h1> a <h6>, <p> y <br>`,
+        category: `Estructura`,
+        code: `<h1>Título</h1> <p>Texto<br>Salto</p>`,
+        desc: `Seis niveles de jerarquía en títulos, párrafos de texto y la etiqueta vacía <br> sin cierre para saltos de línea.`,
+        source: `Sección 02 · Elementos HTML y etiquetas vacías`
+      },
+      {
+        term: `<img src="..." alt="...">`,
+        category: `Estructura`,
+        code: `<img src="img/imagen1.jpg" width="300" height="200" alt="Imagen principal">`,
+        desc: `Inserta imágenes locales o externas con dimensiones y texto alternativo descriptivo cuando la imagen falla.`,
+        source: `Sección 02 · Inclusión de imágenes`
+      },
+      {
+        term: `<header>, <nav>, <main>, <footer>`,
+        category: `Estructura`,
+        code: `<header><nav><ul><li><a href="..."></a></li></ul></nav></header><main>...</main><footer>...</footer>`,
+        desc: `Distribución semántica empleada en las 5 páginas del sitio Tecnología y Gadgets (index, reviews, comparativas, tutoriales, contacto).`,
+        source: `Sección 03 · Navegación multipágina`
+      },
+      {
+        term: `css/style.css y <link>`,
+        category: `Estilo`,
+        code: `<link rel="stylesheet" href="css/style.css">`,
+        desc: `Centraliza los estilos visuales en una única hoja reutilizable para evitar duplicar etiquetas <style> en cada página.`,
+        source: `Sección 04 · Cómo enlazar un archivo CSS`
+      },
+      {
+        term: `background-image y cover`,
+        category: `Estilo`,
+        code: `background-image: url(img/fondo.jpg); background-repeat: no-repeat; background-position: center; background-size: cover;`,
+        desc: `Aplica un fondo visual sin repeticiones, centrado y ajustado al ancho completo del contenedor.`,
+        source: `Sección 04 · Imagen de fondo en CSS`
+      },
+      {
+        term: `CSS Grid (.card-container)`,
+        category: `Estilo`,
+        code: `display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 900px;`,
+        desc: `Organiza las tarjetas de producto en comparativas.html en una cuadrícula uniforme de 3 columnas iguales.`,
+        source: `Sección 04 · Tarjetas de contenido`
+      },
+      {
+        term: `Flexbox (.contenedor)`,
+        category: `Estilo`,
+        code: `display: flex; justify-content: ...; gap: 20px;`,
+        desc: `Alinea el formulario de contacto y el mapa embebido de Google Maps en dos columnas equivalentes.`,
+        source: `Sección 05 · Contacto y mapa en Flexbox`
+      },
+      {
+        term: `Botón flotante (position: fixed)`,
+        category: `Estilo`,
+        code: `position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; z-index: 100;`,
+        desc: `Fija un acceso directo de WhatsApp sobre la esquina inferior derecha sin depender del desplazamiento de la página.`,
+        source: `Sección 04 · Botón flotante de contacto`
+      },
+      {
+        term: `Tablas (<table>, <thead>, <tbody>)`,
+        category: `Multimedia`,
+        code: `<table><thead><tr><th>Producto</th></tr></thead><tbody><tr><td>...</td></tr></tbody></table>`,
+        desc: `Estructura reseñas de productos en reviews.html con imagen (.product-img), descripción, puntuación (9 de 10) y enlace .review-link.`,
+        source: `Sección 05 · Tabla HTML para reviews`
+      },
+      {
+        term: `Vídeo YouTube y <video controls>`,
+        category: `Multimedia`,
+        code: `<video src="videos/vid1.mp4" type="video/mp4" controls>...</video>`,
+        desc: `Combina inserción externa vía <iframe> de YouTube y reproducción MP4 local con controles nativos en tutoriales.html.`,
+        source: `Sección 05 · Cómo añadir un vídeo`
+      },
+      {
+        term: `Visor PDF (<iframe> y Google Docs)`,
+        category: `Multimedia`,
+        code: `<iframe src="archivos/redmi-9a.pdf"></iframe>`,
+        desc: `Permite incrustar fichas PDF locales, abrirlas en pestaña nueva mediante atributo target (_blank) o usar Google Docs Viewer con controles de zoom.`,
+        source: `Sección 05 · Insertar PDFs en la página web`
+      },
+      {
+        term: `<form> con multipart/form-data`,
+        category: `Multimedia`,
+        code: `<form method="post" enctype="multipart/form-data">`,
+        desc: `Imprescindible cuando el formulario incorpora <input type="file">; se combina con text, email, select y textarea (33×5).`,
+        source: `Sección 05 · Formulario de contacto`
+      },
+      {
+        term: `GitHub Pages (rama main / root)`,
+        category: `Despliegue`,
+        code: `Settings -> Pages -> Branch: main -> / (root) -> Save`,
+        desc: `Publica gratuitamente en línea el repositorio público tras subir index.html y carpetas de activos mediante commit.`,
+        source: `Sección 06 · Publicación en GitHub Pages`
+      }
+    ];
+
+    const TIMELINE_STEPS = [
+      {
+        step: `01`,
+        sectionId: `sec-1`,
+        title: `Carpeta e index.html`,
+        deliverable: `Carpeta local «página web» y archivo index.html convertido desde .txt.`,
+        details: `Se habilitan las extensiones de nombre de archivo, se verifica la apertura en el navegador y se adopta Visual Studio Code o Sublime Text para coloreado de etiquetas.`,
+        source: `Apartado 01: Preparación del entorno`
+      },
+      {
+        step: `02`,
+        sectionId: `sec-2`,
+        title: `Esqueleto HTML5`,
+        deliverable: `Documento válido con <!DOCTYPE html>, <html>, <head>, <title> y <body>.`,
+        details: `Se incorporan títulos H1–H6, párrafos <p>, saltos vacíos <br>, imágenes locales en img/ con alt y enlaces <a> con href.`,
+        source: `Apartado 02: Elementos e imágenes HTML`
+      },
+      {
+        step: `03`,
+        sectionId: `sec-3`,
+        title: `Sitio multipágina`,
+        deliverable: `5 archivos interconectados: index, reviews, comparativas, tutoriales y contacto.`,
+        details: `Estructura semántica uniforme (<header>, <nav><ul><li>, <main>, <footer>) garantizando coincidencia exacta en los nombres de ruta.`,
+        source: `Apartado 03: Navegación entre páginas`
+      },
+      {
+        step: `04`,
+        sectionId: `sec-4`,
+        title: `Sistema CSS centralizado`,
+        deliverable: `Carpeta css/style.css enlazada mediante <link> en todas las páginas.`,
+        details: `Estilos tipográficos, fondos, iconos de Google Fonts, botón flotante fixed y tarjetas comparativas con CSS Grid (3 columnas 1fr).`,
+        source: `Apartado 04: CSS, iconos y tarjetas`
+      },
+      {
+        step: `05`,
+        sectionId: `sec-5`,
+        title: `Módulos e integraciones`,
+        deliverable: `Tablas, vídeos, visores PDF, formulario multipart y Google Maps en Flexbox.`,
+        details: `reviews.html muestra reseñas y PDFs; tutoriales.html integra YouTube y MP4; contacto.html alinea formulario y mapa lado a lado.`,
+        source: `Apartado 05: Tablas, multimedia, formularios y mapas`
+      },
+      {
+        step: `06`,
+        sectionId: `sec-6`,
+        title: `Publicación en Internet`,
+        deliverable: `Repositorio público en GitHub con rama main configurada en GitHub Pages.`,
+        details: `Subida de index.html y carpetas de recursos mediante commit; activación en Settings > Pages > Branch: main / (root) para obtener la URL pública.`,
+        source: `Apartado 06: Despliegue en GitHub Pages`
+      }
+    ];
+
+    // Quiz with exact balanced distribution:
+    // Q1: A, Q2: B, Q3: C, Q4: D, Q5: A, Q6: B, Q7: C, Q8: D -> 2xA, 2xB, 2xC, 2xD
+    const QUIZ_QUESTIONS = [
+      {
+        id: `q1`,
+        correct: `A`,
+        prompt: `1. Al crear la primera página web en Windows desde un documento de texto, ¿qué paso previo resulta imprescindible según el tutorial para transformarlo en index.html?`,
+        options: {
+          A: `Activar en la pestaña «Vista» la opción «Extensiones de nombre de archivo» para visualizar .txt y reemplazarlo por .html.`,
+          B: `Instalar un compilador binario de servidor Apache antes de abrir el archivo (fuera de tus fuentes).`,
+          C: `Ejecutar un comando npm init en la terminal de Visual Studio Code (fuera de tus fuentes).`,
+          D: `Guardar el fichero dentro de una base de datos relacional SQLite (fuera de tus fuentes).`
+        },
+        rationale: `Correcta: A. La fuente explica que es necesario ir a Vista → Extensiones de nombre de archivo para ver la extensión .txt y cambiarla a index.html (Sección 01).`
+      },
+      {
+        id: `q2`,
+        correct: `B`,
+        prompt: `2. Respecto a la sintaxis y cierre de etiquetas en HTML (como <p> o la etiqueta vacía <br>), ¿qué afirmación coincide exactamente con la fuente?`,
+        options: {
+          A: `HTML exige obligatoriamente escribir todas las etiquetas en mayúsculas o el navegador bloquea la página.`,
+          B: `HTML no distingue entre mayúsculas y minúsculas, pero el estándar recomienda minúsculas y cerrar las etiquetas (salvo vacías como <br>) para evitar errores extraños con estilos o medios.`,
+          C: `La etiqueta <br> requiere siempre una etiqueta de cierre </br> y un atributo obligatorio type.`,
+          D: `El contenido situado dentro de <head> es el único que se renderiza en el área visual principal del navegador.`
+        },
+        rationale: `Correcta: B. La fuente demuestra con <P> y <p> que HTML no es sensible a mayúsculas, pero recomienda minúsculas y cerrar etiquetas para prevenir fallos al añadir imágenes, vídeos o estilos; <br> es etiqueta vacía (Sección 02).`
+      },
+      {
+        id: `q3`,
+        correct: `C`,
+        prompt: `3. En la arquitectura multipágina del proyecto «Tecnología y Gadgets», ¿qué requisito señala la fuente para que funcione la navegación del menú <nav> entre los 5 archivos HTML?`,
+        options: {
+          A: `Emplear un router dinámico de JavaScript SPA en lugar de archivos .html separados (fuera de tus fuentes).`,
+          B: `Guardar todas las páginas secundarias dentro de la carpeta img/ junto al logotipo.`,
+          C: `Que los nombres indicados en cada propiedad href coincidan exactamente con los nombres de los archivos HTML creados en la carpeta.`,
+          D: `Omitir las etiquetas <header> y <footer> en las páginas secundarias para evitar duplicados.`
+        },
+        rationale: `Correcta: C. En la Sección 03 se advierte expresamente que los nombres en href deben ser exactamente iguales a los archivos creados (reviews.html, comparativas.html, tutoriales.html, contacto.html), manteniendo header y footer comunes.`
+      },
+      {
+        id: `q4`,
+        correct: `D`,
+        prompt: `4. ¿Por qué recomienda la fuente enlazar un archivo externo css/style.css con <link> frente a usar bloques <style> internos, y cómo organiza las tarjetas de comparativas.html?`,
+        options: {
+          A: `Porque los bloques <style> internos no pueden aplicar background-color en ningún navegador.`,
+          B: `Porque css/style.css compila automáticamente código Sass/SCSS nativo en el navegador (fuera de tus fuentes).`,
+          C: `Porque las tarjetas comparativas requieren tablas anidadas en lugar de CSS Grid.`,
+          D: `Porque los estilos internos no son reutilizables entre páginas; enlazando style.css se centraliza el diseño y se maquetan las tarjetas con CSS Grid (display: grid y repeat(3, 1fr)).`
+        },
+        rationale: `Correcta: D. La fuente muestra primero <style> en index.html y explica que no es reutilizable, pasando a css/style.css compartido en todas las páginas y usando CSS Grid con 3 columnas de 1fr en .card-container (Sección 04).`
+      },
+      {
+        id: `q5`,
+        correct: `A`,
+        prompt: `5. Al construir el formulario de contacto.html con un campo <input type="file"> para adjuntar documentos, ¿qué atributo resulta indispensable añadir en la etiqueta <form>?`,
+        options: {
+          A: `enctype="multipart/form-data", ya que sin él el envío del formulario no procesará el archivo adjunto junto con el texto.`,
+          B: `El atributo target con valor _blank, para que el servidor descargue el archivo en una nueva pestaña.`,
+          C: `grid-template-columns: 1fr, para que el campo archivo ocupe todo el ancho.`,
+          D: `async="true" mediante Fetch API de JavaScript (fuera de tus fuentes).`
+        },
+        rationale: `Correcta: A. En la Sección 05 se recalca que al trabajar con elementos type="file" es imprescindible especificar multipart/form-data en <form> para enviar tanto texto como el archivo adjunto.`
+      },
+      {
+        id: `q6`,
+        correct: `B`,
+        prompt: `6. ¿Qué par de mecanismos muestra la fuente para reproducir vídeos en tutoriales.html e integrar PDFs en reviews.html?`,
+        options: {
+          A: `Un reproductor Flash embebido y conversión automática de PDF a SVG (fuera de tus fuentes).`,
+          B: `<iframe> de YouTube y <video controls> para MP4 local en vídeos; <iframe> local, enlace en pestaña nueva (_blank) o Google Docs Viewer para PDFs.`,
+          C: `Exclusivamente enlaces de descarga sin ningún control visual ni visor embebido.`,
+          D: `El componente <canvas> de HTML5 combinado con WebRTC (fuera de tus fuentes).`
+        },
+        rationale: `Correcta: B. La fuente detalla dos vías para vídeos (YouTube iframe y carpeta videos/ con <video controls>) y tres opciones para PDFs (iframe local desde archivos/, enlace con target _blank y Google Docs Viewer) (Sección 05).`
+      },
+      {
+        id: `q7`,
+        correct: `C`,
+        prompt: `7. Para publicar el sitio web en Internet usando GitHub Pages tras subir index.html y las carpetas de imágenes mediante commit, ¿qué configuración debe guardarse en Settings → Pages?`,
+        options: {
+          A: `Cambiar la visibilidad del repositorio a Private y seleccionar la rama develop (fuera de tus fuentes).`,
+          B: `Subir únicamente el archivo style.css sin index.html para que GitHub genere uno por defecto.`,
+          C: `Seleccionar en Branch la rama «main», dejar la carpeta en «/ (root)» y pulsar Save.`,
+          D: `Configurar un servidor DNS inverso mediante Nginx (fuera de tus fuentes).`
+        },
+        rationale: `Correcta: C. En el apartado final de GitHub Pages (Sección 06) se accede a Settings → Pages, se cambia Branch de None a main, se deja / (root) y se pulsa Save.`
+      },
+      {
+        id: `q8`,
+        correct: `D`,
+        prompt: `8. Aplicando el criterio de rigor documental sobre el contenido del curso analizado, ¿cuál de los siguientes elementos aparece tratado en la fuente frente a conceptos ajenos a ella?`,
+        options: {
+          A: `Conexión desde PHP o Node.js a una base de datos MySQL para guardar los datos del formulario (fuera de tus fuentes).`,
+          B: `Despliegue automatizado con Docker y GitHub Actions CI/CD (fuera de tus fuentes).`,
+          C: `Precios exactos en euros de licencias corporativas de GitHub y Visual Studio Code (no consta en fuente).`,
+          D: `Uso de Google Maps mediante <iframe> junto al formulario de contacto en un contenedor Flexbox de dos columnas.`
+        },
+        rationale: `Correcta: D. La integración de Google Maps mediante <iframe> en dos columnas Flexbox (.contenedor) sí se desarrolla paso a paso en la Sección 05; MySQL/Node/Docker están fuera de tus fuentes y los precios no constan.`
+      }
+    ];
+
+    // =========================================================================
+    // STATE MANAGEMENT
+    // =========================================================================
+    let appState = {
+      completedSections: [],
+      checkedTasks: {},
+      calcInputs: { teams: 10, pages: 5, modules: 4, extCost: 1500 },
+      quizAnswers: {},
+      quizSubmitted: false,
+      activeTimelineStep: 0,
+      chartMode: `tutorial`
+    };
+
+    let activeCategory = `all`;
+    let chartInstance = null;
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (err) {
+        // Safe fallback if host API is unavailable in local preview
+      }
+    }
+
+    async function initApp() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = {
+              completedSections: Array.isArray(saved.completedSections) ? saved.completedSections : [],
+              checkedTasks: saved.checkedTasks && typeof saved.checkedTasks === `object` ? saved.checkedTasks : {},
+              calcInputs: saved.calcInputs && typeof saved.calcInputs === `object`
+                ? {
+                    teams: Number(saved.calcInputs.teams) || 10,
+                    pages: Number(saved.calcInputs.pages) || 5,
+                    modules: Number(saved.calcInputs.modules) || 4,
+                    extCost: Number(saved.calcInputs.extCost) || 1500
+                  }
+                : { teams: 10, pages: 5, modules: 4, extCost: 1500 },
+              quizAnswers: saved.quizAnswers && typeof saved.quizAnswers === `object` ? saved.quizAnswers : {},
+              quizSubmitted: Boolean(saved.quizSubmitted),
+              activeTimelineStep: Number.isInteger(saved.activeTimelineStep) ? saved.activeTimelineStep : 0,
+              chartMode: saved.chartMode === `projection` ? `projection` : `tutorial`
+            };
+          }
+        }
+      } catch (err) {
+        // Use default appState
+      }
+
+      restoreChecklistsAndSections();
+      renderCatalog();
+      renderTimeline();
+      restoreCalculatorInputs();
+      updateCalculatorOutputs();
+      renderQuiz();
+      if (appState.quizSubmitted) {
+        gradeQuiz(true);
+      }
+      setChartMode(appState.chartMode, true);
+
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+          window.notebookAppApi.notifyAppReady();
+        }
+      } catch (err) {
+        // Ignore if outside host
+      }
+    }
+
+    // =========================================================================
+    // CHECKLISTS & SECTION COMPLETION
+    // =========================================================================
+    function toggleSectionDone(secId) {
+      const idx = appState.completedSections.indexOf(secId);
+      if (idx === -1) {
+        appState.completedSections.push(secId);
+      } else {
+        appState.completedSections.splice(idx, 1);
+      }
+      restoreChecklistsAndSections();
+      persistState();
+    }
+
+    function toggleTask(taskId) {
+      const cb = document.getElementById(taskId);
+      if (!cb) return;
+      appState.checkedTasks[taskId] = Boolean(cb.checked);
+      updateProgressKPIs();
+      persistState();
+    }
+
+    function restoreChecklistsAndSections() {
+      SECTIONS_META.forEach(function (sec) {
+        const isDone = appState.completedSections.includes(sec.id);
+        const btn = document.getElementById(`btn-done-` + sec.id);
+        const badge = document.getElementById(`badge-` + sec.id);
+        if (btn) {
+          if (isDone) {
+            btn.classList.add(`is-completed`);
+            btn.textContent = `✓ Hecho (clic para desmarcar)`;
+          } else {
+            btn.classList.remove(`is-completed`);
+            btn.textContent = `Marcar como hecho`;
+          }
+        }
+        if (badge) {
+          badge.style.display = isDone ? `inline-flex` : `none`;
+        }
+      });
+
+      ALL_TASK_IDS.forEach(function (taskId) {
+        const cb = document.getElementById(taskId);
+        if (cb) {
+          cb.checked = Boolean(appState.checkedTasks[taskId]);
+        }
+      });
+
+      updateProgressKPIs();
+    }
+
+    function updateProgressKPIs() {
+      const doneSecs = appState.completedSections.length;
+      const doneTasks = ALL_TASK_IDS.filter(function (id) {
+        return Boolean(appState.checkedTasks[id]);
+      }).length;
+      const pct = Math.round((doneSecs / SECTIONS_META.length) * 100);
+
+      const progText = document.getElementById(`kpi-progress-text`);
+      const progBar = document.getElementById(`kpi-progress-bar`);
+      const tasksText = document.getElementById(`kpi-tasks-text`);
+      if (progText) progText.textContent = `${doneSecs} / ${SECTIONS_META.length}`;
+      if (progBar) progBar.style.width = `${pct}%`;
+      if (tasksText) tasksText.textContent = `${doneTasks} de ${ALL_TASK_IDS.length} hitos marcados (${pct}% secciones)`;
+    }
+
+    // =========================================================================
+    // SEARCH & CATEGORY FILTER
+    // =========================================================================
+    function setCategoryFilter(cat, btnEl) {
+      activeCategory = cat;
+      const pills = document.querySelectorAll(`.filter-pill[data-cat]`);
+      pills.forEach(function (p) {
+        p.classList.remove(`is-active`);
+        p.setAttribute(`aria-pressed`, `false`);
+      });
+      if (btnEl) {
+        btnEl.classList.add(`is-active`);
+        btnEl.setAttribute(`aria-pressed`, `true`);
+      }
+      applySearchAndFilter();
+    }
+
+    function resetSearchAndFilter() {
+      const input = document.getElementById(`search-input`);
+      if (input) input.value = ``;
+      const allBtn = document.querySelector(`.filter-pill[data-cat="all"]`);
+      setCategoryFilter(`all`, allBtn);
+    }
+
+    function applySearchAndFilter() {
+      renderCatalog();
+      filterNarrativeSections();
+    }
+
+    function renderCatalog() {
+      const container = document.getElementById(`catalog-results`);
+      const meta = document.getElementById(`filter-status-meta`);
+      const input = document.getElementById(`search-input`);
+      if (!container) return;
+
+      const query = input ? input.value.trim().toLowerCase() : ``;
+
+      const filtered = CATALOG_ITEMS.filter(function (item) {
+        const catMatch = activeCategory === `all` || item.category === activeCategory;
+        if (!catMatch) return false;
+        if (!query) return true;
+        const haystack = `${item.term} ${item.category} ${item.code} ${item.desc} ${item.source}`.toLowerCase();
+        return haystack.includes(query);
+      });
+
+      if (meta) {
+        const catLabel = activeCategory === `all` ? `Todas las categorías` : `Categoría: ${activeCategory}`;
+        meta.textContent = `${catLabel} · ${filtered.length} de ${CATALOG_ITEMS.length} conceptos`;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="aside-box" style="grid-column: 1 / -1;">
+            <p style="margin:0;"><strong>Sin resultados en la referencia de etiquetas y conceptos.</strong> No hay coincidencias para «${escapeHtml(query)}» en la categoría seleccionada.</p>
+            <div>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="resetSearchAndFilter()">Restablecer búsqueda y filtros</button>
+            </div>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(function (item) {
+        return `
+          <div class="catalog-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:var(--space-xs);">
+              <strong>${escapeHtml(item.term)}</strong>
+              <span class="tag tag-petrol">${escapeHtml(item.category)}</span>
+            </div>
+            <div class="catalog-code">${escapeHtml(item.code)}</div>
+            <p style="font-size:0.95rem; margin:0;">${escapeHtml(item.desc)}</p>
+            <div class="catalog-source">${escapeHtml(item.source)}</div>
+          </div>`;
+      }).join(``);
+    }
+
+    function filterNarrativeSections() {
+      const input = document.getElementById(`search-input`);
+      const query = input ? input.value.trim().toLowerCase() : ``;
+
+      SECTIONS_META.forEach(function (sec) {
+        const el = document.getElementById(sec.id);
+        if (!el) return;
+        const cat = el.getAttribute(`data-category`) || ``;
+        const keywords = (el.getAttribute(`data-keywords`) || ``).toLowerCase();
+        const textContent = (el.textContent || ``).toLowerCase();
+
+        const catMatch = activeCategory === `all` || cat === activeCategory;
+        const queryMatch = !query || keywords.includes(query) || textContent.includes(query);
+
+        if (catMatch && queryMatch) {
+          el.classList.remove(`is-hidden-filter`);
+          el.classList.remove(`is-dimmed`);
+        } else if (!catMatch) {
+          el.classList.add(`is-hidden-filter`);
+        } else {
+          el.classList.remove(`is-hidden-filter`);
+          el.classList.add(`is-dimmed`);
+        }
+      });
+    }
+
+    // =========================================================================
+    // INTERACTIVE TIMELINE
+    // =========================================================================
+    function renderTimeline() {
+      const bar = document.getElementById(`timeline-steps-bar`);
+      const panel = document.getElementById(`timeline-detail-panel`);
+      if (!bar || !panel) return;
+
+      bar.innerHTML = TIMELINE_STEPS.map(function (item, idx) {
+        const activeClass = idx === appState.activeTimelineStep ? `is-active` : ``;
+        const isDone = appState.completedSections.includes(item.sectionId) ? ` ✓` : ``;
+        return `
+          <button type="button" role="tab" aria-selected="${idx === appState.activeTimelineStep}" class="timeline-btn ${activeClass}" onclick="selectTimelineStep(${idx})">
+            <span class="timeline-step-num">FASE ${item.step}${isDone}</span>
+            <span class="timeline-step-title">${escapeHtml(item.title)}</span>
+          </button>`;
+      }).join(``);
+
+      const current = TIMELINE_STEPS[appState.activeTimelineStep] || TIMELINE_STEPS[0];
+      const isSecDone = appState.completedSections.includes(current.sectionId);
+      panel.innerHTML = `
+        <div>
+          <span class="figure-label">Entregable de la fase ${current.step}</span>
+          <h3 class="subhead">${escapeHtml(current.title)}: ${escapeHtml(current.deliverable)}</h3>
+          <p>${escapeHtml(current.details)}</p>
+          <div class="source-citation" style="background:transparent; padding-top:var(--space-xs);">
+            <span><strong>Fuente:</strong> Vídeo Byspel - Iván L., ${escapeHtml(current.source)}.</span>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:var(--space-sm);">
+          <button type="button" class="btn btn-primary" onclick="jumpToSection('${current.sectionId}')">
+            Ir a la sección ${current.step}
+          </button>
+          <button type="button" class="btn btn-done ${isSecDone ? `is-completed` : ``}" onclick="toggleSectionFromTimeline('${current.sectionId}')">
+            ${isSecDone ? `✓ Fase completada (clic para desmarcar)` : `Marcar fase ${current.step} como hecha`}
+          </button>
+        </div>`;
+    }
+
+    function selectTimelineStep(idx) {
+      appState.activeTimelineStep = idx;
+      renderTimeline();
+      persistState();
+    }
+
+    function toggleSectionFromTimeline(secId) {
+      toggleSectionDone(secId);
+      renderTimeline();
+    }
+
+    function jumpToSection(secId) {
+      resetSearchAndFilter();
+      const target = document.getElementById(secId);
+      if (target) {
+        target.scrollIntoView({ behavior: `smooth`, block: `start` });
+      }
+    }
+
+    // =========================================================================
+    // CALCULATOR (Dual-input sync handlers + reactive chart)
+    // =========================================================================
+    function restoreCalculatorInputs() {
+      const c = appState.calcInputs;
+      setVal(`slider-teams`, c.teams);
+      setVal(`num-teams`, c.teams);
+      setVal(`slider-pages`, c.pages);
+      setVal(`num-pages`, c.pages);
+      setVal(`slider-modules`, c.modules);
+      setVal(`num-modules`, c.modules);
+      setVal(`slider-extcost`, c.extCost);
+      setVal(`num-extcost`, c.extCost);
+    }
+
+    function setVal(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    }
+
+    function clampNum(val, min, max, fallback) {
+      const n = Number(val);
+      if (Number.isNaN(n)) return fallback;
+      return Math.min(max, Math.max(min, Math.round(n)));
+    }
+
+    function syncTeamsFromSlider(val) {
+      const clean = clampNum(val, 1, 100, 10);
+      appState.calcInputs.teams = clean;
+      setVal(`num-teams`, clean);
+      updateCalculatorOutputs();
+      persistState();
+    }
+    function syncTeamsFromNumber(val) {
+      const clean = clampNum(val, 1, 100, 10);
+      appState.calcInputs.teams = clean;
+      setVal(`slider-teams`, clean);
+      updateCalculatorOutputs();
+      persistState();
+    }
+
+    function syncPagesFromSlider(val) {
+      const clean = clampNum(val, 1, 20, 5);
+      appState.calcInputs.pages = clean;
+      setVal(`num-pages`, clean);
+      updateCalculatorOutputs();
+      persistState();
+    }
+    function syncPagesFromNumber(val) {
+      const clean = clampNum(val, 1, 20, 5);
+      appState.calcInputs.pages = clean;
+      setVal(`slider-pages`, clean);
+      updateCalculatorOutputs();
+      persistState();
+    }
+
+    function syncModulesFromSlider(val) {
+      const clean = clampNum(val, 1, 10, 4);
+      appState.calcInputs.modules = clean;
+      setVal(`num-modules`, clean);
+      updateCalculatorOutputs();
+      persistState();
+    }
+    function syncModulesFromNumber(val) {
+      const clean = clampNum(val, 1, 10, 4);
+      appState.calcInputs.modules = clean;
+      setVal(`slider-modules`, clean);
+      updateCalculatorOutputs();
+      persistState();
+    }
+
+    function syncExtCostFromSlider(val) {
+      const clean = clampNum(val, 300, 10000, 1500);
+      appState.calcInputs.extCost = clean;
+      setVal(`num-extcost`, clean);
+      updateCalculatorOutputs();
+      persistState();
+    }
+    function syncExtCostFromNumber(val) {
+      const clean = clampNum(val, 300, 10000, 1500);
+      appState.calcInputs.extCost = clean;
+      setVal(`slider-extcost`, clean);
+      updateCalculatorOutputs();
+      persistState();
+    }
+
+    function applyCalcPreset(teams, pages, modules, extCost) {
+      appState.calcInputs = { teams: teams, pages: pages, modules: modules, extCost: extCost };
+      restoreCalculatorInputs();
+      updateCalculatorOutputs();
+      persistState();
+    }
+
+    function updateCalculatorOutputs() {
+      const c = appState.calcInputs;
+      const totalPages = c.teams * c.pages;
+      const totalModules = totalPages * c.modules;
+      const totalValue = c.teams * c.extCost;
+      const savedStyleBlocks = Math.max(0, totalPages - 1);
+
+      const elPages = document.getElementById(`out-total-pages`);
+      const elMods = document.getElementById(`out-total-modules`);
+      const elCss = document.getElementById(`out-css-savings`);
+      const elCssNote = document.getElementById(`out-css-compare`);
+      const elVal = document.getElementById(`out-value-eur`);
+
+      if (elPages) elPages.textContent = totalPages.toLocaleString(`es-ES`);
+      if (elMods) elMods.textContent = totalModules.toLocaleString(`es-ES`);
+      if (elCss) elCss.textContent = `${savedStyleBlocks} archivos menos`;
+      if (elCssNote) elCssNote.textContent = `1 hoja style.css centralizada frente a ${totalPages} bloques <style> internos`;
+      if (elVal) elVal.textContent = `${totalValue.toLocaleString(`es-ES`)} €`;
+
+      if (appState.chartMode === `projection`) {
+        renderChart();
+      }
+    }
+
+    // =========================================================================
+    // DYNAMIC CHART (Chart.js)
+    // =========================================================================
+    function setChartMode(mode, skipSave) {
+      appState.chartMode = mode === `projection` ? `projection` : `tutorial`;
+      const btnTut = document.getElementById(`btn-chart-tutorial`);
+      const btnProj = document.getElementById(`btn-chart-projection`);
+      const heading = document.getElementById(`chart-heading`);
+      const subheading = document.getElementById(`chart-subheading`);
+
+      if (btnTut) btnTut.classList.toggle(`is-active`, appState.chartMode === `tutorial`);
+      if (btnProj) btnProj.classList.toggle(`is-active`, appState.chartMode === `projection`);
+
+      if (heading && subheading) {
+        if (appState.chartMode === `tutorial`) {
+          heading.textContent = `Gráfico dinámico: Evolución estructural del proyecto en la fuente`;
+          subheading.textContent = `Elementos HTML/CSS y archivos acumulados en las 6 fases del vídeo`;
+        } else {
+          heading.textContent = `Gráfico dinámico: Impacto de centralización CSS y capacidad de despliegue`;
+          subheading.textContent = `Cálculo reactivo con los parámetros de su organización`;
+        }
+      }
+
+      renderChart();
+      if (!skipSave) persistState();
+    }
+
+    function renderChart() {
+      const canvas = document.getElementById(`metricsChart`);
+      if (!canvas || typeof window.Chart === `undefined`) return;
+
+      if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
+      }
+
+      const styles = getComputedStyle(document.documentElement);
+      const colorData1 = styles.getPropertyValue(`--data-1`).trim() || `#1f4e5f`;
+      const colorData2 = styles.getPropertyValue(`--data-2`).trim() || `#d99000`;
+      const colorData3 = styles.getPropertyValue(`--data-3`).trim() || `#2b6e52`;
+      const colorInk = styles.getPropertyValue(`--on-surface`).trim() || `#17181a`;
+
+      if (appState.chartMode === `tutorial`) {
+        chartInstance = new window.Chart(canvas, {
+          type: `bar`,
+          data: {
+            labels: [
+              `01 Entorno`,
+              `02 Estructura`,
+              `03 Multipágina`,
+              `04 Estilos CSS`,
+              `05 Componentes`,
+              `06 Despliegue`
+            ],
+            datasets: [
+              {
+                label: `Etiquetas y propiedades acumuladas (fuente)`,
+                data: [0, 14, 21, 23, 38, 40],
+                backgroundColor: colorData1,
+                borderRadius: 4
+              },
+              {
+                label: `Archivos y carpetas del proyecto`,
+                data: [1, 2, 6, 7, 9, 10],
+                backgroundColor: colorData2,
+                borderRadius: 4
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: `bottom`,
+                labels: { color: colorInk, font: { family: `Plus Jakarta Sans`, size: 13 } }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: { color: colorInk }
+              },
+              x: {
+                ticks: { color: colorInk }
+              }
+            }
+          }
+        });
+      } else {
+        const c = appState.calcInputs;
+        const totalPages = c.teams * c.pages;
+        const totalModules = totalPages * c.modules;
+        chartInstance = new window.Chart(canvas, {
+          type: `bar`,
+          data: {
+            labels: [
+              `Bloques <style> sin CSS externo`,
+              `Hoja style.css centralizada`,
+              `Páginas HTML activas`,
+              `Componentes integrables`
+            ],
+            datasets: [
+              {
+                label: `Volumen estructural proyectado`,
+                data: [totalPages, 1, totalPages, totalModules],
+                backgroundColor: [colorData2, colorData3, colorData1, colorData1],
+                borderRadius: 4
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: { color: colorInk }
+              },
+              x: {
+                ticks: { color: colorInk }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // =========================================================================
+    // INTERACTIVE QUIZ
+    // =========================================================================
+    function renderQuiz() {
+      const container = document.getElementById(`quiz-container`);
+      if (!container) return;
+
+      container.innerHTML = QUIZ_QUESTIONS.map(function (q) {
+        const selected = appState.quizAnswers[q.id] || ``;
+        const optionsHtml = [`A`, `B`, `C`, `D`].map(function (letter) {
+          const isChecked = selected === letter ? `checked` : ``;
+          return `
+            <label class="quiz-option" id="opt-${q.id}-${letter}">
+              <input type="radio" name="${q.id}" value="${letter}" ${isChecked} onchange="selectQuizAnswer('${q.id}', '${letter}')">
+              <span><strong>${letter})</strong> ${escapeHtml(q.options[letter])}</span>
+            </label>`;
+        }).join(``);
+
+        return `
+          <div class="quiz-card" id="card-${q.id}">
+            <div style="font-weight:600; font-size:1.06rem;">${escapeHtml(q.prompt)}</div>
+            <div class="quiz-options">${optionsHtml}</div>
+            <div class="quiz-feedback" id="fb-${q.id}"></div>
+          </div>`;
+      }).join(``);
+
+      updateAnsweredBadge();
+    }
+
+    function selectQuizAnswer(qId, letter) {
+      appState.quizAnswers[qId] = letter;
+      updateAnsweredBadge();
+      if (appState.quizSubmitted) {
+        gradeQuiz(true);
+      }
+      persistState();
+    }
+
+    function updateAnsweredBadge() {
+      const badge = document.getElementById(`quiz-answered-count`);
+      if (!badge) return;
+      const count = QUIZ_QUESTIONS.filter(function (q) {
+        return Boolean(appState.quizAnswers[q.id]);
+      }).length;
+      badge.textContent = `${count} / ${QUIZ_QUESTIONS.length} respondidas`;
+    }
+
+    function gradeQuiz(skipPersist) {
+      appState.quizSubmitted = true;
+      let correctCount = 0;
+
+      QUIZ_QUESTIONS.forEach(function (q) {
+        const chosen = appState.quizAnswers[q.id];
+        const fb = document.getElementById(`fb-${q.id}`);
+
+        [`A`, `B`, `C`, `D`].forEach(function (letter) {
+          const optEl = document.getElementById(`opt-${q.id}-${letter}`);
+          if (!optEl) return;
+          optEl.classList.remove(`is-correct`, `is-wrong`);
+          if (letter === q.correct) {
+            optEl.classList.add(`is-correct`);
+          } else if (chosen === letter && chosen !== q.correct) {
+            optEl.classList.add(`is-wrong`);
+          }
+        });
+
+        const isOk = chosen === q.correct;
+        if (isOk) correctCount += 1;
+
+        if (fb) {
+          fb.classList.add(`is-visible`);
+          fb.classList.remove(`ok`, `bad`);
+          fb.classList.add(isOk ? `ok` : `bad`);
+          if (!chosen) {
+            fb.textContent = `Sin responder. ${q.rationale}`;
+          } else {
+            fb.textContent = isOk
+              ? `Correcto. ${q.rationale}`
+              : `Respuesta marcada: ${chosen}. ${q.rationale}`;
+          }
+        }
+      });
+
+      const score10 = ((correctCount / QUIZ_QUESTIONS.length) * 10).toFixed(2);
+      const numericScore = Number(score10);
+      let qualification = `Suspenso`;
+      if (numericScore >= 9) qualification = `Sobresaliente`;
+      else if (numericScore >= 7) qualification = `Notable`;
+      else if (numericScore >= 5) qualification = `Aprobado`;
+
+      const gradeEl = document.getElementById(`quiz-grade-display`);
+      const summaryEl = document.getElementById(`quiz-summary-text`);
+      if (gradeEl) gradeEl.textContent = `${score10.replace(`.`, `,`)} / 10 — ${qualification}`;
+      if (summaryEl) summaryEl.textContent = `${correctCount} aciertos de ${QUIZ_QUESTIONS.length} preguntas evaluadas sobre las fuentes.`;
+
+      if (!skipPersist) persistState();
+    }
+
+    function resetQuiz(btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Pulse de nuevo para confirmar reinicio`;
+        return;
+      }
+      if (btn) {
+        btn.dataset.armed = `false`;
+        btn.textContent = `Reiniciar test`;
+      }
+      appState.quizAnswers = {};
+      appState.quizSubmitted = false;
+      renderQuiz();
+
+      const gradeEl = document.getElementById(`quiz-grade-display`);
+      const summaryEl = document.getElementById(`quiz-summary-text`);
+      if (gradeEl) gradeEl.textContent = `Pendiente de corrección`;
+      if (summaryEl) summaryEl.textContent = `Responda a las 8 preguntas y pulse «Corregir evaluación».`;
+
+      persistState();
+    }
+
+    // =========================================================================
+    // CSV EXPORT & UTILITIES
+    // =========================================================================
+    function exportProgressCSV() {
+      const c = appState.calcInputs;
+      const totalPages = c.teams * c.pages;
+      const totalModules = totalPages * c.modules;
+      const totalValue = c.teams * c.extCost;
+
+      const lines = [
+        `Seccion/Parametro,Estado/Valor,Fuente`,
+        `"Aviso","Contenido y calculos de caracter orientativo","Dossier Ejecutivo"`,
+        `"Equipos disponibles",${c.teams},"Parametro usuario"`,
+        `"Paginas por portal",${c.pages},"Base fuente: 5 paginas"`,
+        `"Paginas HTML totales movilizables",${totalPages},"Calculo orientativo"`,
+        `"Componentes funcionales totales",${totalModules},"Calculo orientativo"`,
+        `"Hipotesis presupuesto externo evitado (EUR)",${totalValue},"Hipotesis usuario (en fuente: no consta)"`
+      ];
+
+      SECTIONS_META.forEach(function (sec) {
+        const done = appState.completedSections.includes(sec.id) ? `Completada` : `Pendiente`;
+        lines.push(`"Seccion ${sec.num}: ${sec.title}","${done}","Video Byspel - Ivan L."`);
+      });
+
+      const csvContent = lines.join(`\n`);
+
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+          window.notebookAppApi.triggerFileDownload({
+            content: csvContent,
+            contentType: `text/csv`,
+            encoding: `UTF-8`,
+            filename: `dossier-html-css-avance.csv`
+          });
+          return;
+        }
+      } catch (err) {
+        // Fallback below
+      }
+
+      const blob = new Blob([csvContent], { type: `text/csv;charset=utf-8;` });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement(`a`);
+      a.href = url;
+      a.download = `dossier-html-css-avance.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, `&amp;`)
+        .replace(/</g, `&lt;`)
+        .replace(/>/g, `&gt;`)
+        .replace(/"/g, `&quot;`)
+        .replace(/'/g, `&#39;`);
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>

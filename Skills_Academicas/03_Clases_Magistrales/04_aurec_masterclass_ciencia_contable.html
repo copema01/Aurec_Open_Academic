@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUREC S.A.S. | Masterclass: La Ciencia Contable en las Decisiones</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        window.tailwind = window.tailwind || {};
+        window.tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#edf8f1',
+                            100: '#d8eedf',
+                            500: '#1f7a4d',
+                            800: '#155d3a',
+                            900: '#114932',
+                            950: '#0d3526',
+                        },
+                        aurec: {
+                            gold: '#d97706',
+                            goldlight: '#f59e0b',
+                            navy: '#12372b'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --aurec-gold: #f6b73c;
+            --aurec-navy: #12372b;
+            --aurec-cyan: #22b8cf;
+            --aurec-violet: #7c66d9;
+            --aurec-coral: #ef6a62;
+            --aurec-green: #1f7a4d;
+            --aurec-green-light: #78a84b;
+            --aurec-green-dark: #12372b;
+            --module-accent: var(--aurec-cyan);
+            --module-tint: #effafd;
+            --module-soft: #dff5fa;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: #1e293b;
+            font-family: 'Inter', Arial, sans-serif;
+            background:
+                radial-gradient(circle at 8% 12%, rgba(31, 122, 77, 0.11), transparent 24rem),
+                radial-gradient(circle at 92% 18%, rgba(246, 183, 60, 0.12), transparent 22rem),
+                linear-gradient(135deg, #eef7f1 0%, #f8faf7 48%, #edf5ef 100%) !important;
+        }
+
+        header {
+            background: linear-gradient(115deg, #ffffff 0%, #f4f9f5 100%) !important;
+            color: var(--aurec-navy) !important;
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid #d9e8dc !important;
+            box-shadow: 0 10px 30px rgba(18, 55, 43, 0.12) !important;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        header::after {
+            content: "";
+            display: block;
+            height: 3px;
+            background: linear-gradient(90deg, var(--aurec-green) 0 24%, var(--aurec-green-light) 24% 48%, var(--aurec-gold) 48% 74%, var(--aurec-coral) 74% 100%);
+        }
+
+        nav {
+            background: var(--aurec-green-dark) !important;
+            border-top: 1px solid #2d5c49 !important;
+            overflow-x: auto;
+        }
+
+        main {
+            max-width: 90rem !important;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        header > div:first-child {
+            min-height: 82px;
+            max-width: 90rem;
+            margin: 0 auto;
+            padding: 12px 24px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        header > div:first-child > div:first-child {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        header h1 {
+            margin: 0;
+            color: var(--aurec-green-dark) !important;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        header p {
+            margin: 4px 0 0;
+            color: #52677a !important;
+        }
+
+        header .bg-gradient-to-tr {
+            background: linear-gradient(135deg, #d97706, #f6b73c) !important;
+            color: var(--aurec-green-dark) !important;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        nav > div {
+            max-width: 90rem;
+            min-height: 58px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 24px;
+            box-sizing: border-box;
+        }
+
+        .tab-btn {
+            min-height: 42px;
+            padding: 10px 12px;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: #c8d8e5;
+            font: 700 12px 'Inter', Arial, sans-serif;
+            white-space: nowrap;
+        }
+
+        #btn-tab-marco[aria-current="page"] {
+            background: var(--aurec-green) !important;
+            color: #ffffff !important;
+        }
+
+        #btn-tab-simulador[aria-current="page"] {
+            background: var(--aurec-gold) !important;
+            color: var(--aurec-green-dark) !important;
+        }
+
+        #btn-tab-casos[aria-current="page"] {
+            background: var(--aurec-coral) !important;
+            color: #ffffff !important;
+        }
+
+        #btn-tab-analisis[aria-current="page"] {
+            background: #9a86ec !important;
+            color: #ffffff !important;
+        }
+
+        #btn-tab-checklist[aria-current="page"] {
+            background: #51b96d !important;
+            color: #12372b !important;
+        }
+
+        /* Aislamiento estricto de vistas SPA para evitar desplazamiento vertical acumulado */
+        .tab-panel {
+            display: none;
+            animation: fadeInModule 0.25s ease-out forwards;
+        }
+
+        .tab-panel.active-panel {
+            display: block;
+        }
+
+        @keyframes fadeInModule {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-btn {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .tab-btn[aria-current="page"] {
+            box-shadow: 0 8px 24px rgba(246, 183, 60, 0.28);
+        }
+
+        body[data-module="tab-marco"] {
+            --module-accent: var(--aurec-green);
+            --module-tint: #edf8f1;
+            --module-soft: #dbeee2;
+        }
+
+        body[data-module="tab-simulador"] {
+            --module-accent: var(--aurec-gold);
+            --module-tint: #fff8e8;
+            --module-soft: #fcebc4;
+        }
+
+        body[data-module="tab-casos"] {
+            --module-accent: var(--aurec-coral);
+            --module-tint: #fff2ef;
+            --module-soft: #fbdad5;
+        }
+
+        body[data-module="tab-analisis"] {
+            --module-accent: var(--aurec-violet);
+            --module-tint: #f6f3ff;
+            --module-soft: #e6dffd;
+        }
+
+        body[data-module="tab-checklist"] {
+            --module-accent: var(--aurec-green);
+            --module-tint: #eefaf2;
+            --module-soft: #d9f1e1;
+        }
+
+        body[data-module] main {
+            background: radial-gradient(circle at 92% 8%, var(--module-soft), transparent 22rem);
+        }
+
+        .tab-panel {
+            --module-accent: var(--aurec-green);
+        }
+
+        #tab-simulador {
+            --module-accent: var(--aurec-gold);
+        }
+
+        #tab-casos {
+            --module-accent: var(--aurec-coral);
+        }
+
+        #tab-analisis {
+            --module-accent: var(--aurec-violet);
+        }
+
+        #tab-checklist {
+            --module-accent: var(--aurec-green);
+        }
+
+        .tab-panel.active-panel {
+            border-radius: 18px;
+            border: 1px solid rgba(15, 23, 42, 0.06);
+            padding: 10px;
+            box-shadow: 0 10px 38px rgba(15, 23, 42, 0.06);
+        }
+
+        .tab-panel.active-panel > div,
+        .tab-panel.active-panel > section {
+            box-sizing: border-box;
+        }
+
+        .tab-panel .rounded-2xl,
+        .tab-panel .rounded-xl {
+            box-sizing: border-box;
+        }
+
+        .tab-panel h2,
+        .tab-panel h3,
+        .tab-panel h4 {
+            color: #17283a;
+        }
+
+        .tab-panel h2 {
+            font-size: 28px;
+            line-height: 1.15;
+        }
+
+        .tab-panel h3 {
+            font-size: 17px;
+        }
+
+        .bg-white {
+            background: #ffffff;
+        }
+
+        .bg-slate-50,
+        .bg-slate-100 {
+            background: #f4f7f9;
+        }
+
+        .bg-slate-900 {
+            background: var(--aurec-green-dark);
+            color: #ffffff;
+        }
+
+        .bg-slate-950 {
+            background: #0d2a20;
+            color: #ffffff;
+        }
+
+        .bg-slate-800 {
+            background: #1d4b38;
+            color: #ffffff;
+        }
+
+        .border,
+        .border-slate-200,
+        .border-slate-100 {
+            border: 1px solid #dbe6ec;
+        }
+
+        .rounded-2xl {
+            border-radius: 18px;
+        }
+
+        .rounded-xl {
+            border-radius: 13px;
+        }
+
+        .shadow-sm,
+        .shadow-md,
+        .shadow-lg,
+        .shadow-xl {
+            box-shadow: 0 12px 34px rgba(15, 23, 42, 0.09);
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .gap-4 {
+            gap: 16px;
+        }
+
+        .gap-6 {
+            gap: 24px;
+        }
+
+        .gap-8 {
+            gap: 32px;
+        }
+
+        .p-4,
+        .p-5,
+        .p-6,
+        .p-8 {
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            vertical-align: middle;
+        }
+
+        #tab-marco > div:first-child,
+        #tab-simulador > div,
+        #tab-casos > div:first-child,
+        #tab-analisis > div:first-child,
+        #tab-checklist > div:first-child {
+            box-shadow: 0 18px 50px rgba(15, 23, 42, 0.10);
+        }
+
+        #tab-marco > div:first-child {
+            border-top: 5px solid var(--aurec-green);
+            background: linear-gradient(145deg, #ffffff 0%, #edf8f1 100%);
+        }
+
+        #tab-simulador > div:first-child {
+            border-top: 5px solid var(--aurec-gold);
+            background: linear-gradient(145deg, #ffffff 0%, #fffaf0 100%);
+        }
+
+        #tab-casos > div:first-child {
+            border-top: 5px solid var(--aurec-coral);
+            background: linear-gradient(145deg, #ffffff 0%, #fff7f4 100%);
+        }
+
+        #tab-analisis > div:first-child {
+            border-top: 5px solid var(--aurec-violet);
+            background: linear-gradient(145deg, #ffffff 0%, #f7f5ff 100%);
+        }
+
+        #tab-checklist > div:first-child {
+            border-top: 5px solid var(--aurec-green);
+            background: linear-gradient(145deg, #ffffff 0%, #f2fbf5 100%);
+        }
+
+        #tab-marco .rounded-xl.border,
+        #tab-casos .rounded-xl.border,
+        #tab-analisis .border,
+        #tab-checklist .border {
+            transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+        }
+
+        #tab-marco .grid > div.border:hover,
+        #tab-casos .lg\\:grid-cols-2 > div:hover,
+        #tab-analisis .border:hover,
+        #tab-checklist label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.10);
+        }
+
+        #tab-simulador .lg\\:grid-cols-4 > div {
+            border-top: 3px solid transparent;
+        }
+
+        #tab-simulador .lg\\:grid-cols-4 > div:nth-child(1) {
+            border-top-color: var(--aurec-green);
+            background: linear-gradient(145deg, #ffffff, #edf8f1);
+        }
+
+        #tab-simulador .lg\\:grid-cols-4 > div:nth-child(2) {
+            border-top-color: var(--aurec-gold);
+            background: linear-gradient(145deg, #ffffff, #fff8e8);
+        }
+
+        #tab-simulador .lg\\:grid-cols-4 > div:nth-child(3) {
+            border-top-color: var(--aurec-violet);
+            background: linear-gradient(145deg, #ffffff, #f6f3ff);
+        }
+
+        #tab-simulador .lg\\:grid-cols-4 > div:nth-child(4) {
+            border-top-color: var(--aurec-coral);
+            background: linear-gradient(145deg, #ffffff, #fff2ef);
+        }
+
+        #tab-simulador input {
+            background: #f8fbfd;
+            border-color: #bdd1dc;
+        }
+
+        #tab-simulador input:focus {
+            outline: none;
+            border-color: var(--aurec-green);
+            box-shadow: 0 0 0 3px rgba(31, 122, 77, 0.16);
+        }
+
+        #tab-casos .caso-laboratorio {
+            min-width: 0;
+        }
+
+        #tab-casos .caso-inputs {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        #tab-casos .caso-inputs label {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: #52677a;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        #tab-casos .caso-inputs input {
+            width: 100%;
+            min-height: 38px;
+            box-sizing: border-box;
+            border: 1px solid #cbdac8;
+            border-radius: 9px;
+            background: #ffffff;
+            color: #173829;
+            padding: 8px 10px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        #tab-casos .caso-inputs input:focus {
+            outline: none;
+            border-color: var(--aurec-green);
+            box-shadow: 0 0 0 3px rgba(31, 122, 77, 0.12);
+        }
+
+        #tab-casos details {
+            border: 1px solid #dbe6ec;
+            border-radius: 10px;
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        #tab-casos summary {
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 11px 13px;
+            color: #173829;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        #tab-casos summary::-webkit-details-marker {
+            display: none;
+        }
+
+        #tab-casos summary::after {
+            content: "+";
+            display: grid;
+            place-items: center;
+            width: 20px;
+            height: 20px;
+            flex: 0 0 20px;
+            border-radius: 50%;
+            background: #edf8f1;
+            color: var(--aurec-green);
+        }
+
+        #tab-casos details[open] summary::after {
+            content: "−";
+        }
+
+        #tab-casos .detalle-campo {
+            border-top: 1px solid #e8efea;
+            padding: 11px 13px;
+            color: #52677a;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+
+        #tab-casos .resultado-live {
+            transition: background-color 220ms ease, transform 220ms ease, color 220ms ease;
+        }
+
+        #tab-casos .resultado-live.actualizado {
+            animation: pulsoContable 650ms ease;
+        }
+
+        #tab-casos .asiento-linea {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) 0.6fr 0.6fr;
+            align-items: center;
+            gap: 8px;
+            min-height: 48px;
+            border-bottom: 1px solid #e8efea;
+            padding: 8px 10px;
+            transition: background 220ms ease, transform 220ms ease;
+        }
+
+        #tab-casos .asiento-linea:last-child {
+            border-bottom: 0;
+        }
+
+        #tab-casos .asiento-linea.mover {
+            background: #edf8f1;
+            transform: translateX(4px);
+        }
+
+        @keyframes pulsoContable {
+            0% { transform: scale(1); }
+            45% { transform: scale(1.025); background: #eefaf2; }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 640px) {
+            #tab-casos .caso-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            #tab-casos .asiento-linea {
+                grid-template-columns: minmax(0, 1fr) 0.55fr 0.55fr;
+                font-size: 10px;
+            }
+        }
+
+        #python-console-output {
+            color: #d6f7ff;
+        }
+
+        #tab-simulador .lg\:col-span-7,
+        #tab-simulador .lg\:col-span-5 {
+            min-width: 0;
+        }
+
+        #tab-simulador input {
+            width: 100%;
+            min-height: 38px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+
+        #tab-simulador label {
+            min-height: 32px;
+            display: flex;
+            align-items: flex-end;
+            line-height: 1.25;
+        }
+
+        #tab-simulador #python-console-output {
+            min-height: 350px;
+            max-height: 520px;
+            margin: 0;
+            padding: 12px 4px 8px;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 11px;
+            line-height: 1.65;
+        }
+
+        .diagnostico-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #5ee19a;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .diagnostico-status::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 12px rgba(74, 222, 128, 0.75);
+        }
+
+        .docente-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 6px 12px;
+            margin-top: 3px;
+        }
+
+        .docente-links a {
+            color: var(--aurec-green);
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .docente-links a:hover {
+            color: #d97706;
+            text-decoration: underline;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .tab-btn:hover {
+                transform: translateY(-1px);
+            }
+        }
+
+        .module-progress {
+            height: 3px;
+            background: #dce8df;
+            position: relative;
+        }
+
+        .module-progress-bar {
+            height: 100%;
+            width: 20%;
+            background: linear-gradient(90deg, var(--aurec-green), var(--aurec-green-light), #f59e0b);
+            transition: width 260ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .live-badge {
+            box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.25);
+        }
+
+        .checklist-progress {
+            height: 8px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+
+        .checklist-progress-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--aurec-green), var(--aurec-green-light));
+            transition: width 200ms ease;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        @media (min-width: 640px) {
+            .sm\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .md\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            .md\:flex-row {
+                flex-direction: row;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .lg\:grid-cols-4 {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+
+            .lg\:grid-cols-12 {
+                grid-template-columns: repeat(12, minmax(0, 1fr));
+            }
+
+            .lg\:col-span-5 {
+                grid-column: span 5 / span 5;
+            }
+
+            .lg\:col-span-7 {
+                grid-column: span 7 / span 7;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            header > div:first-child > div:last-child {
+                display: none;
+            }
+
+            header h1 {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            main {
+                padding: 12px;
+            }
+
+            header > div:first-child {
+                min-height: 72px;
+                padding: 10px 12px;
+            }
+
+            header p {
+                max-width: 56vw;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            nav > div {
+                padding: 7px 12px;
+            }
+
+            .tab-panel h2 {
+                font-size: 22px;
+            }
+        }
+
+        /* Estilos de Impresión / PDF Ecológico (Fondo Claro) */
+        #print-report {
+            display: none;
+        }
+
+        @media print {
+            header, nav, footer, .no-print, button, select {
+                display: none !important;
+            }
+            main,
+            .tab-panel,
+            .tab-panel.active-panel {
+                display: none !important;
+            }
+            #print-report {
+                display: block !important;
+                width: 100%;
+                color: #111827;
+                background: #ffffff;
+                font-size: 10pt;
+            }
+            .print-cover {
+                min-height: 8cm;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                border-bottom: 3px solid #1f7a4d;
+                margin-bottom: 12mm;
+                padding: 8mm 10mm 12mm;
+            }
+            .print-cover h1 {
+                margin: 0 0 4mm;
+                color: #12372b;
+                font-size: 24pt;
+            }
+            .print-section {
+                page-break-before: always;
+                margin: 0 10mm;
+            }
+            .print-section:first-of-type {
+                page-break-before: auto;
+            }
+            .print-section h2 {
+                margin: 0 0 5mm;
+                border-bottom: 1px solid #9ca3af;
+                padding-bottom: 3mm;
+                color: #12372b;
+                font-size: 16pt;
+            }
+            .print-kpis {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 4mm;
+                margin-bottom: 6mm;
+            }
+            .print-kpi {
+                border: 1px solid #d1d5db;
+                border-radius: 3mm;
+                padding: 4mm;
+            }
+            .print-kpi strong {
+                display: block;
+                margin-top: 2mm;
+                font-size: 13pt;
+            }
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 4mm 0;
+            }
+            .print-table th,
+            .print-table td {
+                border: 1px solid #d1d5db;
+                padding: 2.5mm;
+                text-align: left;
+                vertical-align: top;
+            }
+            .print-table th {
+                background: #edf8f1;
+            }
+            .print-conclusion {
+                border-left: 4px solid #1f7a4d;
+                background: #f3f6f4;
+                padding: 4mm;
+                margin: 5mm 0;
+            }
+            .print-checklist {
+                columns: 2;
+                column-gap: 8mm;
+            }
+            .print-checklist p {
+                break-inside: avoid;
+                margin: 0 0 3mm;
+            }
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                font-size: 10.5pt !important;
+            }
+            .tab-panel {
+                display: block !important;
+                page-break-after: always;
+                margin-bottom: 2rem;
+            }
+            .bg-slate-900, .bg-slate-950, .bg-slate-800 {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+            .text-white, .text-slate-200, .text-amber-400 {
+                color: #000000 !important;
+            }
+            .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl {
+                box-shadow: none !important;
+            }
+            .border {
+                border-color: #94a3b8 !important;
+            }
+            pre {
+                white-space: pre-wrap !important;
+                word-wrap: break-word !important;
+                color: #000000 !important;
+                background-color: #f8fafc !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans text-slate-800 bg-slate-100 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Header Principal Institucional -->
+    <header class="bg-slate-900 text-white shadow-xl border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Branding & Título Masterclass -->
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gradient-to-tr from-amber-600 via-amber-500 to-amber-300 px-3 py-2.5 rounded-xl shadow-lg shadow-amber-500/20 text-slate-950 font-black text-lg sm:text-xl tracking-wider">
+                        AUREC SAS
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h1 class="text-base sm:text-xl font-bold tracking-tight text-white">AUREC S.A.S. | Consultoría & Cátedra de Posgrado</h1>
+                            <span class="live-badge bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] px-2.5 py-0.5 rounded-full font-medium flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Sistema en Vivo
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-medium mt-0.5 line-clamp-1">
+                            MASTERCLASS: Más allá de los números: Por qué la ciencia contable gobierna las decisiones de personas y empresas
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Info Docente & Versión -->
+                <div class="hidden lg:flex items-center space-x-6 border-l border-slate-800 pl-6">
+                    <div class="text-right">
+                        <p class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Docente Titular</p>
+                        <div class="docente-links">
+                            <i class="fa-solid fa-user-tie text-xs text-amber-500"></i>
+                            <a href="https://www.edgarjulianmartinez.com" target="_blank" rel="noopener noreferrer">C.P. Edgar J. Martínez A.</a>
+                            <span class="text-slate-300">|</span>
+                            <a href="https://www.aurec.com.co" target="_blank" rel="noopener noreferrer">Aurec S.A.S.</a>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700/50 text-center min-w-[95px]">
+                        <span class="block text-[10px] text-slate-400 font-bold uppercase">Módulo</span>
+                        <span id="header-module-indicator" class="text-xs font-mono text-amber-400 font-bold">1 / 5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navegación Horizontal de 5 Pestañas -->
+        <nav class="bg-slate-950 border-t border-slate-800/80 px-4 sm:px-6 lg:px-8 overflow-x-auto custom-scrollbar" aria-label="Navegación de Módulos">
+            <div class="max-w-7xl mx-auto flex space-x-1 sm:space-x-2 py-2.5 min-w-max">
+                <button type="button" onclick="switchTab('tab-marco')" id="btn-tab-marco" aria-controls="tab-marco" aria-current="page" class="tab-btn px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all duration-200 bg-brand-500 text-white shadow-md">
+                    <i class="fa-solid fa-book-bookmark"></i> Módulo 1: Marco Teórico & Ciencia Contable
+                </button>
+                <button type="button" onclick="switchTab('tab-simulador')" id="btn-tab-simulador" aria-controls="tab-simulador" class="tab-btn px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i class="fa-solid fa-calculator"></i> Módulo 2: Simulador Financiero en Vivo
+                </button>
+                <button type="button" onclick="switchTab('tab-casos')" id="btn-tab-casos" aria-controls="tab-casos" class="tab-btn px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i class="fa-solid fa-receipt"></i> Módulo 3: Casos Prácticos & Asientos
+                </button>
+                <button type="button" onclick="switchTab('tab-analisis')" id="btn-tab-analisis" aria-controls="tab-analisis" class="tab-btn px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i class="fa-solid fa-comments"></i> Módulo 4: Preguntas de Análisis
+                </button>
+                <button type="button" onclick="switchTab('tab-checklist')" id="btn-tab-checklist" aria-controls="tab-checklist" class="tab-btn px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60">
+                    <i class="fa-solid fa-clipboard-check"></i> Módulo 5: Check-list & Dictamen
+                </button>
+            </div>
+        </nav>
+        <div class="module-progress" aria-hidden="true"><div id="module-progress-bar" class="module-progress-bar"></div></div>
+    </header>
+
+    <!-- Contenido Principal (Vistas Modulares Aisladas) -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ===================================================================== -->
+        <!-- MÓDULO 1: MARCO TEÓRICO & CIENCIA CONTABLE                            -->
+        <!-- ===================================================================== -->
+        <section id="tab-marco" class="tab-panel active-panel space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 pb-5 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-800 bg-brand-50 px-3 py-1 rounded-full border border-brand-100">Módulo 1 de 5 • Fundamentos Epistemológicos</span>
+                        <h2 class="text-2xl font-extrabold text-slate-900 mt-2">La Contabilidad como Ciencia Social Aplicada y su Impacto Real</h2>
+                        <p class="text-sm text-slate-600 mt-1">Trascendiendo la teneduría de libros hacia el gobierno económico de personas naturales y jurídicas.</p>
+                    </div>
+                    <div class="flex items-center gap-2.5 text-amber-700 bg-amber-50 px-4 py-3 rounded-xl border border-amber-200/70">
+                        <i class="fa-solid fa-brain text-2xl text-amber-600"></i>
+                        <div>
+                            <span class="block text-xs font-extrabold">Juicio Profesional</span>
+                            <span class="block text-[11px] text-amber-800">Materialidad NIA 320</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3 Pilares Epistemológicos -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 hover:border-brand-500 transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-brand-500 text-white flex items-center justify-center font-bold text-lg mb-3 shadow-sm">1</div>
+                        <h3 class="font-bold text-slate-900 text-base mb-2">Epistemología Contable</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            La contabilidad no es una simple técnica administrativa ni un trámite fiscal; es una <strong>ciencia empírica y social</strong> que estudia, mide y representa fidedignamente la circulación del valor económico, los derechos y las obligaciones en el tiempo.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 hover:border-amber-500 transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-lg mb-3 shadow-sm">2</div>
+                        <h3 class="font-bold text-slate-900 text-base mb-2">Principio de Dualidad</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            La Partida Doble (<span class="font-mono font-semibold text-slate-800">Activo = Pasivo + Patrimonio</span>) es la representación matemática del equilibrio económico. Ningún recurso existe sin su fuente de financiación interna o externa.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 hover:border-emerald-500 transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-lg mb-3 shadow-sm">3</div>
+                        <h3 class="font-bold text-slate-900 text-base mb-2">Materialidad & Valor (NIA 320)</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            En la maximización del valor empresarial y la protección del patrimonio familiar, la <strong>materialidad</strong> filtra lo irrelevante para enfocar la atención gerencial y de auditoría en las partidas que alteran decisiones económicas reales.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Matriz Comparativa: Persona Natural vs. Persona Jurídica (PYME) -->
+                <h3 class="font-bold text-slate-900 text-lg mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-scale-balanced text-brand-800"></i> Matriz Comparativa: Dimensión Personal vs. Dimensión Corporativa
+                </h3>
+                
+                <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm mb-8">
+                    <table class="w-full text-left border-collapse bg-white">
+                        <thead>
+                            <tr class="bg-slate-900 text-white text-xs font-semibold tracking-wider uppercase">
+                                <th class="p-4 border-b border-slate-800">Dimensión de Análisis</th>
+                                <th class="p-4 border-b border-slate-800">Persona Natural (Finanzas Personales)</th>
+                                <th class="p-4 border-b border-slate-800">Persona Jurídica (PYME / Empresa)</th>
+                                <th class="p-4 border-b border-slate-800">Impacto del Criterio Contable</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-4 font-bold text-slate-900">Objetivo Fundamental</td>
+                                <td class="p-4">Protección y crecimiento del Patrimonio Líquido real y sostenibilidad familiar.</td>
+                                <td class="p-4">Maximización del valor económico de la empresa para accionistas y socios.</td>
+                                <td class="p-4 font-semibold text-brand-800">Evita confundir flujo operativo con riqueza acumulada.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-4 font-bold text-slate-900">Riesgo por Falso Diagnóstico</td>
+                                <td class="p-4 text-red-600 font-medium">Confundir ingresos brutos altos con salud financiera (Trampa del consumo pasivo).</td>
+                                <td class="p-4 text-red-600 font-medium">Confundir utilidad contable con liquidez disponible (Reparto ilegítimo de dividendos).</td>
+                                <td class="p-4 font-semibold text-red-700">Previene insolvencia imprevista y sobreendeudamiento.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-4 font-bold text-slate-900">Marco de Medición</td>
+                                <td class="p-4">Formulario 210 DIAN + Estado de Situación Patrimonial & Flujo de Caja.</td>
+                                <td class="p-4">Marco Técnico NIIF para las PYMES (Sección 11, Deterioro NIIF 9, Provisiones).</td>
+                                <td class="p-4 font-semibold text-emerald-700">Establece la base objetiva para la toma de decisiones.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-4 font-bold text-slate-900">Rol del Auditor / Asesor</td>
+                                <td class="p-4">Arquitecto de estructuración patrimonial y mitigación de riesgo fiscal.</td>
+                                <td class="p-4">Dictaminador de Estados Financieros con Escepticismo Profesional y NIA.</td>
+                                <td class="p-4 font-semibold text-slate-900">Aporta gobernanza, transparencia y credibilidad externa.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Banner Fórmula Regla de Oro -->
+                <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-6 rounded-2xl shadow-lg border border-slate-700 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                        <span class="text-xs font-semibold text-amber-400 uppercase tracking-widest">Máxima Fundamental de Auditoría</span>
+                        <h4 class="text-lg sm:text-xl font-mono font-bold mt-1 text-white">"La utilidad es una opinión contable; el flujo de caja es un hecho financiero."</h4>
+                        <p class="text-xs text-slate-300 mt-2">Tanto en la economía del hogar como en la Junta Directiva de una PYME, la ciencia contable exige evaluar la liquidez real antes de comprometer patrimonio o decretar dividendos.</p>
+                    </div>
+                    <div class="flex-shrink-0 no-print">
+                        <button type="button" onclick="switchTab('tab-simulador')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-5 py-3 rounded-xl shadow-lg transition-all text-xs flex items-center gap-2">
+                            CONTINUAR AL MÓDULO 2: SIMULADOR <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- MÓDULO 2: SIMULADOR FINANCIERO EN VIVO                                -->
+        <!-- ===================================================================== -->
+        <section id="tab-simulador" class="tab-panel space-y-6">
+            <!-- Header del Simulador -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand-800 bg-brand-50 px-3 py-1 rounded-full border border-brand-100">Módulo 2 de 5 • Laboratorio Interactivo</span>
+                    <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2 mt-2">
+                        <i class="fa-brands fa-python text-amber-500 text-2xl"></i> Motor de Diagnóstico Financiero & Auditoría (JS/Python)
+                    </h2>
+                    <p class="text-xs text-slate-600 mt-1">
+                        Modifique en tiempo real las variables de la Persona Natural o la PYME para evaluar el deterioro patrimonial, la utilidad ajustada y el riesgo de liquidez.
+                    </p>
+                </div>
+                <div class="flex gap-2 no-print">
+                    <button type="button" onclick="resetearSimulador()" class="px-3.5 py-2 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate-left"></i> Restablecer
+                    </button>
+                    <button type="button" onclick="ejecutarMotorAuditoria()" class="px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-play"></i> EJECUTAR DIAGNÓSTICO
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard de KPIs Rápidos -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Patrimonio Líquido (Carlos P.)</span>
+                    <span id="kpi-patrimonio-neto" class="text-2xl font-black text-slate-900 mt-1 block font-mono">$0</span>
+                    <div id="kpi-patrimonio-sub" class="mt-2 text-[10px] font-bold text-slate-500">Calculando...</div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Tasa Ahorro Real (Carlos P.)</span>
+                    <span id="kpi-tasa-ahorro" class="text-2xl font-black text-amber-600 mt-1 block font-mono">0.0%</span>
+                    <div id="kpi-tasa-sub" class="mt-2 text-[10px] font-bold text-slate-500">Capacidad de acumulación</div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Utilidad Real Ajustada (PYME)</span>
+                    <span id="kpi-utilidad-real" class="text-2xl font-black text-slate-900 mt-1 block font-mono">$0</span>
+                    <div id="kpi-utilidad-sub" class="mt-2 text-[10px] font-bold text-slate-500">Post deterioro NIIF 9 & obsolescencia</div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Dictamen Reparto Dividendos</span>
+                    <span id="kpi-alerta-div" class="text-lg font-black text-red-600 mt-1 block">ALERTA SEVERA</span>
+                    <div id="kpi-div-sub" class="mt-2 text-[10px] font-bold text-slate-500">Efectivo en Banco vs Reparto</div>
+                </div>
+            </div>
+
+            <!-- Paneles Editables de Entrada de Datos + Consola -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- Columna Izquierda: Formularios Parámetros Editables -->
+                <div class="space-y-6">
+                    
+                    <!-- Formulario A: Persona Natural (Carlos Pérez) -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-user text-amber-600"></i> Escenario A: Persona Natural (Carlos Pérez)
+                            </h3>
+                            <span class="text-[10px] bg-amber-100 text-amber-900 font-bold px-2.5 py-0.5 rounded-full">Finanzas Personales</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Ingresos Brutos Mensuales ($):</label>
+                                <input type="number" id="input-pn-ingresos" value="12000000" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Porcentaje Gastos Consumo (%):</label>
+                                <input type="number" id="input-pn-gastos-pct" value="85" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Pasivo Tarjetas Crédito ($):</label>
+                                <input type="number" id="input-pn-pasivo-tc" value="45000000" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Tasa Interés Tarjeta (% EA):</label>
+                                <input type="number" id="input-pn-tasa-tc" value="32" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Valor Vehículo Uso Personal ($):</label>
+                                <input type="number" id="input-pn-vehiculo" value="50000000" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Depreciación Anual Vehículo (%):</label>
+                                <input type="number" id="input-pn-deprec-pct" value="10" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulario B: Persona Jurídica (Alfa S.A.S.) -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-building text-brand-800"></i> Escenario B: PYME (Inversiones y Servicios Alfa S.A.S.)
+                            </h3>
+                            <span class="text-[10px] bg-brand-100 text-brand-900 font-bold px-2.5 py-0.5 rounded-full">Auditoría NIIF PYMES</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Utilidad Neta Reportada ($):</label>
+                                <input type="number" id="input-pyme-utilidad" value="80000000" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Cartera Vencida > 120 días ($):</label>
+                                <input type="number" id="input-pyme-cartera-vencida" value="120000000" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Estimación Deterioro Cartera (% NIIF 9):</label>
+                                <input type="number" id="input-pyme-deterioro-pct" value="50" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Inventario Obsoleto en Bodega ($):</label>
+                                <input type="number" id="input-pyme-inventario-obsoleto" value="60000000" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">Efectivo Disponible en Bancos ($):</label>
+                                <input type="number" id="input-pyme-efectivo" value="3500000" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">% Propuesto Reparto Dividendos (%):</label>
+                                <input type="number" id="input-pyme-div-pct" value="50" oninput="ejecutarMotorAuditoria()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 font-mono text-slate-900 focus:ring-2 focus:ring-brand-500">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Columna Derecha: Consola Python estilo Terminal -->
+                <div>
+                    <div class="bg-slate-950 text-slate-200 p-5 rounded-2xl shadow-xl border border-slate-800 font-mono text-xs h-full flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+                                <span class="text-amber-400 font-bold flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-line text-xs"></i> Informe de resultados en tiempo real
+                                </span>
+                                <span class="text-[10px] text-slate-500">Motor AUREC</span>
+                            </div>
+                            <pre id="python-console-output" class="text-[11px] leading-relaxed text-slate-300 overflow-x-auto whitespace-pre-wrap font-mono custom-scrollbar max-h-[520px]">
+Preparando el diagnóstico financiero AUREC S.A.S....
+                            </pre>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80 text-[10px] text-slate-500 flex items-center justify-between">
+                            <span class="diagnostico-status">Diagnóstico listo</span>
+                            <span class="text-emerald-400">Resultados actualizados</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Barra de Navegación Inferior del Módulo -->
+            <div class="flex justify-between items-center pt-2 no-print">
+                <button type="button" onclick="switchTab('tab-marco')" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Anterior: Marco Teórico
+                </button>
+                <button type="button" onclick="switchTab('tab-casos')" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-800 text-white text-xs font-bold shadow-md flex items-center gap-2">
+                    Siguiente: Casos Prácticos & Asientos <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- MÓDULO 3: TALLER PRÁCTICO, CASOS DE ESTUDIO & ASIENTOS CONTABLES      -->
+        <!-- ===================================================================== -->
+        <section id="tab-casos" class="tab-panel space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">Módulo 3 de 5 • Taller Práctico & Registros NIIF</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Casos Clínicos Contables: Apariencia vs. Realidad NIIF</h2>
+                    <p class="text-sm text-slate-600 mt-1">Modifique las variables y observe cómo cambian el diagnóstico, los indicadores y los registros contables.</p>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+                    <div class="text-xs text-amber-950">
+                        <strong>Modo de trabajo:</strong> Puede probar el caso de forma independiente o sincronizarlo con el Módulo 2.
+                    </div>
+                    <button type="button" onclick="sincronizarCasosConSimulador()" class="no-print px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-rotate"></i> Traer valores del simulador
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <article class="caso-laboratorio border border-slate-200 rounded-2xl p-5 bg-slate-50/60 flex flex-col gap-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <span class="bg-slate-900 text-white text-[10px] font-bold px-2.5 py-1 rounded-md">CASO 1 • PERSONA NATURAL</span>
+                                <h3 class="text-lg font-black text-slate-900 mt-3">Carlos Pérez: liquidez aparente</h3>
+                            </div>
+                            <span id="caso1-estado" class="bg-amber-100 text-amber-900 text-[10px] font-black px-2.5 py-1 rounded-full">PATRIMONIO EN RIESGO</span>
+                        </div>
+
+                        <div class="caso-inputs">
+                            <label>Ingresos mensuales
+                                <input id="caso1-ingresos" type="number" value="12000000" oninput="actualizarCasoPersonal()">
+                            </label>
+                            <label>Gasto de consumo (%)
+                                <input id="caso1-gastos" type="number" value="85" oninput="actualizarCasoPersonal()">
+                            </label>
+                            <label>Pasivo tarjeta
+                                <input id="caso1-pasivo" type="number" value="45000000" oninput="actualizarCasoPersonal()">
+                            </label>
+                            <label>Tasa de tarjeta (% EA)
+                                <input id="caso1-tasa" type="number" value="32" oninput="actualizarCasoPersonal()">
+                            </label>
+                            <label>Valor del vehículo
+                                <input id="caso1-vehiculo" type="number" value="50000000" oninput="actualizarCasoPersonal()">
+                            </label>
+                            <label>Depreciación anual (%)
+                                <input id="caso1-depreciacion" type="number" value="10" oninput="actualizarCasoPersonal()">
+                            </label>
+                        </div>
+
+                        <details open>
+                            <summary>¿Qué significa cada dato?</summary>
+                            <div class="detalle-campo">
+                                Los ingresos muestran cuánto entra; el gasto revela cuánto sale; el pasivo representa obligaciones exigibles; y el vehículo es un activo cuyo valor disminuye con el tiempo. El patrimonio líquido resulta de restar pasivos al valor neto del activo.
+                            </div>
+                        </details>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="resultado-live bg-white border border-slate-200 rounded-xl p-3">
+                                <span class="text-[10px] font-black uppercase text-slate-500">Flujo disponible</span>
+                                <strong id="caso1-flujo" class="block mt-1 text-lg font-mono text-slate-900">$1.800.000</strong>
+                            </div>
+                            <div class="resultado-live bg-white border border-slate-200 rounded-xl p-3">
+                                <span class="text-[10px] font-black uppercase text-slate-500">Patrimonio líquido</span>
+                                <strong id="caso1-patrimonio" class="block mt-1 text-lg font-mono text-red-700">$0</strong>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                            <div class="bg-slate-900 text-white px-3 py-2 text-[11px] font-bold flex justify-between">
+                                <span>Asiento interactivo: saneamiento de deuda</span>
+                                <button type="button" onclick="animarAsiento('caso1-asiento')" class="text-amber-400 no-print"><i class="fa-solid fa-play"></i> Ver movimiento</button>
+                            </div>
+                            <div id="caso1-asiento">
+                                <div class="asiento-linea text-slate-700">
+                                    <span>2105xx Obligación tarjeta</span><strong id="caso1-debito" class="text-right text-red-700">45.000.000</strong><span class="text-right">Débito</span>
+                                </div>
+                                <div class="asiento-linea text-slate-700">
+                                    <span>2105xx Crédito libranza</span><strong id="caso1-credito" class="text-right text-emerald-700">45.000.000</strong><span class="text-right">Crédito</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="caso1-dictamen" class="bg-amber-50 p-4 rounded-xl border border-amber-200 text-xs text-amber-900">
+                            <strong>Dictamen:</strong> existe una trampa de liquidez aparente. Se recomienda elevar el flujo disponible y reemplazar la deuda costosa.
+                        </div>
+                    </article>
+
+                    <article class="caso-laboratorio border border-slate-200 rounded-2xl p-5 bg-slate-50/60 flex flex-col gap-4">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <span class="bg-slate-900 text-white text-[10px] font-bold px-2.5 py-1 rounded-md">CASO 2 • PYME / NIIF</span>
+                                <h3 class="text-lg font-black text-slate-900 mt-3">Alfa S.A.S.: utilidad ajustada</h3>
+                            </div>
+                            <span id="caso2-estado" class="bg-red-100 text-red-800 text-[10px] font-black px-2.5 py-1 rounded-full">ALERTA DE INSOLVENCIA</span>
+                        </div>
+
+                        <div class="caso-inputs">
+                            <label>Utilidad reportada
+                                <input id="caso2-utilidad" type="number" value="80000000" oninput="actualizarCasoPyme()">
+                            </label>
+                            <label>Cartera vencida
+                                <input id="caso2-cartera" type="number" value="120000000" oninput="actualizarCasoPyme()">
+                            </label>
+                            <label>Deterioro cartera (%)
+                                <input id="caso2-deterioro" type="number" value="50" oninput="actualizarCasoPyme()">
+                            </label>
+                            <label>Inventario obsoleto
+                                <input id="caso2-inventario" type="number" value="60000000" oninput="actualizarCasoPyme()">
+                            </label>
+                            <label>Efectivo disponible
+                                <input id="caso2-efectivo" type="number" value="3500000" oninput="actualizarCasoPyme()">
+                            </label>
+                            <label>Dividendo propuesto (%)
+                                <input id="caso2-dividendo" type="number" value="50" oninput="actualizarCasoPyme()">
+                            </label>
+                        </div>
+
+                        <details open>
+                            <summary>¿Cómo afecta cada ajuste?</summary>
+                            <div class="detalle-campo">
+                                El deterioro reduce el valor recuperable de la cartera y el inventario obsoleto disminuye el activo disponible. La utilidad ajustada se obtiene restando ambos ajustes a la utilidad reportada antes de evaluar dividendos.
+                            </div>
+                        </details>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="resultado-live bg-white border border-slate-200 rounded-xl p-3">
+                                <span class="text-[9px] font-black uppercase text-slate-500">Deterioro cartera</span>
+                                <strong id="caso2-deterioro-res" class="block mt-1 text-sm font-mono text-red-700">-$60.000.000</strong>
+                            </div>
+                            <div class="resultado-live bg-white border border-slate-200 rounded-xl p-3">
+                                <span class="text-[9px] font-black uppercase text-slate-500">Resultado ajustado</span>
+                                <strong id="caso2-resultado" class="block mt-1 text-sm font-mono text-red-700">-$40.000.000</strong>
+                            </div>
+                            <div class="resultado-live bg-white border border-slate-200 rounded-xl p-3">
+                                <span class="text-[9px] font-black uppercase text-slate-500">Dividendos propuestos</span>
+                                <strong id="caso2-dividendos" class="block mt-1 text-sm font-mono text-slate-900">$0</strong>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                            <div class="bg-slate-900 text-white px-3 py-2 text-[11px] font-bold flex justify-between">
+                                <span>Asiento interactivo: ajustes NIIF</span>
+                                <button type="button" onclick="animarAsiento('caso2-asiento')" class="text-amber-400 no-print"><i class="fa-solid fa-play"></i> Ver movimiento</button>
+                            </div>
+                            <div id="caso2-asiento">
+                                <div class="asiento-linea text-slate-700">
+                                    <span>5199xx Gasto deterioro y obsolescencia</span><strong id="caso2-gasto" class="text-right text-red-700">120.000.000</strong><span class="text-right">Débito</span>
+                                </div>
+                                <div class="asiento-linea text-slate-700">
+                                    <span>1399xx Deterioro cartera</span><strong id="caso2-credito-cartera" class="text-right text-red-700">60.000.000</strong><span class="text-right">Crédito</span>
+                                </div>
+                                <div class="asiento-linea text-slate-700">
+                                    <span>1499xx Deterioro inventarios</span><strong id="caso2-credito-inventario" class="text-right text-red-700">60.000.000</strong><span class="text-right">Crédito</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="caso2-dictamen" class="bg-red-50 p-4 rounded-xl border border-red-200 text-xs text-red-900">
+                            <strong>Dictamen:</strong> no procede repartir dividendos con resultado negativo ajustado y caja insuficiente.
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Barra de Navegación Inferior del Módulo -->
+            <div class="flex justify-between items-center pt-2 no-print">
+                <button type="button" onclick="switchTab('tab-simulador')" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Anterior: Simulador en Vivo
+                </button>
+                <button type="button" onclick="switchTab('tab-analisis')" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-800 text-white text-xs font-bold shadow-md flex items-center gap-2">
+                    Siguiente: Preguntas de Análisis <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- MÓDULO 4: PREGUNTAS DE ANÁLISIS & RESPUESTAS                          -->
+        <!-- ===================================================================== -->
+        <section id="tab-analisis" class="tab-panel space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 pb-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-800 bg-brand-50 px-3 py-1 rounded-full border border-brand-200">Módulo 4 de 5 • Seminario de Discusión</span>
+                        <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Preguntas de Análisis Técnico & Soluciones de Auditoría</h2>
+                        <p class="text-sm text-slate-600 mt-1">Despliegue cada interrogante para revisar la sustentación técnica bajo estándares internacionales.</p>
+                    </div>
+                    <button type="button" onclick="toggleAllAccordions()" class="no-print px-3.5 py-2 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-all self-start sm:self-center">
+                        <i class="fa-solid fa-layer-group mr-1.5"></i> Expandir / Contraer Todo
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+
+                    <!-- PREGUNTA 1 -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button type="button" onclick="toggleAccordion('acc-1')" class="w-full text-left p-5 bg-slate-50 hover:bg-slate-100/80 transition-all font-bold text-slate-900 flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xs shrink-0">1</span>
+                                Caso Persona Natural: ¿Cuál es la diferencia crítica entre liquidez transitoria y patrimonio real en el caso de Carlos?
+                            </span>
+                            <i id="icon-acc-1" class="fa-solid fa-chevron-down text-slate-400 transition-transform ml-3"></i>
+                        </button>
+                        <div id="acc-1" class="accordion-body hidden p-5 bg-white border-t border-slate-200 text-xs text-slate-600 leading-relaxed space-y-2">
+                            <p class="font-semibold text-slate-800">Análisis del Auditor Senior:</p>
+                            <p>
+                                La <strong>liquidez transitoria</strong> corresponde al flujo bruto mensual percibido por salarios u honorarios ($12.000.000 COP), el cual genera una falsa sensación de opulencia económica. Por el contrario, el <strong>patrimonio real</strong> es el residuo neto resultante de restar la totalidad de los pasivos exigibles a los activos líquidos y productivos.
+                            </p>
+                            <p class="bg-amber-50 p-3 rounded-lg border border-amber-100 text-amber-900">
+                                Mantener un gasto de consumo del 85% combinado con pasivos costosos al 32% EA reduce su patrimonio neto a cero. La contabilidad personal demuestra que no se construye riqueza por lo que se factura, sino por lo que se retiene e invierte productivamente.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PREGUNTA 2 -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button type="button" onclick="toggleAccordion('acc-2')" class="w-full text-left p-5 bg-slate-50 hover:bg-slate-100/80 transition-all font-bold text-slate-900 flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xs shrink-0">2</span>
+                                Caso Persona Natural: ¿Cómo afecta el endeudamiento de consumo su seguridad financiera y tributaria futura?
+                            </span>
+                            <i id="icon-acc-2" class="fa-solid fa-chevron-down text-slate-400 transition-transform ml-3"></i>
+                        </button>
+                        <div id="acc-2" class="accordion-body hidden p-5 bg-white border-t border-slate-200 text-xs text-slate-600 leading-relaxed space-y-2">
+                            <p class="font-semibold text-slate-800">Análisis del Auditor Senior:</p>
+                            <p>
+                                A nivel tributario (Formulario 210 de la DIAN), los intereses por deudas de consumo no son deducibles en la cédula general de personas naturales. Además, un patrimonio bruto compuesto por bienes depreciables de uso personal incrementa la exposición fiscal sin generar flujos de caja para cubrir el impuesto de renta.
+                            </p>
+                            <p class="bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-900">
+                                Ante una contingencia laboral o de salud, la ausencia de reservas líquidas obliga a liquidar activos con pérdida o incurrir en mora tributaria punitiva.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PREGUNTA 3 -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button type="button" onclick="toggleAccordion('acc-3')" class="w-full text-left p-5 bg-slate-50 hover:bg-slate-100/80 transition-all font-bold text-slate-900 flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-xs shrink-0">3</span>
+                                Caso Persona Natural: ¿Qué 3 acciones contables e inmediatas debe implementar Carlos?
+                            </span>
+                            <i id="icon-acc-3" class="fa-solid fa-chevron-down text-slate-400 transition-transform ml-3"></i>
+                        </button>
+                        <div id="acc-3" class="accordion-body hidden p-5 bg-white border-t border-slate-200 text-xs text-slate-600 leading-relaxed space-y-2">
+                            <p class="font-semibold text-slate-800">Plan de Choque Financiero:</p>
+                            <ul class="list-disc pl-5 space-y-1.5">
+                                <li><strong class="text-slate-800">Sustitución de Pasivo Costoso:</strong> Consolidar o prepagar aceleradamente la deuda de tarjeta de crédito del 32% EA hacia una línea de menor costo financiero.</li>
+                                <li><strong class="text-slate-800">Presupuesto Base Cero:</strong> Reducir el gasto corriente del 85% al 65%, liberando un 20% mensual ($2.400.000 COP) exclusivo para saneamiento patrimonial.</li>
+                                <li><strong class="text-slate-800">Fondo de Liquidez Contingente:</strong> Constituir una reserva líquida equivalente a 6 meses de gastos fijos antes de adquirir nuevos bienes de consumo.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- PREGUNTA 4 -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button type="button" onclick="toggleAccordion('acc-4')" class="w-full text-left p-5 bg-slate-50 hover:bg-slate-100/80 transition-all font-bold text-slate-900 flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-brand-500 text-white font-black flex items-center justify-center text-xs shrink-0">4</span>
+                                Caso PYME: ¿Por qué es inadmisible decretar dividendos de $40M basándose en la utilidad del Estado de Resultados?
+                            </span>
+                            <i id="icon-acc-4" class="fa-solid fa-chevron-down text-slate-400 transition-transform ml-3"></i>
+                        </button>
+                        <div id="acc-4" class="accordion-body hidden p-5 bg-white border-t border-slate-200 text-xs text-slate-600 leading-relaxed space-y-2">
+                            <p class="font-semibold text-slate-800">Análisis del Auditor Senior:</p>
+                            <p>
+                                La utilidad contable reportada de $80M está distorsionada por la omisión de pérdidas ya ocurridas o esperadas ($60M por deterioro de cartera y $60M por obsolescencia de inventarios). Tras los ajustes NIIF, la empresa presenta una <strong>pérdida real de -$40.000.000 COP</strong>.
+                            </p>
+                            <p class="bg-red-50 p-3 rounded-lg border border-red-100 text-red-900">
+                                Adicionalmente, con solo $3.5M en bancos, decretar $40M obligaría a endeudar la compañía o incumplir obligaciones fiscales corrientes (IVA y Retefuente), configurando responsabilidad solidaria de los administradores.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PREGUNTA 5 -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button type="button" onclick="toggleAccordion('acc-5')" class="w-full text-left p-5 bg-slate-50 hover:bg-slate-100/80 transition-all font-bold text-slate-900 flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-brand-500 text-white font-black flex items-center justify-center text-xs shrink-0">5</span>
+                                Caso PYME: ¿Cómo la falta de deterioro (NIIF 9) e inventario obsoleto distorsionan la realidad de la empresa?
+                            </span>
+                            <i id="icon-acc-5" class="fa-solid fa-chevron-down text-slate-400 transition-transform ml-3"></i>
+                        </button>
+                        <div id="acc-5" class="accordion-body hidden p-5 bg-white border-t border-slate-200 text-xs text-slate-600 leading-relaxed space-y-2">
+                            <p class="font-semibold text-slate-800">Análisis del Auditor Senior:</p>
+                            <p>
+                                Mantener en el Activo Corriente cuentas por cobrar incobrables e inventarios sin valor neto realizable sobreestima artificialmente el capital de trabajo neto operativo y la razón corriente.
+                            </p>
+                            <p class="bg-amber-50 p-3 rounded-lg border border-amber-100 text-amber-900">
+                                Esto induce a error a entidades financieras, proveedores y socios sobre la verdadera capacidad de pago a corto plazo, ocultando una crisis de insolvencia técnica.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- PREGUNTA 6 -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden">
+                        <button type="button" onclick="toggleAccordion('acc-6')" class="w-full text-left p-5 bg-slate-50 hover:bg-slate-100/80 transition-all font-bold text-slate-900 flex justify-between items-center text-sm">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-brand-500 text-white font-black flex items-center justify-center text-xs shrink-0">6</span>
+                                Caso PYME: Como auditor o consultor, ¿cuál debe ser el dictamen y recomendación final ante la Junta de Socios?
+                            </span>
+                            <i id="icon-acc-6" class="fa-solid fa-chevron-down text-slate-400 transition-transform ml-3"></i>
+                        </button>
+                        <div id="acc-6" class="accordion-body hidden p-5 bg-white border-t border-slate-200 text-xs text-slate-600 leading-relaxed space-y-2">
+                            <p class="font-semibold text-slate-800">Dictamen Final del Auditor Senior:</p>
+                            <p>
+                                Si la administración se niega a incorporar los ajustes materiales por deterioro ($120M), el auditor debe emitir una <strong>Opinión Modificada (con Salvedades o Desfavorable según materialidad)</strong> conforme a la NIA 705.
+                            </p>
+                            <p class="bg-emerald-50 p-3 rounded-lg border border-emerald-100 text-emerald-900 font-medium">
+                                Recomendación ejecutiva: Suspender el decreto de dividendos, ejecutar plan de recuperación jurídica de cartera vencida, realizar venta de salvamento del inventario obsoleto para oxigenar la caja y priorizar el pago de pasivos fiscales.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Barra de Navegación Inferior del Módulo -->
+            <div class="flex justify-between items-center pt-2 no-print">
+                <button type="button" onclick="switchTab('tab-casos')" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Anterior: Casos Prácticos
+                </button>
+                <button type="button" onclick="switchTab('tab-checklist')" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-800 text-white text-xs font-bold shadow-md flex items-center gap-2">
+                    Siguiente: Check-list & Dictamen <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- MÓDULO 5: CHECK-LIST & DICTAMEN                                       -->
+        <!-- ===================================================================== -->
+        <section id="tab-checklist" class="tab-panel space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">Módulo 5 de 5 • Dictamen & Gobernanza</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Lista de Chequeo Auditor AUREC S.A.S. & Papeles de Trabajo</h2>
+                    <p class="text-sm text-slate-600 mt-1">Puntos de control obligatorios para validar la razonabilidad financiera en personas naturales y jurídicas.</p>
+                </div>
+
+                <!-- Barra de Progreso del Checklist -->
+                <div class="mb-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <div class="mb-2 flex items-center justify-between gap-3 text-xs">
+                        <span class="font-bold text-slate-800"><i class="fa-solid fa-list-check mr-2 text-brand-800"></i>Avance de Verificación de Auditoría</span>
+                        <span id="checklist-progress-label" class="font-mono font-bold text-brand-800">100% completado</span>
+                    </div>
+                    <div class="checklist-progress" role="progressbar" aria-label="Progreso del check-list" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                        <div id="checklist-progress-bar" class="checklist-progress-bar"></div>
+                    </div>
+                </div>
+
+                <!-- Checklist Interactivo -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    
+                    <!-- Columna 1: Checklist Persona Natural -->
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-user-check text-amber-600"></i> Control Financiero Personal (Persona Natural)
+                        </h3>
+
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-all">
+                            <input type="checkbox" checked class="mt-0.5 rounded text-brand-500 focus:ring-brand-500 w-4 h-4">
+                            <span class="text-xs text-slate-700">Verificación de discrepancia entre ingresos brutos percibidos vs. flujo de caja libre disponible.</span>
+                        </label>
+
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-all">
+                            <input type="checkbox" checked class="mt-0.5 rounded text-brand-500 focus:ring-brand-500 w-4 h-4">
+                            <span class="text-xs text-slate-700">Auditoría del costo financiero efectivo de pasivos de consumo (Tarjetas de crédito > 25% EA).</span>
+                        </label>
+
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-all">
+                            <input type="checkbox" checked class="mt-0.5 rounded text-brand-500 focus:ring-brand-500 w-4 h-4">
+                            <span class="text-xs text-slate-700">Cálculo periódico del Patrimonio Líquido real descontando depreciación de activos no productivos.</span>
+                        </label>
+                    </div>
+
+                    <!-- Columna 2: Checklist PYME -->
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-building-circle-check text-brand-800"></i> Control Financiero Corporativo (PYME)
+                        </h3>
+
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-all">
+                            <input type="checkbox" checked class="mt-0.5 rounded text-brand-500 focus:ring-brand-500 w-4 h-4">
+                            <span class="text-xs text-slate-700">Evaluación de deterioro de cartera vencida (>90/120 días) bajo el modelo NIIF 9 / Sección 11.</span>
+                        </label>
+
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-all">
+                            <input type="checkbox" checked class="mt-0.5 rounded text-brand-500 focus:ring-brand-500 w-4 h-4">
+                            <span class="text-xs text-slate-700">Revisión de valor neto realizable de inventarios y castigo oportuno de mercancía sin rotación.</span>
+                        </label>
+
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-all">
+                            <input type="checkbox" checked class="mt-0.5 rounded text-brand-500 focus:ring-brand-500 w-4 h-4">
+                            <span class="text-xs text-slate-700">Comprobación de suficiencia de flujo de caja antes de autorizar propuestas de distribución de utilidades.</span>
+                        </label>
+                    </div>
+
+                </div>
+
+                <!-- Botón Generación PDF / Impresión -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 text-center shadow-lg border border-slate-800 no-print">
+                    <h4 class="font-bold text-amber-400 text-base mb-2">¿Desea descargar el informe consolidado de la Masterclass?</h4>
+                    <p class="text-xs text-slate-300 mb-4 max-w-xl mx-auto">
+                        Genera una versión limpia con fondo blanco (ahorro de tinta) optimizada para exportación a PDF y papeles de trabajo de posgrado.
+                    </p>
+                    <button type="button" onclick="imprimirInforme()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-6 py-3 rounded-xl shadow-md transition-all text-xs inline-flex items-center gap-2">
+                        <i class="fa-solid fa-file-pdf"></i> EXPORTAR / IMPRIMIR PAPELES DE TRABAJO (PDF)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barra de Navegación Inferior del Módulo -->
+            <div class="flex justify-between items-center pt-2 no-print">
+                <button type="button" onclick="switchTab('tab-analisis')" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Anterior: Preguntas de Análisis
+                </button>
+                <button type="button" onclick="switchTab('tab-marco')" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i> Volver al Inicio (Módulo 1)
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <section id="print-report" aria-hidden="true">
+        <div class="print-cover">
+            <div>
+                <p>AUREC S.A.S. | Cátedra de Posgrado</p>
+                <h1>Informe consolidado de la Masterclass</h1>
+                <h2 style="margin:0;color:#52677a;font-size:16pt;">La ciencia contable en las decisiones de personas y empresas</h2>
+            </div>
+            <p id="print-fecha"></p>
+            <p>C.P. Edgar J. Martínez A. | www.edgarjulianmartinez.com</p>
+        </div>
+
+        <div class="print-section">
+            <h2>1. Diagnóstico financiero actual</h2>
+            <div class="print-kpis">
+                <div class="print-kpi">Patrimonio líquido de Carlos Pérez<strong id="print-patrimonio">$0</strong></div>
+                <div class="print-kpi">Tasa real de ahorro<strong id="print-ahorro">0%</strong></div>
+                <div class="print-kpi">Resultado ajustado de Alfa S.A.S.<strong id="print-utilidad">$0</strong></div>
+                <div class="print-kpi">Reparto propuesto<strong id="print-dividendos">$0</strong></div>
+            </div>
+            <div class="print-conclusion" id="print-dictamen-simulador"></div>
+        </div>
+
+        <div class="print-section">
+            <h2>2. Caso 1 — Persona natural</h2>
+            <table class="print-table">
+                <tr><th>Variable</th><th>Valor utilizado</th></tr>
+                <tr><td>Ingresos mensuales</td><td id="print-c1-ingresos"></td></tr>
+                <tr><td>Gasto de consumo</td><td id="print-c1-gastos"></td></tr>
+                <tr><td>Pasivo de tarjeta</td><td id="print-c1-pasivo"></td></tr>
+                <tr><td>Valor neto del vehículo</td><td id="print-c1-vehiculo"></td></tr>
+                <tr><td>Patrimonio líquido</td><td id="print-c1-patrimonio"></td></tr>
+            </table>
+            <div class="print-conclusion" id="print-c1-dictamen"></div>
+        </div>
+
+        <div class="print-section">
+            <h2>3. Caso 2 — PYME / NIIF</h2>
+            <table class="print-table">
+                <tr><th>Concepto</th><th>Resultado ajustado</th></tr>
+                <tr><td>Utilidad reportada</td><td id="print-c2-utilidad"></td></tr>
+                <tr><td>Deterioro de cartera</td><td id="print-c2-deterioro"></td></tr>
+                <tr><td>Inventario obsoleto</td><td id="print-c2-inventario"></td></tr>
+                <tr><td>Resultado ajustado</td><td id="print-c2-resultado"></td></tr>
+                <tr><td>Efectivo disponible</td><td id="print-c2-efectivo"></td></tr>
+                <tr><td>Dividendos propuestos</td><td id="print-c2-dividendos"></td></tr>
+            </table>
+            <div class="print-conclusion" id="print-c2-dictamen"></div>
+        </div>
+
+        <div class="print-section">
+            <h2>4. Checklist de control aplicado</h2>
+            <div id="print-checklist" class="print-checklist"></div>
+        </div>
+
+        <div class="print-section">
+            <h2>5. Conclusión ejecutiva</h2>
+            <p class="print-conclusion" id="print-conclusion-final"></p>
+        </div>
+    </section>
+
+    <!-- Footer Institucional -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="font-semibold text-slate-300">AUREC S.A.S. - Asesoría y Consultoría Contable, Tributaria & Financiera</p>
+                <p class="text-[10px] text-slate-500 mt-0.5">
+                    Desarrollado para la Cátedra de Posgrado |
+                    <a href="https://www.edgarjulianmartinez.com" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400">C.P. Edgar J. Martínez A.</a> |
+                    <a href="https://www.aurec.com.co" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400">Aurec S.A.S.</a> |
+                    © 2026 Todos los derechos reservados.
+                </p>
+            </div>
+            <div class="flex items-center gap-4 text-slate-400">
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-microchip text-amber-500"></i> JS Financial Engine</span>
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-book-journal-whills text-brand-500"></i> NIIF / IAS / NIA 320</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT INTEGRADA -->
+    <script>
+        const TABS_ORDER = ['tab-marco', 'tab-simulador', 'tab-casos', 'tab-analisis', 'tab-checklist'];
+        let allAccordionsOpen = false;
+
+        // Formateador de moneda COP
+        function formatCOP(val) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                maximumFractionDigits: 0
+            }).format(val);
+        }
+
+        // Navegación estricta entre pestañas (SPA)
+        function switchTab(tabId) {
+            if (!TABS_ORDER.includes(tabId)) return;
+
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.remove('active-panel');
+                panel.setAttribute('aria-hidden', 'true');
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-500', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/60');
+                btn.removeAttribute('aria-current');
+            });
+
+            const selectedPanel = document.getElementById(tabId);
+            if (selectedPanel) {
+                selectedPanel.classList.add('active-panel');
+                selectedPanel.setAttribute('aria-hidden', 'false');
+            }
+
+            document.body.dataset.module = tabId;
+
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-brand-500', 'text-white', 'shadow-md');
+                activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-800/60');
+                activeBtn.setAttribute('aria-current', 'page');
+                activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+
+            const tabIndex = TABS_ORDER.indexOf(tabId);
+            const progress = ((tabIndex + 1) / TABS_ORDER.length) * 100;
+            const progressBar = document.getElementById('module-progress-bar');
+            if (progressBar) progressBar.style.width = progress + '%';
+
+            const indicator = document.getElementById('header-module-indicator');
+            if (indicator) indicator.textContent = `${tabIndex + 1} / ${TABS_ORDER.length}`;
+
+            if (window.location.hash !== '#' + tabId) {
+                history.replaceState(null, '', '#' + tabId);
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Accordion Toggle Módulo 4
+        function toggleAccordion(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if (!el) return;
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                if (icon) icon.classList.add('rotate-180');
+            } else {
+                el.classList.add('hidden');
+                if (icon) icon.classList.remove('rotate-180');
+            }
+        }
+
+        // Expandir o contraer todos los acordeones del Módulo 4
+        function toggleAllAccordions() {
+            allAccordionsOpen = !allAccordionsOpen;
+            document.querySelectorAll('.accordion-body').forEach(body => {
+                const icon = document.getElementById('icon-' + body.id);
+                if (allAccordionsOpen) {
+                    body.classList.remove('hidden');
+                    if (icon) icon.classList.add('rotate-180');
+                } else {
+                    body.classList.add('hidden');
+                    if (icon) icon.classList.remove('rotate-180');
+                }
+            });
+        }
+
+        function leerNumeroCaso(id, fallback = 0) {
+            const input = document.getElementById(id);
+            if (!input) return fallback;
+            const value = parseFloat(input.value);
+            return Number.isFinite(value) ? value : fallback;
+        }
+
+        function limitarPorcentaje(valor) {
+            return Math.min(Math.max(valor, 0), 100);
+        }
+
+        function aplicarPulso(elementos) {
+            elementos.forEach(elemento => {
+                if (!elemento) return;
+                elemento.classList.remove('actualizado');
+                void elemento.offsetWidth;
+                elemento.classList.add('actualizado');
+            });
+        }
+
+        function animarAsiento(id) {
+            const asiento = document.getElementById(id);
+            if (!asiento) return;
+            const filas = Array.from(asiento.querySelectorAll('.asiento-linea'));
+            filas.forEach((fila, index) => {
+                fila.classList.remove('mover');
+                window.setTimeout(() => fila.classList.add('mover'), 180 * (index + 1));
+                window.setTimeout(() => fila.classList.remove('mover'), 950 + 180 * index);
+            });
+        }
+
+        function actualizarCasoPersonal() {
+            const ingresos = Math.max(leerNumeroCaso('caso1-ingresos'), 0);
+            const gastosPct = limitarPorcentaje(leerNumeroCaso('caso1-gastos'));
+            const pasivo = Math.max(leerNumeroCaso('caso1-pasivo'), 0);
+            const vehiculo = Math.max(leerNumeroCaso('caso1-vehiculo'), 0);
+            const depreciacionPct = limitarPorcentaje(leerNumeroCaso('caso1-depreciacion'));
+
+            const gastos = ingresos * gastosPct / 100;
+            const flujo = ingresos - gastos;
+            const patrimonio = vehiculo * (1 - depreciacionPct / 100) - pasivo;
+
+            document.getElementById('caso1-flujo').textContent = formatCOP(flujo);
+            document.getElementById('caso1-patrimonio').textContent = formatCOP(patrimonio);
+            document.getElementById('caso1-patrimonio').className = patrimonio <= 0
+                ? 'block mt-1 text-lg font-mono text-red-700'
+                : 'block mt-1 text-lg font-mono text-emerald-700';
+
+            document.getElementById('caso1-debito').textContent = pasivo ? pasivo.toLocaleString('es-CO') : '0';
+            document.getElementById('caso1-credito').textContent = pasivo ? pasivo.toLocaleString('es-CO') : '0';
+
+            const estado = document.getElementById('caso1-estado');
+            const dictamen = document.getElementById('caso1-dictamen');
+            if (patrimonio <= 0) {
+                estado.textContent = 'PATRIMONIO EN RIESGO';
+                estado.className = 'bg-red-100 text-red-800 text-[10px] font-black px-2.5 py-1 rounded-full';
+                dictamen.className = 'bg-red-50 p-4 rounded-xl border border-red-200 text-xs text-red-900';
+                dictamen.innerHTML = '<strong>Dictamen:</strong> el patrimonio líquido es cero o negativo. Se requiere reducir consumo y sustituir la deuda costosa.';
+            } else {
+                estado.textContent = 'PATRIMONIO POSITIVO';
+                estado.className = 'bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-1 rounded-full';
+                dictamen.className = 'bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-xs text-emerald-900';
+                dictamen.innerHTML = '<strong>Dictamen:</strong> el patrimonio mejora, pero todavía deben priorizarse liquidez y un fondo de contingencia.';
+            }
+
+            aplicarPulso([
+                document.getElementById('caso1-flujo').parentElement,
+                document.getElementById('caso1-patrimonio').parentElement
+            ]);
+        }
+
+        function actualizarCasoPyme() {
+            const utilidad = Math.max(leerNumeroCaso('caso2-utilidad'), 0);
+            const cartera = Math.max(leerNumeroCaso('caso2-cartera'), 0);
+            const deterioroPct = limitarPorcentaje(leerNumeroCaso('caso2-deterioro'));
+            const inventario = Math.max(leerNumeroCaso('caso2-inventario'), 0);
+            const efectivo = Math.max(leerNumeroCaso('caso2-efectivo'), 0);
+            const dividendoPct = limitarPorcentaje(leerNumeroCaso('caso2-dividendo'));
+
+            const deterioroCartera = cartera * deterioroPct / 100;
+            const resultado = utilidad - deterioroCartera - inventario;
+            const baseDistribuible = Math.max(resultado, 0);
+            const dividendos = baseDistribuible * dividendoPct / 100;
+            const gastoTotal = deterioroCartera + inventario;
+
+            document.getElementById('caso2-deterioro-res').textContent = '-' + formatCOP(deterioroCartera).replace(/\s/g, ' ');
+            document.getElementById('caso2-resultado').textContent = formatCOP(resultado);
+            document.getElementById('caso2-resultado').className = resultado < 0
+                ? 'block mt-1 text-sm font-mono text-red-700'
+                : 'block mt-1 text-sm font-mono text-emerald-700';
+            document.getElementById('caso2-dividendos').textContent = formatCOP(dividendos);
+            document.getElementById('caso2-gasto').textContent = gastoTotal.toLocaleString('es-CO');
+            document.getElementById('caso2-credito-cartera').textContent = deterioroCartera.toLocaleString('es-CO');
+            document.getElementById('caso2-credito-inventario').textContent = inventario.toLocaleString('es-CO');
+
+            const estado = document.getElementById('caso2-estado');
+            const dictamen = document.getElementById('caso2-dictamen');
+            if (resultado <= 0 || dividendos > efectivo) {
+                estado.textContent = resultado <= 0 ? 'ALERTA DE INSOLVENCIA' : 'CAJA INSUFICIENTE';
+                estado.className = 'bg-red-100 text-red-800 text-[10px] font-black px-2.5 py-1 rounded-full';
+                dictamen.className = 'bg-red-50 p-4 rounded-xl border border-red-200 text-xs text-red-900';
+                dictamen.innerHTML = resultado <= 0
+                    ? '<strong>Dictamen:</strong> no procede repartir dividendos con resultado ajustado negativo.'
+                    : '<strong>Dictamen:</strong> existe caja insuficiente para cubrir el reparto propuesto.';
+            } else {
+                estado.textContent = 'REPARTO RESPALDADO';
+                estado.className = 'bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-1 rounded-full';
+                dictamen.className = 'bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-xs text-emerald-900';
+                dictamen.innerHTML = '<strong>Dictamen:</strong> el escenario respalda el reparto solo si se mantiene suficiente caja operativa.';
+            }
+
+            aplicarPulso([
+                document.getElementById('caso2-deterioro-res').parentElement,
+                document.getElementById('caso2-resultado').parentElement,
+                document.getElementById('caso2-dividendos').parentElement
+            ]);
+        }
+
+        function sincronizarCasosConSimulador() {
+            const copiar = (destino, origen) => {
+                const d = document.getElementById(destino);
+                const o = document.getElementById(origen);
+                if (d && o) d.value = o.value;
+            };
+            copiar('caso1-ingresos', 'input-pn-ingresos');
+            copiar('caso1-gastos', 'input-pn-gastos-pct');
+            copiar('caso1-pasivo', 'input-pn-pasivo-tc');
+            copiar('caso1-tasa', 'input-pn-tasa-tc');
+            copiar('caso1-vehiculo', 'input-pn-vehiculo');
+            copiar('caso1-depreciacion', 'input-pn-deprec-pct');
+            copiar('caso2-utilidad', 'input-pyme-utilidad');
+            copiar('caso2-cartera', 'input-pyme-cartera-vencida');
+            copiar('caso2-deterioro', 'input-pyme-deterioro-pct');
+            copiar('caso2-inventario', 'input-pyme-inventario-obsoleto');
+            copiar('caso2-efectivo', 'input-pyme-efectivo');
+            copiar('caso2-dividendo', 'input-pyme-div-pct');
+            actualizarCasoPersonal();
+            actualizarCasoPyme();
+            animarAsiento('caso1-asiento');
+            animarAsiento('caso2-asiento');
+        }
+
+        // MOTOR DE CÁLCULOS Y CONSOLA PYTHON (MÓDULO 2)
+        function ejecutarMotorAuditoria() {
+            const readNumber = (id, fallback = 0) => {
+                const input = document.getElementById(id);
+                if (!input) return fallback;
+                const value = parseFloat(input.value);
+                return Number.isFinite(value) ? value : fallback;
+            };
+            const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+            // 1. Obtener datos Persona Natural
+            const ingPN = Math.max(readNumber('input-pn-ingresos'), 0);
+            const pctGastosPN = clamp(readNumber('input-pn-gastos-pct'), 0, 100);
+            const pasivoTCPN = Math.max(readNumber('input-pn-pasivo-tc'), 0);
+            const tasaTCPN = Math.max(readNumber('input-pn-tasa-tc'), 0);
+            const vehiculoPN = Math.max(readNumber('input-pn-vehiculo'), 0);
+            const deprecPN = clamp(readNumber('input-pn-deprec-pct'), 0, 100);
+
+            // 2. Obtener datos PYME
+            const utilPyme = Math.max(readNumber('input-pyme-utilidad'), 0);
+            const carteraVencidaPyme = Math.max(readNumber('input-pyme-cartera-vencida'), 0);
+            const pctDeterioroPyme = clamp(readNumber('input-pyme-deterioro-pct'), 0, 100);
+            const invObsoletoPyme = Math.max(readNumber('input-pyme-inventario-obsoleto'), 0);
+            const efectivoPyme = Math.max(readNumber('input-pyme-efectivo'), 0);
+            const pctDivPyme = clamp(readNumber('input-pyme-div-pct'), 0, 100);
+
+            // --- CÁLCULOS PERSONA NATURAL ---
+            const gastosMontoPN = ingPN * (pctGastosPN / 100);
+            const flujoLibrePN = ingPN - gastosMontoPN;
+            const vehiculoAjustadoPN = vehiculoPN * (1 - (deprecPN / 100));
+            const patrimonioNetoPN = vehiculoAjustadoPN - pasivoTCPN;
+            const tasaAhorroRealPN = ingPN > 0 ? (flujoLibrePN / ingPN) * 100 : 0;
+
+            // --- CÁLCULOS PYME ---
+            const valorDeterioroCartera = carteraVencidaPyme * (pctDeterioroPyme / 100);
+            const utilidadRealPyme = utilPyme - valorDeterioroCartera - invObsoletoPyme;
+            const utilidadDistribuibleSimulada = Math.max(utilidadRealPyme, 0);
+            const montoDivPropuesto = utilidadDistribuibleSimulada * (pctDivPyme / 100);
+            const riesgoDiv = utilidadRealPyme <= 0 || efectivoPyme < montoDivPropuesto;
+
+            // --- ACTUALIZAR KPIS VISUALES ---
+            document.getElementById('kpi-patrimonio-neto').innerText = formatCOP(patrimonioNetoPN);
+            document.getElementById('kpi-patrimonio-sub').innerText = patrimonioNetoPN <= 0 ? "Alarma: Patrimonio en cero/negativo" : "Patrimonio Líquido Positivo";
+            document.getElementById('kpi-patrimonio-neto').className = patrimonioNetoPN <= 0 ? "text-2xl font-black text-red-600 mt-1 block font-mono" : "text-2xl font-black text-emerald-600 mt-1 block font-mono";
+
+            document.getElementById('kpi-tasa-ahorro').innerText = tasaAhorroRealPN.toFixed(1) + "%";
+            document.getElementById('kpi-tasa-sub').innerText = tasaAhorroRealPN < 20 ? "Alerta: Ahorro < 20% recomendado" : "Margen de ahorro adecuado";
+
+            document.getElementById('kpi-utilidad-real').innerText = formatCOP(utilidadRealPyme);
+            document.getElementById('kpi-utilidad-real').className = utilidadRealPyme < 0 ? "text-2xl font-black text-red-600 mt-1 block font-mono" : "text-2xl font-black text-emerald-600 mt-1 block font-mono";
+
+            document.getElementById('kpi-alerta-div').innerText = riesgoDiv ? "ALERTA SEVERA" : "EFECTIVO SUFICIENTE";
+            document.getElementById('kpi-alerta-div').className = riesgoDiv ? "text-lg font-black text-red-600 mt-1 block" : "text-lg font-black text-emerald-600 mt-1 block";
+            document.getElementById('kpi-div-sub').innerText = `Caja: ${formatCOP(efectivoPyme)} | Div: ${formatCOP(montoDivPropuesto)}`;
+
+            // --- GENERAR SALIDA EN CONSOLA ESTILO PYTHON ---
+            let consoleLog = "========================================================\n";
+            consoleLog += "   AUREC S.A.S. | INFORME DE DIAGNÓSTICO FINANCIERO\n";
+            consoleLog += "========================================================\n\n";
+
+            consoleLog += "[PERSONA NATURAL: CARLOS PÉREZ]\n";
+            consoleLog += ` • Ingreso Bruto Mensual: ${formatCOP(ingPN)}\n`;
+            consoleLog += ` • Gastos Consumo (${pctGastosPN}%): ${formatCOP(gastosMontoPN)} | Disponible: ${formatCOP(flujoLibrePN)}\n`;
+            consoleLog += ` • Vehículo (Valor Neto tras ${deprecPN}% dep.): ${formatCOP(vehiculoAjustadoPN)}\n`;
+            consoleLog += ` • Pasivo Tarjeta Crédito (${tasaTCPN}% EA): ${formatCOP(pasivoTCPN)}\n`;
+            consoleLog += ` -> PATRIMONIO LÍQUIDO REAL: ${formatCOP(patrimonioNetoPN)}\n`;
+            consoleLog += ` -> TASA DE AHORRO REAL: ${tasaAhorroRealPN.toFixed(1)}%\n`;
+            consoleLog += patrimonioNetoPN <= 0 ? " [!] ALERTA AUDITOR: Patrimonio en insolvencia o trampa de consumo.\n\n" : " [OK] Patrimonio Líquido Positivo.\n\n";
+
+            consoleLog += "-------------------------------------------------------------------------\n";
+            consoleLog += "[PERSONA JURÍDICA: INVERSIONES Y SERVICIOS ALFA S.A.S.]\n";
+            consoleLog += ` • Utilidad Neta Reportada (P&L): ${formatCOP(utilPyme)}\n`;
+            consoleLog += ` • (-) Deterioro Cartera (${pctDeterioroPyme}% NIIF 9): ${formatCOP(valorDeterioroCartera)}\n`;
+            consoleLog += ` • (-) Obsolescencia Inventario Bodega: ${formatCOP(invObsoletoPyme)}\n`;
+            consoleLog += ` -> RESULTADO REAL AJUSTADO: ${formatCOP(utilidadRealPyme)}\n`;
+            consoleLog += ` • Disponible en Bancos: ${formatCOP(efectivoPyme)}\n`;
+            consoleLog += ` • Dividendos Propuestos (${pctDivPyme}%): ${formatCOP(montoDivPropuesto)}\n`;
+            if (riesgoDiv) {
+                const deficitCaja = Math.max(montoDivPropuesto - efectivoPyme, 0);
+                const motivo = utilidadRealPyme <= 0 ? "Resultado ajustado no distribuible (Pérdida real)." : "Déficit de caja inmediato de " + formatCOP(deficitCaja) + ".";
+                consoleLog += " [CRÍTICO] DICTAMEN AUDITOR: Rechazar reparto de dividendos. " + motivo + "\n";
+            } else {
+                consoleLog += " [OK] Caja suficiente y utilidad real respaldada para reparto.\n";
+            }
+            consoleLog += "=========================================================================\n";
+
+            document.getElementById('python-console-output').innerText = consoleLog;
+        }
+
+        // Restablecer valores iniciales
+        function resetearSimulador() {
+            document.getElementById('input-pn-ingresos').value = 12000000;
+            document.getElementById('input-pn-gastos-pct').value = 85;
+            document.getElementById('input-pn-pasivo-tc').value = 45000000;
+            document.getElementById('input-pn-tasa-tc').value = 32;
+            document.getElementById('input-pn-vehiculo').value = 50000000;
+            document.getElementById('input-pn-deprec-pct').value = 10;
+
+            document.getElementById('input-pyme-utilidad').value = 80000000;
+            document.getElementById('input-pyme-cartera-vencida').value = 120000000;
+            document.getElementById('input-pyme-deterioro-pct').value = 50;
+            document.getElementById('input-pyme-inventario-obsoleto').value = 60000000;
+            document.getElementById('input-pyme-efectivo').value = 3500000;
+            document.getElementById('input-pyme-div-pct').value = 50;
+
+            ejecutarMotorAuditoria();
+        }
+
+        // Imprimir Papel de Trabajo PDF
+        function imprimirInforme() {
+            ejecutarMotorAuditoria();
+            actualizarCasoPersonal();
+            actualizarCasoPyme();
+
+            const getText = id => {
+                const element = document.getElementById(id);
+                return element ? element.textContent.trim() : '';
+            };
+            const getValue = id => {
+                const element = document.getElementById(id);
+                return element ? parseFloat(element.value) || 0 : 0;
+            };
+
+            document.getElementById('print-fecha').textContent =
+                'Fecha de emisión: ' + new Intl.DateTimeFormat('es-CO', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }).format(new Date());
+
+            document.getElementById('print-patrimonio').textContent = getText('kpi-patrimonio-neto');
+            document.getElementById('print-ahorro').textContent = getText('kpi-tasa-ahorro');
+            document.getElementById('print-utilidad').textContent = getText('kpi-utilidad-real');
+            document.getElementById('print-dividendos').textContent =
+                getText('kpi-div-sub').includes('Div:') ? getText('kpi-div-sub').split('| Div: ')[1] : getText('kpi-div-sub');
+            document.getElementById('print-dictamen-simulador').textContent =
+                getText('kpi-alerta-div') === 'ALERTA SEVERA'
+                    ? 'Resultado de auditoría: ALERTA SEVERA. La utilidad ajustada o la caja disponible no respaldan el reparto propuesto.'
+                    : 'Resultado de auditoría: efectivo suficiente y utilidad real respaldada para evaluar el reparto.';
+
+            const vehiculoNeto = getValue('caso1-vehiculo') * (1 - getValue('caso1-depreciacion') / 100);
+            document.getElementById('print-c1-ingresos').textContent = formatCOP(getValue('caso1-ingresos'));
+            document.getElementById('print-c1-gastos').textContent =
+                getValue('caso1-gastos').toLocaleString('es-CO') + '%';
+            document.getElementById('print-c1-pasivo').textContent = formatCOP(getValue('caso1-pasivo'));
+            document.getElementById('print-c1-vehiculo').textContent = formatCOP(vehiculoNeto);
+            document.getElementById('print-c1-patrimonio').textContent = getText('caso1-patrimonio');
+            document.getElementById('print-c1-dictamen').textContent =
+                document.getElementById('caso1-dictamen').textContent.trim();
+
+            const deterioro = getValue('caso2-cartera') * getValue('caso2-deterioro') / 100;
+            const resultado = getValue('caso2-utilidad') - deterioro - getValue('caso2-inventario');
+            const baseDistribuible = Math.max(resultado, 0);
+            const dividendos = baseDistribuible * getValue('caso2-dividendo') / 100;
+            document.getElementById('print-c2-utilidad').textContent = formatCOP(getValue('caso2-utilidad'));
+            document.getElementById('print-c2-deterioro').textContent = formatCOP(deterioro);
+            document.getElementById('print-c2-inventario').textContent = formatCOP(getValue('caso2-inventario'));
+            document.getElementById('print-c2-resultado').textContent = formatCOP(resultado);
+            document.getElementById('print-c2-efectivo').textContent = formatCOP(getValue('caso2-efectivo'));
+            document.getElementById('print-c2-dividendos').textContent = formatCOP(dividendos);
+            document.getElementById('print-c2-dictamen').textContent =
+                document.getElementById('caso2-dictamen').textContent.trim();
+
+            const checklist = Array.from(document.querySelectorAll('#tab-checklist input[type="checkbox"]'));
+            const checklistContainer = document.getElementById('print-checklist');
+            checklistContainer.innerHTML = checklist.map((input, index) => {
+                const label = input.closest('label');
+                const text = label ? label.textContent.trim().replace(/\s+/g, ' ') : 'Punto de control ' + (index + 1);
+                return '<p><strong>' + (input.checked ? '[X]' : '[ ]') + '</strong> ' + text + '</p>';
+            }).join('');
+
+            document.getElementById('print-conclusion-final').textContent =
+                'Conclusión: la contabilidad no debe utilizarse para presentar una apariencia favorable, sino para revelar liquidez, patrimonio, deterioros y capacidad real de reparto. ' +
+                'Todo dictamen debe fundamentarse en evidencia verificable y suficiente caja operativa.';
+
+            document.body.classList.add('imprimiendo-informe');
+            window.setTimeout(() => {
+                window.print();
+                window.setTimeout(() => document.body.classList.remove('imprimiendo-informe'), 100);
+            }, 120);
+        }
+
+        // Inicialización al cargar el DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            ejecutarMotorAuditoria();
+            actualizarCasoPersonal();
+            actualizarCasoPyme();
+
+            const checklist = Array.from(document.querySelectorAll('#tab-checklist input[type="checkbox"]'));
+            const updateChecklistProgress = () => {
+                const checked = checklist.filter(input => input.checked).length;
+                const percentage = checklist.length ? Math.round((checked / checklist.length) * 100) : 0;
+                const bar = document.getElementById('checklist-progress-bar');
+                const label = document.getElementById('checklist-progress-label');
+                const container = bar && bar.parentElement;
+                if (bar) bar.style.width = percentage + '%';
+                if (label) label.textContent = percentage + '% completado';
+                if (container) container.setAttribute('aria-valuenow', percentage);
+            };
+            checklist.forEach(input => input.addEventListener('change', updateChecklistProgress));
+            updateChecklistProgress();
+
+            const hashTab = location.hash.replace('#', '');
+            const initialTab = TABS_ORDER.includes(hashTab) ? hashTab : 'tab-marco';
+            switchTab(initialTab);
+
+            window.addEventListener('hashchange', () => {
+                const tabId = location.hash.replace('#', '');
+                if (TABS_ORDER.includes(tabId)) switchTab(tabId);
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+                if (!['ArrowLeft', 'ArrowRight'].includes(event.key) || event.altKey || event.ctrlKey || event.metaKey) return;
+                const active = TABS_ORDER.findIndex(tabId => document.getElementById(tabId).classList.contains('active-panel'));
+                const direction = event.key === 'ArrowRight' ? 1 : -1;
+                const next = Math.min(Math.max(active + direction, 0), TABS_ORDER.length - 1);
+                switchTab(TABS_ORDER[next]);
+            });
+        });
+    </script>
+</body>
+</html>
