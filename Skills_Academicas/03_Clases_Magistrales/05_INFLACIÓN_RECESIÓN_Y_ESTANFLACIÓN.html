@@ -1,0 +1,2673 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="dashboard">
+  <meta name="design-style" content="carbon">
+  <title>Inflación, Recesión y Estanflación — Panel Macroeconómico Interactivo</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* 1. Carbon style tokens */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      --primary: #0f62fe;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      --font-headline: 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', monospace;
+
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+
+      /* 2. Shared semantic & focus tokens */
+      --positive: #198038;
+      --positive-bg: #defbe6;
+      --warning: #8e6a00;
+      --warning-bg: #fcf4d6;
+      --error-bg: #fff1f1;
+      --focus: #0f62fe;
+
+      /* 3. Compact Dashboard Type Scale */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.05rem + 0.5vw, 1.45rem);
+      --subhead-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+      --body-size: 0.9375rem;
+      --compact-size: 0.84375rem;
+      --label-size: 0.75rem;
+
+      /* 4. Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.25rem;
+      --space-2xl: 3.5rem;
+
+      /* 5. Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    header { position: static !important; }
+
+    .page-grid {
+      display: grid;
+      gap: var(--space-xl);
+      padding: var(--space-lg);
+      max-width: 1280px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .page-grid * { min-width: 0; }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    /* Typography */
+    .headline {
+      font-family: var(--font-headline);
+      font-weight: 300;
+      letter-spacing: 0;
+      line-height: 1.18;
+      margin: 0;
+    }
+    .headline strong { font-weight: 600; }
+
+    h1.headline { font-size: var(--display-size); }
+    h2.section-title {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 300;
+      line-height: 1.25;
+      margin: 0;
+      color: var(--on-surface);
+    }
+    h2.section-title strong { font-weight: 600; }
+    h3 {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      margin: 0 0 var(--space-xs) 0;
+      line-height: 1.3;
+    }
+
+    .label-mono {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .key-value {
+      font-family: var(--font-label);
+      font-weight: 300;
+      font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.85rem);
+      line-height: 1.15;
+      color: var(--on-surface);
+      font-variant-numeric: tabular-nums;
+    }
+    .compact-copy {
+      font-size: var(--compact-size);
+      line-height: 1.48;
+      color: var(--on-surface);
+      margin: 0;
+    }
+    .muted-copy {
+      font-size: var(--compact-size);
+      color: var(--on-surface-variant);
+      margin: 0;
+      line-height: 1.45;
+    }
+    .source-note {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+      margin-top: var(--space-sm);
+    }
+
+    /* Notice Banner & Top Bar */
+    .notice-strip {
+      background: var(--surface-container);
+      border-left: 3px solid var(--primary);
+      padding: var(--space-sm) var(--space-md);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+    .notice-text {
+      font-size: var(--compact-size);
+      color: var(--on-surface);
+      font-weight: 500;
+      margin: 0;
+    }
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: var(--rule);
+    }
+    .nav-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+    }
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 var(--space-sm);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: color var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+    }
+    .nav-link:hover {
+      color: var(--primary);
+      background: var(--surface-container);
+    }
+
+    /* Section Header */
+    .section-block {
+      display: grid;
+      gap: var(--space-md);
+    }
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+    }
+    .section-head-left {
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    /* Carbon Layers & Cards */
+    .layer {
+      background: var(--surface-container);
+      border-radius: 0;
+      padding: var(--space-md);
+      border-top: 2px solid transparent;
+      transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .layer-nested {
+      background: var(--surface-container-high);
+      padding: var(--space-md);
+    }
+    .key-tile {
+      border-bottom: var(--indicator);
+    }
+    .is-highlighted {
+      border-top: 2px solid var(--primary);
+      background: var(--primary-container);
+    }
+    .is-highlighted .label-mono,
+    .is-highlighted .compact-copy,
+    .is-highlighted .muted-copy,
+    .is-highlighted .source-note {
+      color: var(--on-primary-container);
+    }
+
+    /* Tags */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 var(--space-sm);
+      border-radius: var(--rounded-full);
+      font-size: var(--label-size);
+      font-weight: 500;
+      font-family: var(--font-label);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      white-space: nowrap;
+    }
+    .tag-pos { background: var(--positive-bg); color: var(--positive); }
+    .tag-neg { background: var(--error-bg); color: var(--error); }
+    .tag-warn { background: var(--warning-bg); color: var(--warning); }
+    .tag-neutral { background: var(--surface-container-high); color: var(--on-surface); }
+    .tag-outside {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid var(--warning);
+      margin-left: var(--space-xs);
+    }
+
+    /* Grids */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+      gap: var(--space-sm);
+    }
+    .split-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: var(--space-md);
+      align-items: start;
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+    .four-col-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+
+    /* Controls: Inputs, Selects, Buttons */
+    .control-group {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .control-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+      font-weight: 500;
+    }
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      align-items: end;
+    }
+    select, input[type="text"], input[type="search"], input[type="number"] {
+      height: 44px;
+      background: var(--surface-container);
+      border: none;
+      border-bottom: var(--field-rule);
+      border-radius: 0;
+      padding: 0 var(--space-md);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      color: var(--on-surface);
+      width: 100%;
+    }
+    select {
+      padding-right: var(--space-xl);
+      cursor: pointer;
+    }
+    select:hover, input[type="text"]:hover, input[type="search"]:hover, input[type="number"]:hover {
+      background: var(--surface-container-high);
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+      min-height: 28px;
+    }
+
+    button {
+      font-family: var(--font-body);
+      font-size: var(--compact-size);
+      font-weight: 500;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: 0;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background: color-mix(in srgb, var(--primary), var(--on-surface) 22%);
+    }
+    .btn-secondary {
+      background: var(--background);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary:hover {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .btn-ghost {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-ghost:hover {
+      background: var(--surface-container-high);
+    }
+    .btn-tab {
+      background: transparent;
+      color: var(--on-surface-variant);
+      border: none;
+      border-bottom: 2px solid var(--outline-variant);
+      padding: var(--space-sm) var(--space-md);
+    }
+    .btn-tab:hover {
+      color: var(--on-surface);
+      background: var(--surface-container);
+    }
+    .btn-tab.is-active {
+      color: var(--on-surface);
+      font-weight: 600;
+      border-bottom: var(--indicator);
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      border-top: var(--rule);
+      border-bottom: var(--rule);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--compact-size);
+      text-align: left;
+    }
+    thead th {
+      background: var(--surface-container-high);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface);
+      padding: var(--space-sm) var(--space-md);
+      font-weight: 600;
+      border-bottom: var(--rule);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      vertical-align: top;
+    }
+    tbody tr:nth-child(even) {
+      background: var(--surface-container);
+    }
+    tbody tr.row-highlight {
+      background: var(--primary-container);
+    }
+    .num-cell {
+      font-family: var(--font-label);
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Lists */
+    .clean-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: var(--space-sm);
+    }
+    .clean-list li {
+      border-top: var(--rule);
+      padding-top: var(--space-sm);
+      font-size: var(--compact-size);
+    }
+    .clean-list li:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    /* Charts */
+    .chart-box {
+      position: relative;
+      min-height: 360px;
+      width: 100%;
+      background: var(--background);
+      padding: var(--space-sm);
+      border: var(--rule);
+    }
+
+    /* Timeline */
+    .timeline-rail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+    }
+    .timeline-card {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      border-left: 3px solid var(--primary);
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    /* Quiz */
+    .quiz-card {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: grid;
+      gap: var(--space-sm);
+      border-left: 3px solid var(--outline);
+    }
+    .quiz-card.answered-correct { border-left-color: var(--positive); }
+    .quiz-card.answered-wrong { border-left-color: var(--error); }
+    .quiz-options {
+      display: grid;
+      gap: var(--space-xs);
+    }
+    .quiz-option-btn {
+      justify-content: flex-start;
+      text-align: left;
+      background: var(--background);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface);
+      padding: var(--space-sm) var(--space-md);
+      line-height: 1.4;
+      font-weight: 400;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .quiz-option-btn:hover:not(:disabled) {
+      background: var(--surface-container-high);
+      border-color: var(--primary);
+    }
+    .quiz-option-btn.opt-selected-correct {
+      background: var(--positive-bg);
+      border-color: var(--positive);
+      color: var(--on-surface);
+      font-weight: 600;
+    }
+    .quiz-option-btn.opt-selected-wrong {
+      background: var(--error-bg);
+      border-color: var(--error);
+      color: var(--on-surface);
+    }
+    .quiz-feedback {
+      font-size: var(--compact-size);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--background);
+      border-left: 3px solid var(--primary);
+    }
+
+    /* Progress Tracker */
+    .progress-bar-track {
+      height: 8px;
+      width: 100%;
+      background: var(--surface-container-high);
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+    .tracker-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container);
+      border-bottom: var(--rule);
+    }
+    .tracker-row.is-done {
+      border-left: 3px solid var(--positive);
+      background: var(--positive-bg);
+    }
+
+    /* Callout notification strip */
+    .callout-strip {
+      background: var(--surface-container);
+      border-left: 3px solid var(--primary);
+      padding: var(--space-sm) var(--space-md);
+      font-size: var(--compact-size);
+    }
+    .callout-strip.is-warn { border-left-color: var(--warning); }
+    .callout-strip.is-pos { border-left-color: var(--positive); }
+    .callout-strip.is-err { border-left-color: var(--error); }
+
+    /* Card container query */
+    .card-wrapper { container-type: inline-size; }
+    @container (min-width: 440px) {
+      .calc-output-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @container (max-width: 439px) {
+      .calc-output-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 760px) {
+      .split-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .page-grid { padding: var(--space-sm); gap: var(--space-lg); }
+      .controls-row { flex-direction: column; align-items: stretch; }
+      .nav-strip { gap: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-grid">
+
+    <!-- CABECERA Y AVISO ORIENTATIVO -->
+    <header>
+      <div class="notice-strip" role="note" aria-label="Aviso orientativo">
+        <p class="notice-text">Aviso orientativo: Herramienta pedagógica basada exclusivamente en las fuentes del cuaderno.</p>
+        <span class="label-mono" id="header-progress-badge">Avance: 0 / 7 módulos</span>
+      </div>
+
+      <div class="header-meta" style="margin-top: var(--space-md);">
+        <div style="display: grid; gap: var(--space-xs); max-width: 78ch;">
+          <span class="label-mono">Cuaderno macroeconómico · Edición ampliada para perfiles técnicos</span>
+          <h1 class="headline">INFLACIÓN, RECESIÓN Y <strong>ESTANFLACIÓN</strong></h1>
+          <p class="muted-copy">Guía interactiva de diagnóstico, cifras verificadas y toma de decisiones para <strong>Contadores</strong>, <strong>Ingenieros Industriales</strong>, <strong>Administradores de Empresas</strong> y <strong>Economistas</strong>.</p>
+        </div>
+        <div class="layer key-tile" style="min-width: 220px;">
+          <span class="label-mono">Perfil activo</span>
+          <div id="active-profile-indicator" style="font-weight: 600; margin-top: var(--space-xs);">Todas las disciplinas</div>
+          <span class="muted-copy">Ajustable en el módulo 02</span>
+        </div>
+      </div>
+
+      <nav class="nav-strip" aria-label="Navegación de secciones">
+        <a class="nav-link" href="#diagnostico">01. Diagnóstico</a>
+        <a class="nav-link" href="#profesiones">02. Por Profesión</a>
+        <a class="nav-link" href="#comparativo">03. Datos y Países</a>
+        <a class="nav-link" href="#herramientas">04. Herramientas</a>
+        <a class="nav-link" href="#evaluacion">05. Test Evaluativo</a>
+        <a class="nav-link" href="#avance">06. Registro de Avance</a>
+      </nav>
+    </header>
+
+    <!-- SECCIÓN 1: DIAGNÓSTICO INMEDIATO -->
+    <section id="diagnostico" class="section-block" aria-labelledby="sec1-title">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="label-mono">01 · Diagnóstico inmediato</span>
+          <h2 id="sec1-title" class="section-title">Clarificación conceptual: <strong>cinco regímenes económicos</strong></h2>
+        </div>
+        <span class="label-mono" id="diagnostico-filter-note">Vista completa de referencia</span>
+      </div>
+
+      <div class="concepts-grid" id="concepts-grid">
+        <!-- Generado dinámicamente para sincronizar resaltado por profesión -->
+      </div>
+
+      <!-- Comparador rápido: Por qué la estanflación atrapa a la banca central -->
+      <div class="layer">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+          <div>
+            <span class="label-mono">Dilema operativo de política monetaria</span>
+            <h3>¿Por qué la estanflación inutiliza las recetas clásicas de tasas de interés?</h3>
+          </div>
+          <span class="tag tag-neg">Riesgo máximo de política</span>
+        </div>
+        <div class="four-col-grid">
+          <div class="layer-nested">
+            <span class="label-mono">Recesión tradicional</span>
+            <p class="compact-copy" style="margin-top: var(--space-xs);">Bajan las tasas de interés para estimular el crédito y reactivar el consumo y la inversión (<em>Javi Linares</em>).</p>
+          </div>
+          <div class="layer-nested">
+            <span class="label-mono">Inflación por demanda</span>
+            <p class="compact-copy" style="margin-top: var(--space-xs);">Suben las tasas para enfriar el exceso de crédito y consumo cuando la capacidad instalada ya llegó al límite (<em>Carlos Fajardo</em>).</p>
+          </div>
+          <div class="layer-nested">
+            <span class="label-mono">Estanflación (Choque de oferta)</span>
+            <p class="compact-copy" style="margin-top: var(--space-xs);">Si suben tasas, ahogan a Pymes y empleo; si las bajan, alimentan los precios y la emisión (<em>Banxavi</em>; <em>Daniel Lacalle</em>).</p>
+          </div>
+          <div class="layer-nested">
+            <span class="label-mono">Efecto paradójico en Colombia</span>
+            <p class="compact-copy" style="margin-top: var(--space-xs);">Al subir la tasa del Banco de la República (12%), sube el costo financiero incluido en la fórmula tarifaria de servicios públicos, generando más inflación de costos (<em>Carlos Fajardo</em>).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: MÓDULO INTERACTIVO POR PROFESIÓN -->
+    <section id="profesiones" class="section-block" aria-labelledby="sec2-title">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="label-mono">02 · Filtro disciplinar</span>
+          <h2 id="sec2-title" class="section-title">Enfoque aplicado por <strong>profesión</strong></h2>
+        </div>
+        <span class="label-mono">Resalta variables e impactos en toda la página</span>
+      </div>
+
+      <div class="layer">
+        <div class="controls-row">
+          <div class="control-group" style="flex: 1 1 320px;">
+            <label class="control-label" for="profession-select">Seleccione su profesión o disciplina</label>
+            <select id="profession-select" onchange="selectProfession(this.value)">
+              <option value="all">Todas las disciplinas (Vista general integrada)</option>
+              <option value="contador">Contador — Tasas, liquidez, indexación y balances</option>
+              <option value="ingeniero">Ingeniero Industrial — Cadenas de suministro, insumos y productividad</option>
+              <option value="administrador">Administrador de Empresas — Pymes, ventas, pricing power y riesgo</option>
+              <option value="economista">Economista — M2, PIB desestacionalizado, Curva de Phillips y superdólar</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-xs);" aria-label="Accesos rápidos de profesión">
+            <button type="button" class="btn-ghost" data-prof-btn="contador" onclick="selectProfession('contador')">Contador</button>
+            <button type="button" class="btn-ghost" data-prof-btn="ingeniero" onclick="selectProfession('ingeniero')">Ing. Industrial</button>
+            <button type="button" class="btn-ghost" data-prof-btn="administrador" onclick="selectProfession('administrador')">Administrador</button>
+            <button type="button" class="btn-ghost" data-prof-btn="economista" onclick="selectProfession('economista')">Economista</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="profession-detail-panel" aria-live="polite">
+        <!-- Contenido dinámico de la profesión seleccionada -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3: CUADRO COMPARATIVO GEOGRÁFICO Y DATOS NUMÉRICOS -->
+    <section id="comparativo" class="section-block" aria-labelledby="sec3-title">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="label-mono">03 · Evidencia empírica y geográfica</span>
+          <h2 id="sec3-title" class="section-title">Cuadro comparativo y <strong>datos numéricos verificados</strong></h2>
+        </div>
+        <span class="label-mono">Etiquetas validadas por diferencia matemática exacta</span>
+      </div>
+
+      <!-- KPI Hero Strip Colombia -->
+      <div>
+        <span class="label-mono" style="display: block; margin-bottom: var(--space-xs);">Radiografía rápida de Colombia (Fuente: Carlos Fajardo)</span>
+        <div class="kpi-strip">
+          <div class="layer key-tile">
+            <span class="label-mono">PIB desestacionalizado (3T)</span>
+            <div class="key-value">-0,1%</div>
+            <span class="muted-copy">También citado -0,8% vs +1,3% en 2T</span>
+          </div>
+          <div class="layer">
+            <span class="label-mono">Sector agropecuario</span>
+            <div class="key-value">-6,7%</div>
+            <span class="muted-copy">Venía creciendo ~10% previo</span>
+          </div>
+          <div class="layer">
+            <span class="label-mono">Minas y canteras</span>
+            <div class="key-value">+7,8%</div>
+            <span class="muted-copy">Manufactura cayó -1,2%</span>
+          </div>
+          <div class="layer">
+            <span class="label-mono">Inflación reportada</span>
+            <div class="key-value">6,30%</div>
+            <span class="muted-copy">Subió desde 4,8% (nov. 2025) y 5,10%</span>
+          </div>
+          <div class="layer">
+            <span class="label-mono">Desempleo</span>
+            <div class="key-value">8,5%</div>
+            <span class="muted-copy">Subió desde mínimo de 8,0%</span>
+          </div>
+          <div class="layer">
+            <span class="label-mono">Gasto público / PIB</span>
+            <div class="key-value">34%</div>
+            <span class="muted-copy">Deuda externa: 22% del total</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros geográficos -->
+      <div class="controls-row">
+        <div class="control-group" style="min-width: 240px;">
+          <label class="control-label" for="region-filter">Filtrar por país o región</label>
+          <select id="region-filter" onchange="renderCountryTable()">
+            <option value="all">Todos los países y regiones (19 registros)</option>
+            <option value="Colombia">Colombia</option>
+            <option value="Argentina">Argentina</option>
+            <option value="Chile">Chile</option>
+            <option value="EE. UU.">Estados Unidos</option>
+            <option value="Eurozona">Eurozona y Europa</option>
+            <option value="China">China</option>
+            <option value="Global y Otros">Global (FMI) y otras economías</option>
+          </select>
+        </div>
+        <div class="control-group" style="min-width: 220px;">
+          <label class="control-label" for="status-filter">Filtrar por estado numérico</label>
+          <select id="status-filter" onchange="renderCountryTable()">
+            <option value="all">Todos los estados</option>
+            <option value="Deterioro">Solo Deterioro</option>
+            <option value="Mejora">Solo Mejora</option>
+            <option value="No consta">Solo No consta (sin serie previa)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>País / Región</th>
+              <th>Indicador</th>
+              <th style="text-align: right;">Ref. inicial</th>
+              <th style="text-align: right;">Dato actual / proy.</th>
+              <th style="text-align: right;">Diferencia</th>
+              <th>Estado</th>
+              <th>Fuente en cuaderno</th>
+            </tr>
+          </thead>
+          <tbody id="country-table-body">
+            <!-- Generado en JS -->
+          </tbody>
+        </table>
+      </div>
+      <p class="source-note">Nota metodológica de rigor: «Mejora» aplica únicamente cuando el cambio numérico favorece el equilibrio macroeconómico o el poder adquisitivo (ej. caída de informalidad en Chile o baja arancelaria en EE. UU.); «Deterioro» aplica cuando sube la inflación, el desempleo, la informalidad o cae el PIB/sector. Si la fuente entrega un dato puntual sin cifra previa comparable, se registra explícitamente «No consta».</p>
+    </section>
+
+    <!-- SECCIÓN 4: HERRAMIENTAS INTERACTIVAS -->
+    <section id="herramientas" class="section-block" aria-labelledby="sec4-title">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="label-mono">04 · Laboratorio analítico</span>
+          <h2 id="sec4-title" class="section-title">Herramientas interactivas: <strong>buscador, calculadora, activos y línea de tiempo</strong></h2>
+        </div>
+      </div>
+
+      <!-- 4A. Buscador en tiempo real -->
+      <div class="layer">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--space-md); margin-bottom: var(--space-md);">
+          <div>
+            <span class="label-mono">4A · Glosario técnico en tiempo real</span>
+            <h3>Buscador de términos, indicadores y mecanismos</h3>
+          </div>
+          <span class="label-mono" id="glossary-count">0 términos visibles</span>
+        </div>
+
+        <div class="controls-row" style="margin-bottom: var(--space-md);">
+          <div class="control-group" style="flex: 2 1 280px;">
+            <label class="control-label" for="glossary-search">Buscar término, autor o indicador (ej. M2, Ormuz, pricing power, desestacionalizado)</label>
+            <input type="search" id="glossary-search" placeholder="Escriba para filtrar al instante…" oninput="filterGlossary()">
+          </div>
+          <div class="control-group" style="flex: 1 1 200px;">
+            <label class="control-label" for="glossary-category">Categoría temática</label>
+            <select id="glossary-category" onchange="filterGlossary()">
+              <option value="all">Todas las categorías</option>
+              <option value="Conceptos base">Conceptos base</option>
+              <option value="Política monetaria">Política monetaria y divisas</option>
+              <option value="Sector real">Sector real, oferta y costos</option>
+              <option value="Estrategia y activos">Estrategia financiera y activos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="concepts-grid" id="glossary-results">
+          <!-- Generado dinámicamente -->
+        </div>
+      </div>
+
+      <!-- 4B. Calculadora interactiva de tasa real e inflación -->
+      <div class="layer card-wrapper">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--space-md); margin-bottom: var(--space-md);">
+          <div>
+            <span class="label-mono">4B · Simulador financiero basado en fuentes</span>
+            <h3>Calculadora de inflación, tasa de interés real y presupuesto</h3>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-xs);">
+            <button type="button" class="btn-ghost" onclick="applyCalcPreset('colombia')">Preset Colombia (6,30% / 12%)</button>
+            <button type="button" class="btn-ghost" onclick="applyCalcPreset('argentina')">Preset Argentina (33%)</button>
+            <button type="button" class="btn-ghost" onclick="applyCalcPreset('mexico')">Preset México (7,99%)</button>
+            <button type="button" class="btn-ghost" onclick="applyCalcPreset('hipoteca')">Hipoteca fija 2% vs 7% infl.</button>
+          </div>
+        </div>
+
+        <div class="split-grid">
+          <!-- Entradas -->
+          <div class="layer-nested" style="display: grid; gap: var(--space-md);">
+            <div class="control-group">
+              <label class="control-label" for="calc-income">Ingreso o presupuesto mensual base (en moneda local, ej. COP)</label>
+              <input type="number" id="calc-income" value="3000000" min="100000" step="100000" oninput="updateCalculator()">
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="input-inflation">Inflación anual proyectada (%)</label>
+              <div style="display: grid; grid-template-columns: 1fr 110px; gap: var(--space-sm); align-items: center;">
+                <input type="range" id="slider-inflation" min="0" max="50" step="0.1" value="6.3" oninput="syncInflationFromSlider(this.value)">
+                <input type="number" id="input-inflation" min="0" max="300" step="0.1" value="6.3" oninput="syncInflationFromNumber(this.value)">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="input-rate">Tasa de interés nominal de deuda / crédito (%)</label>
+              <div style="display: grid; grid-template-columns: 1fr 110px; gap: var(--space-sm); align-items: center;">
+                <input type="range" id="slider-rate" min="0" max="40" step="0.1" value="12.0" oninput="syncRateFromSlider(this.value)">
+                <input type="number" id="input-rate" min="0" max="200" step="0.1" value="12.0" oninput="syncRateFromNumber(this.value)">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="input-wage">Reajuste nominal anual de su ingreso / ventas (%)</label>
+              <div style="display: grid; grid-template-columns: 1fr 110px; gap: var(--space-sm); align-items: center;">
+                <input type="range" id="slider-wage" min="0" max="40" step="0.1" value="4.0" oninput="syncWageFromSlider(this.value)">
+                <input type="number" id="input-wage" min="0" max="200" step="0.1" value="4.0" oninput="syncWageFromNumber(this.value)">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label" for="input-debt-share">Porcentaje del presupuesto en deuda y fijos indexados (%)</label>
+              <div style="display: grid; grid-template-columns: 1fr 110px; gap: var(--space-sm); align-items: center;">
+                <input type="range" id="slider-debt-share" min="0" max="90" step="1" value="35" oninput="syncShareFromSlider(this.value)">
+                <input type="number" id="input-debt-share" min="0" max="100" step="1" value="35" oninput="syncShareFromNumber(this.value)">
+              </div>
+            </div>
+          </div>
+
+          <!-- Salidas -->
+          <div style="display: grid; gap: var(--space-md);">
+            <div class="calc-output-grid" style="display: grid; gap: var(--space-sm);">
+              <div class="layer-nested key-tile">
+                <span class="label-mono">Variación poder adquisitivo real</span>
+                <div class="key-value" id="out-real-wage">-2,16%</div>
+                <span class="muted-copy" id="out-real-wage-note">Por debajo de la inflación</span>
+              </div>
+              <div class="layer-nested">
+                <span class="label-mono">Tasa de interés real de deuda</span>
+                <div class="key-value" id="out-real-rate">+5,36%</div>
+                <span class="muted-copy" id="out-real-rate-note">Costo real positivo</span>
+              </div>
+              <div class="layer-nested">
+                <span class="label-mono">Efecto mensual en compra real</span>
+                <div class="key-value" id="out-monthly-gap">-$64.911</div>
+                <span class="muted-copy">Ajuste real mensual sobre presupuesto</span>
+              </div>
+              <div class="layer-nested">
+                <span class="label-mono">Fondo de emergencia (3 meses)</span>
+                <div class="key-value" id="out-emergency-fund">$9.000.000</div>
+                <span class="muted-copy">Mínimo sugerido (Dr. Carvajal, FRANCE 24)</span>
+              </div>
+            </div>
+
+            <div id="calc-verdict" class="callout-strip">
+              <!-- Diagnóstico dinámico -->
+            </div>
+            <p class="source-note">Fórmulas estándar aplicadas sobre conceptos de salario real (<em>Carlos Fajardo</em>, <em>Banxavi</em>), deuda a tasas superiores a la inflación (<em>Dr. Eduardo Carvajal</em>) y apalancamiento a tasa fija inferior a la inflación (<em>Javi Linares</em>).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4C. Gráfico interactivo de comportamiento de activos -->
+      <div class="layer">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--space-md); margin-bottom: var(--space-md);">
+          <div>
+            <span class="label-mono">4C · Cobertura patrimonial y activos</span>
+            <h3>Comportamiento histórico de activos en estanflación, recesión y expansión</h3>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: var(--space-xs);">
+            <button type="button" class="btn-tab is-active" data-chart-mode="seventies" onclick="setAssetChartMode('seventies')">Estanflación años 70 (%)</button>
+            <button type="button" class="btn-tab" data-chart-mode="recessions" onclick="setAssetChartMode('recessions')">9 Recesiones EE. UU. (% éxito)</button>
+            <button type="button" class="btn-tab" data-chart-mode="drawdowns" onclick="setAssetChartMode('drawdowns')">Caídas extremas registradas (%)</button>
+          </div>
+        </div>
+
+        <div class="split-grid">
+          <div>
+            <div class="chart-box" style="min-height: 360px;">
+              <canvas id="assets-chart" aria-label="Gráfico comparativo de activos en ciclos económicos"></canvas>
+            </div>
+            <p class="source-note" id="chart-caption">Fuente: Javi Linares (S&P GSCI +586%, petróleo +1.000%, trigo +300%, oro +2.300% en década 1970).</p>
+          </div>
+
+          <div class="layer-nested" style="display: grid; gap: var(--space-sm);">
+            <span class="label-mono">Matriz cualitativa de activos (según fuentes)</span>
+            <ul class="clean-list">
+              <li><span class="tag tag-pos">Favorecido</span> <strong>Oro físico / reserva:</strong> Positivo en 6 de 9 recesiones EE. UU. post-1970; +2.300% en los años 70. En expansiones prolongadas (1991–2001) cae 20%–30% (<em>Dragon Oro Plata</em>, <em>Javi Linares</em>).</li>
+              <li><span class="tag tag-pos">Favorecido</span> <strong>Materias primas (ETFs/commodities):</strong> Suben junto con la inflación; S&P GSCI +586% en los 70 (<em>Javi Linares</em>).</li>
+              <li><span class="tag tag-pos">Favorecido</span> <strong>Activos reales escasos e hipoteca fija baja:</strong> Inmuebles con deuda fija ~2%, tierras de cultivo y Bitcoin (<em>Javi Linares</em>; bienes raíces en <em>Emprendo Libre</em>).</li>
+              <li><span class="tag tag-pos">Favorecido</span> <strong>Acciones Value / Pricing power y TIPS corto plazo:</strong> Empresas que trasladan costos (Meta, Google, Microsoft, salud, energía) y fondos monetarios/bonos indexados cortos (<em>Javi Linares</em>).</li>
+              <li><span class="tag tag-neg">Perjudicado</span> <strong>Bonos de renta fija a largo plazo (15–30 años):</strong> Se hunden si los tipos suben contra la inflación (ej. 6% a 13% en los 70; % exacto de caída: <em>No consta</em>) (<em>Javi Linares</em>).</li>
+              <li><span class="tag tag-neg">Perjudicado</span> <strong>Acciones especulativas (PER alto) y efectivo sin remunerar:</strong> Sufren contracción de múltiplos y erosión directa del poder de compra (<em>Javi Linares</em>).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4D. Línea de tiempo 1970 a 2026 -->
+      <div class="layer">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--space-sm); margin-bottom: var(--space-md);">
+          <div>
+            <span class="label-mono">4D · Evolución histórica 1970–2026</span>
+            <h3>Línea de tiempo de crisis de inflación, recesión y estanflación</h3>
+          </div>
+          <span class="label-mono" id="timeline-step-counter">Hito 1 de 7</span>
+        </div>
+
+        <div class="timeline-rail" id="timeline-buttons" role="tablist" aria-label="Periodos históricos 1970 a 2026">
+          <!-- Generado en JS -->
+        </div>
+
+        <div class="timeline-card" id="timeline-detail" style="margin-top: var(--space-md);" aria-live="polite">
+          <!-- Generado en JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 5: TEST EVALUATIVO -->
+    <section id="evaluacion" class="section-block" aria-labelledby="sec5-title">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="label-mono">05 · Validación de conocimientos</span>
+          <h2 id="sec5-title" class="section-title">Test evaluativo <strong>(8 preguntas · opciones A, B, C y D equilibradas)</strong></h2>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm);">
+          <span class="tag" id="quiz-score-pill">Puntaje: 0 / 8</span>
+          <button type="button" class="btn-secondary" id="quiz-reset-btn" onclick="resetQuiz(this)">Reiniciar test</button>
+        </div>
+      </div>
+
+      <p class="muted-copy">Cada pregunta cuenta con una única respuesta correcta sustentada en los videos analizados. Cualquier alternativa que introduzca un planteamiento o dato ajeno al cuaderno exhibe explícitamente la etiqueta <span class="tag tag-outside">Fuera de tus fuentes</span>.</p>
+
+      <div class="two-col-grid" id="quiz-container">
+        <!-- Generado dinámicamente -->
+      </div>
+    </section>
+
+    <!-- SECCIÓN 6: REGISTRO DE AVANCE -->
+    <section id="avance" class="section-block" aria-labelledby="sec6-title">
+      <div class="section-head">
+        <div class="section-head-left">
+          <span class="label-mono">06 · Seguimiento de estudio</span>
+          <h2 id="sec6-title" class="section-title">Registro de <strong>avance personal</strong></h2>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: var(--space-xs);">
+          <button type="button" class="btn-primary" onclick="exportProgressReport()">Exportar resumen (.txt)</button>
+          <button type="button" class="btn-secondary" id="progress-reset-btn" onclick="resetProgress(this)">Reiniciar avance</button>
+        </div>
+      </div>
+
+      <div class="layer">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+          <span class="label-mono" id="progress-summary-text">0 de 7 módulos completados (0%)</span>
+          <span class="muted-copy">El progreso se guarda automáticamente en el cuaderno.</span>
+        </div>
+        <div class="progress-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar-aria">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+      </div>
+
+      <div id="tracker-list" style="border-top: var(--rule);">
+        <!-- Generado dinámicamente -->
+      </div>
+    </section>
+
+    <!-- PIE DE PÁGINA CON FUENTES Y AVISO -->
+    <footer style="border-top: var(--rule); padding-top: var(--space-lg); padding-bottom: var(--space-xl); display: grid; gap: var(--space-md);">
+      <div class="notice-strip">
+        <p class="notice-text">Aviso orientativo: Herramienta pedagógica basada exclusivamente en las fuentes del cuaderno.</p>
+        <span class="label-mono">Sin datos externos ni estimaciones inventadas</span>
+      </div>
+
+      <div>
+        <span class="label-mono" style="display: block; margin-bottom: var(--space-xs);">Fuentes citadas en esta herramienta (YouTube)</span>
+        <div class="two-col-grid">
+          <ul class="clean-list">
+            <li><strong>FRANCE 24 Español</strong> — <em>«Crece la incertidumbre ante una posible recesión económica mundial»</em> (Gabriela Calderón y Dr. Eduardo Carvajal).</li>
+            <li><strong>Daniel Lacalle</strong> — <em>«ESTANFLACIÓN: el mayor RIESGO para la economía global»</em>.</li>
+            <li><strong>Javi Linares</strong> — <em>«Estanflación: ¿Llegará el peor escenario de 2026?»</em>.</li>
+            <li><strong>Emprendo Libre (Sabrina)</strong> — <em>«INFLACIÓN + RECESIÓN = ESTANFLACIÓN · Ray Dalio explicado en español»</em>.</li>
+          </ul>
+          <ul class="clean-list">
+            <li><strong>Dragon Oro Plata</strong> — <em>«ORO: Recesión, estanflación, expansión»</em>.</li>
+            <li><strong>Carlos Fajardo</strong> — <em>«Recesión en Argentina y Estanflación en Colombia, ¿Qué es y cómo paso?»</em>.</li>
+            <li><strong>Banxavi</strong> — <em>«Inflación Vs Deflación Vs Estanflación En 2026»</em>.</li>
+            <li><strong>El Destape (Cande Botto)</strong> — <em>«ESTANFLACION: INFLACIÓN Y RECESIÓN»</em>; <strong>TonyT2B</strong> — <em>«Inflación, Hiperinflación, Recesión, Estanflación»</em>; <strong>Reflexiones de un Galeno</strong> — <em>«El Banco Central Europeo advierte…»</em>.</li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    /* =========================================================
+       DATOS ESTRUCTURADOS EXCLUSIVAMENTE DE LAS FUENTES
+       ========================================================= */
+    const CONCEPTS_DATA = [
+      {
+        id: `inflacion`,
+        title: `Inflación`,
+        tag: `Pérdida de poder de compra`,
+        tagClass: `tag-warn`,
+        professions: [`contador`, `ingeniero`, `administrador`, `economista`],
+        definition: `Aumento generalizado, sostenido y continuo de los precios de productos y servicios de consumo básico, que equivale a la pérdida de valor del dinero.`,
+        mechanism: `Puede originarse por demanda (exceso de crédito o dinero M2 persiguiendo bienes al límite de la capacidad instalada) o por oferta/costos (alza de petróleo, clima, cadenas logísticas, indexación y tasas financieras).`,
+        evidence: `Colombia: 6,30% (subió desde 4,8% en nov. 2025); México: 7,99%; EE. UU. 2022: 8,5% y proyección FMI 2026: 3,2%.`,
+        sources: `TonyT2B; Banxavi; Carlos Fajardo; FRANCE 24 Español; Javi Linares.`
+      },
+      {
+        id: `deflacion`,
+        title: `Deflación`,
+        tag: `Colapso de demanda`,
+        tagClass: `tag-neg`,
+        professions: [`contador`, `administrador`, `economista`],
+        definition: `Caída generalizada y sostenida del nivel de precios (inflación negativa) que suele reflejar contracción de la actividad económica o sobreproducción.`,
+        mechanism: `Hogares y empresas postergan compras esperando precios menores; caen ventas, ingresos y empleo, mientras las deudas pesan más en términos reales y deterioran los balances.`,
+        evidence: `EE. UU. 1929–1933 (PIB -30%, desempleo 1 de cada 4 trabajadores); Suiza (década previa a 2021 con tasa promedio negativa); China reciente (0,1% / -0,1% por exceso de inventarios).`,
+        sources: `Banxavi; Emprendo Libre; Carlos Fajardo; TonyT2B.`
+      },
+      {
+        id: `recesion`,
+        title: `Recesión`,
+        tag: `2 trimestres negativos`,
+        tagClass: `tag-neg`,
+        professions: [`contador`, `ingeniero`, `administrador`, `economista`],
+        definition: `Caída o decrecimiento de la actividad económica durante dos trimestres consecutivos del PIB en su serie desestacionalizada (ajustada por días hábiles de cada mes).`,
+        mechanism: `Cae el gasto agregado (hogares, empresas, Estado o exportaciones netas) → bajan las ventas → se recorta la producción y se despide personal → vuelve a caer el gasto en bola de nieve.`,
+        evidence: `Chile 2026 (1T -0,5%, 2T +0,1%, 3T -1,8%; minería -14,7%); Argentina 2026 (2T -0,6%, jul–ago -2,1%); 9 recesiones en EE. UU. desde los años 70.`,
+        sources: `Carlos Fajardo; Emprendo Libre; Dragon Oro Plata; TonyT2B.`
+      },
+      {
+        id: `estanflacion`,
+        title: `Estanflación`,
+        tag: `Estancamiento + Inflación`,
+        tagClass: `tag-neg`,
+        professions: [`contador`, `ingeniero`, `administrador`, `economista`],
+        definition: `Coexistencia de crecimiento económico estancado (o negativo) con inflación alta/persistente y aumento del desempleo o erosión severa del salario real.`,
+        mechanism: `Surge principalmente por choques de oferta o políticas erradas (subir tasas sobre shocks energéticos mientras crece el déficit), dejando atrapados a los bancos centrales y rompiendo la Curva de Phillips.`,
+        evidence: `EE. UU. años 70 (inflación hasta 14%, PIB -0,3%, desempleo >7%–10%); Colombia actual (PIB desest. -0,1% / -0,8% con inflación al 6,30%); Argentina (FMI 2026: PIB 2,1% e inflación 32,5%).`,
+        sources: `Javi Linares; Daniel Lacalle; Banxavi; Carlos Fajardo; El Destape; FRANCE 24 Español; TonyT2B.`
+      },
+      {
+        id: `hiperinflacion`,
+        title: `Hiperinflación`,
+        tag: `>50% mensual`,
+        tagClass: `tag-neg`,
+        professions: [`contador`, `economista`],
+        definition: `Inflación totalmente desbocada que supera el 50% mensual o alrededor del 13.000% interanual, destruyendo la función de reserva de valor de la moneda.`,
+        mechanism: `Financiación monetaria masiva de déficits, guerras o colapso productivo con pérdida total de confianza en el dinero fíat.`,
+        evidence: `Alemania Weimar 1922–1923 (29.500% mensual; 4,2 billones de marcos por dólar); Zimbabue 2007 (79.600 millones % mensual); Hungría posguerra (4.000 billones % mensual; billete de 100 trillones).`,
+        sources: `TonyT2B; Dragon Oro Plata.`
+      }
+    ];
+
+    const PROFESSIONS_DATA = {
+      all: {
+        title: `Vista integrada de las cuatro disciplinas`,
+        subtitle: `Seleccione su profesión en la lista desplegable para filtrar las variables macroeconómicas, el impacto operativo y las decisiones respaldadas por las fuentes.`,
+        badge: `Vista general`,
+        variables: [
+          `Contabilidad y Finanzas: Tasas de intervención (BanRep 12%), indexación de tarifas y servicios públicos, estructura de deuda interna vs. externa y salario real.`,
+          `Ingeniería Industrial: Choques de oferta (Estrecho de Ormuz con 20% del petróleo mundial), costos de insumos (urea, fertilizantes, petróleo), capacidad instalada e infraestructura.`,
+          `Administración de Empresas: Costo del crédito en Pymes (+7% ante +25 pb Fed según Lacalle), expectativas de demanda (Hall y Woodford), pricing power y desapalancamiento.`,
+          `Economía: Expansión de M2 (41% en EE. UU.), PIB desestacionalizado vs. nominal, oferta vs. demanda, Curva de Phillips, ciclos de Ray Dalio y superdólar.`
+        ],
+        impacts: [
+          `En Colombia confluyen caída del PIB desestacionalizado (-0,1% / -0,8%), contracción agropecuaria (-6,7%) e inflación al alza (6,30%) con tasas altas (12%).`,
+          `A nivel global el FMI ajusta la inflación de 3,8% a 4,4% y recorta el crecimiento de 3,3% a 3,1%, mientras la Eurozona cae de 1,2% a 0,9%.`
+        ],
+        decisions: [
+          `Evitar sobreapalancamiento en ciclos de tasas elevadas y mantener un fondo de emergencias de al menos 3 meses de ingresos (Dr. Carvajal, FRANCE 24).`,
+          `Distinguir si la inflación proviene de demanda o de oferta antes de proyectar tasas, precios y presupuestos (Carlos Fajardo; Daniel Lacalle).`
+        ],
+        metrics: `Fuentes: FRANCE 24 Español, Carlos Fajardo, Daniel Lacalle, Javi Linares, Banxavi, Emprendo Libre, El Destape.`
+      },
+      contador: {
+        title: `Perfil: Contadores Públicos y Financieros`,
+        subtitle: `Control de liquidez, costo financiero, indexación de gastos fijos, exposición fiscal y salud del balance ante inflación y tasas altas.`,
+        badge: `Contadores`,
+        variables: [
+          `Costo financiero y tasa del Banco de la República (12% en Colombia): la fórmula oficial de servicios públicos incorpora el costo financiero atado a la tasa BanRep, encareciendo los costos fijos operativos (Carlos Fajardo).`,
+          `Liquidez y servicio de deuda: evitar créditos a largo plazo con tasas superiores a la inflación (Dr. Eduardo Carvajal, FRANCE 24) y vigilar la exposición cambiaria (Argentina 60% deuda externa vs. Colombia 22% externa / 78% en pesos).`,
+          `Indexación de costos fijos y canasta de servicios: en Argentina (INDEC sept.) vivienda/agua/gas subieron +3,1% mensual, educación +3%, comunicación +2,5% y salud prepaga +2,4%, superando el IPC general de 1,9% (El Destape).`,
+          `Pérdida de poder adquisitivo y fiscalidad sin deflactar: el efectivo sin remunerar pierde compra cada año; en España los tramos no deflactados del IRPF hacen que 18.000 € de 2026 paguen 624 € frente a 157 € en 2019 a igual poder adquisitivo (Javi Linares).`,
+          `Balances empresariales y cuentas nacionales: todo gasto equivale a un ingreso (PIB por ingreso = PIB por gasto, Carlos Fajardo); en deflación las deudas pesan más en términos reales y deterioran balances (Banxavi).`
+        ],
+        impacts: [
+          `Margen operativo presionado por costos indexados (tarifas, arriendos, insumos) aun cuando las ventas reales se estancan.`,
+          `Erosión de caja ociosa en cuentas corrientes sin remunerar y riesgo de liquidez si el capital de trabajo se financia a tasas restrictivas.`
+        ],
+        decisions: [
+          `Reestructurar pasivos costosos, evitar nuevo endeudamiento de largo plazo por encima de la inflación y constituir reserva de liquidez de mínimo 3 meses (Dr. Carvajal, FRANCE 24).`,
+          `Monitorear la inflación efectiva de los rubros de la empresa (tarifas, fletes, materias primas) en lugar de depender solo del índice promedio (Banxavi; El Destape).`,
+          `Evaluar instrumentos de renta fija de muy corto plazo o bonos ligados a inflación (TIPS) en lugar de renta fija de 15–30 años (Javi Linares).`
+        ],
+        metrics: `Cifras clave: BanRep 12% · Deuda externa Colombia 22% vs. Argentina 60% · Servicios Argentina +2,4% / Vivienda +3,1% mensual · Reserva mínima 3 meses.`
+      },
+      ingeniero: {
+        title: `Perfil: Ingenieros Industriales y de Operaciones`,
+        subtitle: `Gestión de cadenas de suministro, choques de insumos críticos, capacidad instalada, productividad e infraestructura física.`,
+        badge: `Ingenieros Industriales`,
+        variables: [
+          `Shocks de oferta en cadenas globales: el cierre/tensión en el Estrecho de Ormuz compromete ~20% del petróleo mundial y químicos esenciales para manufactura; antecedente de buque encallado en canal en 2021 que frenó inventarios (Javi Linares; Carlos Fajardo).`,
+          `Variación de insumos y materias primas: petróleo por encima de US$100/barril encarece plásticos, combustibles, sintéticos, urea y fertilizantes (~230.000 COP por bulto citado en Colombia); auge de IA y centros de datos presiona cobre, oro y plata (Carlos Fajardo; Javi Linares; TonyT2B).`,
+          `Capacidad instalada no utilizada: según la teoría poskeynesiana, mientras exista capacidad instalada ociosa, una mayor demanda aumenta la producción sin disparar precios (caso China con acumulación de inventarios e inflación cercana a 0%) (Carlos Fajardo).`,
+          `Productividad e infraestructura física: la productividad es el motor del crecimiento de largo plazo (8 pilares de Ray Dalio en Emprendo Libre); la IA generativa promete un boom de productividad (Javi Linares), mientras el abandono vial y eventos climáticos (Fenómeno del Niño, crecientes en Paraná/Iguazú de 12.000 m³/s) destruyen oferta agrícola (-6,7% en Colombia) y logísticas (Carlos Fajardo; El Destape).`
+        ],
+        impacts: [
+          `Encarecimiento simultáneo de fletes, empaques y energía obliga a recalcular puntos de equilibrio y lotes óptimos de inventario.`,
+          `En Chile la contracción minera (-14,7%) arrastró la construcción y llevó al PIB 3T a -1,8% por falta de diversificación e inversión industrial (Carlos Fajardo).`
+        ],
+        decisions: [
+          `Auditar la vulnerabilidad de la cadena de suministro frente a cuellos de botella marítimos, insumos importados en dólares y choques climáticos (Javi Linares; Carlos Fajardo).`,
+          `Medir la utilización real de capacidad instalada antes de trasladar precios o expandir planta, evitando sobreacumulación de inventarios sin demanda (Carlos Fajardo).`,
+          `Priorizar proyectos de eficiencia energética y automatización/IA que reduzcan costos unitarios ante energía cara (Javi Linares; FRANCE 24).`
+        ],
+        metrics: `Cifras clave: 20% petróleo en Ormuz · Petróleo >US$100 nominal · Fertilizante ~230.000 COP/bulto · Agro Colombia -6,7% · Manufactura Colombia -1,2% · Minería Chile -14,7%.`
+      },
+      administrador: {
+        title: `Perfil: Administradores de Empresas y Gerentes`,
+        subtitle: `Supervivencia de Pymes ante crédito restrictivo, comportamiento de ventas por expectativas, fijación de precios y gestión del riesgo.`,
+        badge: `Administradores de Empresas`,
+        variables: [
+          `Costo del crédito y asfixia de Pymes: un alza de 25 puntos básicos en la tasa de la Fed puede convertirse en un costo de deuda de ~7% para una Pyme, encareciendo o cerrando la financiación justo para quienes crean más empleo (Daniel Lacalle).`,
+          `Contracción de ventas por expectativas de los hogares: siguiendo a Robert Hall y Michael Woodford (Nobel), las familias gastan según lo que esperan ganar mañana; con miedo al desempleo, mora e informalidad (44% Argentina, 26,4% Chile), postergan compras aunque baje la inflación (El Destape; Carlos Fajardo).`,
+          `Poder de fijación de precios (Pricing Power): sobreviven mejor las empresas de consumo indispensable, salud, energía o tecnología crítica (ej. Meta, Google, Microsoft) capaces de trasladar alzas de costos sin perder clientes (Javi Linares).`,
+          `Desapalancamiento corporativo y gestión del riesgo: Ray Dalio advierte que en fases de subida de tasas el sobreapalancamiento provoca liquidaciones; la consigna en tormenta macro es prudencia, evitar compras superfluas, convertir pasivos en activos productivos y reservar liquidez para oportunidades en recesión (Emprendo Libre; Dr. Carvajal y Gabriela Calderón en FRANCE 24; Reflexiones de un Galeno).`
+        ],
+        impacts: [
+          `Caída de ingresos en industria, comercio y construcción (en Argentina maquinaria -27%, instrumentos -22%, calzado/prendas -5%, automotores -3,5%) mientras los sectores extractivos exportan (Carlos Fajardo; El Destape).`,
+          `Aumento de costos laborales en moneda fuerte o de arrendamientos en dólares (ej. leasing aéreo en Latinoamérica) frente a ingresos locales depreciados (FRANCE 24).`
+        ],
+        decisions: [
+          `Ejecutar desapalancamiento ordenado y no tomar deuda nueva de largo plazo para activos no productivos (Emprendo Libre; Reflexiones de un Galeno).`,
+          `Segmentar el portafolio hacia productos/servicios con mayor pricing power y diversificar mercados externos para reducir dependencia de un único socio comercial (Javi Linares; Dr. Carvajal).`,
+          `Mantener caja para capturar activos o cuotas de mercado cuando competidores sobreendeudados liquiden en recesión (Gabriela Calderón, FRANCE 24).`
+        ],
+        metrics: `Cifras clave: +25 pb Fed → ~7% deuda Pyme · Maquinaria Argentina -27% · Gasto público Colombia 34% del PIB · Exportaciones México a EE. UU. ~80%.`
+      },
+      economista: {
+        title: `Perfil: Economistas y Analistas Macroeconómicos`,
+        subtitle: `Agregados monetarios (M2), contabilidad de PIB desestacionalizado, debate oferta vs. demanda, Curva de Phillips, bancos centrales y superdólar.`,
+        badge: `Economistas`,
+        variables: [
+          `Crecimiento del M2 y oferta monetaria: en EE. UU. el M2 creció 41% en año y medio frente a 16% promedio anual (Greenwood y Hanke en WSJ); la reacción tardía de la Fed y el BCE (más laxo) validó la presión monetaria sobre precios (Gabriela Calderón, FRANCE 24).`,
+          `PIB desestacionalizado vs. nominal: la recesión exige dos trimestres seguidos negativos en PIB desestacionalizado (ajustando días desiguales como feb. 28 días vs. dic. 31 días); en Colombia 0,5% nominal equivalió a -0,1% desestacionalizado (Carlos Fajardo).`,
+          `Inflación por oferta vs. demanda y Curva de Phillips: crítica a Milton Friedman por asumir la inflación de oferta como transitoria; en estanflación se rompe la Curva de Phillips al coexistir inflación alta y desempleo creciente (Carlos Fajardo; TonyT2B; Banxavi).`,
+          `Política de tasas (Fed, BCE, BanRep): subir tasas ante shocks petroleros/geopolíticos de corto plazo daña el crecimiento sin resolver la oferta (Daniel Lacalle); mantener déficits (7% en EE. UU.) sostiene una «inflación pegajosa» sobre el 2% (Javi Linares).`,
+          `Ciclos de crédito/productividad y superdólar: Ray Dalio distingue ciclos de deuda de corto plazo (5–7 años) frente a ciclos de largo plazo (75–100 años; deuda actual 3,5× el valor creado). El «superdólar» y tasas altas provocan fuga hacia la seguridad (flight to safety), empobrecimiento en monedas locales (COP, ARS) y efecto sustitución en países dolarizados como Ecuador (Emprendo Libre; FRANCE 24).`
+        ],
+        impacts: [
+          `Estabilizar cuentas fiscales y monetarias sin demanda, crédito ni inversión productiva genera estancamiento («la macro ordenada no alcanza», Nobel Hall y Woodford en El Destape).`,
+          `Paridad cercana euro–dólar (1,11 citada por Dr. Carvajal) reconfigura flujos comerciales de América Latina con Europa y EE. UU. (FRANCE 24).`
+        ],
+        decisions: [
+          `Diagnosticar primero si el choque es de oferta, monetario (M2) o de demanda antes de recomendar endurecimiento monetario (Daniel Lacalle; Carlos Fajardo; Gabriela Calderón).`,
+          `Evaluar proyecciones del FMI con lectura crítica de demanda interna y tasa de desempleo real/informalidad (El Destape; Javi Linares).`,
+          `En economías emergentes con deuda en moneda local (Colombia 78% interna), priorizar estabilidad productiva frente a choques externos de capitales (Carlos Fajardo; FRANCE 24).`
+        ],
+        metrics: `Cifras clave: M2 EE. UU. +41% · Deuda/valor creado 3,5× · Déficit EE. UU. 7% · FMI Global: infl. 3,8%→4,4% y PIB 3,3%→3,1% · Eurozona PIB 1,2%→0,9%.`
+      }
+    };
+
+    const COUNTRY_METRICS = [
+      {
+        region: `Colombia`,
+        indicator: `PIB trimestral desestacionalizado`,
+        initial: `+1,3% (2T)`,
+        actual: `-0,8% (y -0,1% serie ref.)`,
+        diff: `-2,1 pp`,
+        status: `Deterioro`,
+        professions: [`economista`, `administrador`, `contador`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Colombia`,
+        indicator: `Variación sector agropecuario (3T)`,
+        initial: `+10,0% (previo)`,
+        actual: `-6,7%`,
+        diff: `-16,7 pp`,
+        status: `Deterioro`,
+        professions: [`ingeniero`, `economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Colombia`,
+        indicator: `Producción minas y canteras`,
+        initial: `No consta`,
+        actual: `+7,8%`,
+        diff: `No consta`,
+        status: `No consta`,
+        professions: [`ingeniero`, `economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Colombia`,
+        indicator: `Industria manufacturera`,
+        initial: `No consta`,
+        actual: `-1,2%`,
+        diff: `No consta`,
+        status: `No consta`,
+        professions: [`ingeniero`, `administrador`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Colombia`,
+        indicator: `Inflación anual`,
+        initial: `4,8% (nov. 2025) / 5,10%`,
+        actual: `6,30%`,
+        diff: `+1,50 pp / +1,20 pp`,
+        status: `Deterioro`,
+        professions: [`contador`, `economista`, `administrador`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Colombia`,
+        indicator: `Tasa de desempleo`,
+        initial: `8,0%`,
+        actual: `8,5%`,
+        diff: `+0,5 pp`,
+        status: `Deterioro`,
+        professions: [`economista`, `administrador`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Colombia`,
+        indicator: `Gasto público (% PIB) y tasa BanRep`,
+        initial: `No consta`,
+        actual: `34% PIB · Tasa BanRep 12%`,
+        diff: `No consta`,
+        status: `No consta`,
+        professions: [`contador`, `economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Argentina`,
+        indicator: `Inflación anual (tramo reciente)`,
+        initial: `31,0% (mínimo reciente)`,
+        actual: `33,0%`,
+        diff: `+2,0 pp`,
+        status: `Deterioro`,
+        professions: [`contador`, `economista`, `administrador`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Argentina`,
+        indicator: `Inflación anual (desde pico 211%)`,
+        initial: `211,0% (pico)`,
+        actual: `33,0%`,
+        diff: `-178,0 pp`,
+        status: `Mejora`,
+        professions: [`economista`, `contador`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Argentina`,
+        indicator: `Proyección FMI crecimiento PIB 2026`,
+        initial: `3,5%`,
+        actual: `2,1%`,
+        diff: `-1,4 pp`,
+        status: `Deterioro`,
+        professions: [`economista`, `administrador`],
+        source: `El Destape (Cande Botto)`
+      },
+      {
+        region: `Argentina`,
+        indicator: `Proyección FMI inflación promedio 2026`,
+        initial: `30,4% (y 16,4% oct. 2025)`,
+        actual: `32,5%`,
+        diff: `+2,1 pp`,
+        status: `Deterioro`,
+        professions: [`contador`, `economista`],
+        source: `El Destape (Cande Botto)`
+      },
+      {
+        region: `Argentina`,
+        indicator: `Tasa de desempleo`,
+        initial: `5,7%`,
+        actual: `7,9%`,
+        diff: `+2,2 pp`,
+        status: `Deterioro`,
+        professions: [`administrador`, `economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Argentina`,
+        indicator: `Informalidad laboral`,
+        initial: `41,0%`,
+        actual: `44,0%`,
+        diff: `+3,0 pp`,
+        status: `Deterioro`,
+        professions: [`administrador`, `economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Argentina`,
+        indicator: `Tasa de pobreza`,
+        initial: `No consta`,
+        actual: `32,0%`,
+        diff: `No consta`,
+        status: `No consta`,
+        professions: [`economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Chile`,
+        indicator: `PIB trimestral 2026 (1T → 3T)`,
+        initial: `-0,5% (1T) / +0,1% (2T)`,
+        actual: `-1,8% (3T)`,
+        diff: `-1,3 pp (vs 1T)`,
+        status: `Deterioro`,
+        professions: [`economista`, `ingeniero`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Chile`,
+        indicator: `Inflación anual`,
+        initial: `3,5% (2025)`,
+        actual: `4,5%`,
+        diff: `+1,0 pp`,
+        status: `Deterioro`,
+        professions: [`contador`, `economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Chile`,
+        indicator: `Tasa de desempleo`,
+        initial: `7,9% (2022) / 8,6% (2025)`,
+        actual: `9,8%`,
+        diff: `+1,9 pp (vs 2022)`,
+        status: `Deterioro`,
+        professions: [`administrador`, `economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `Chile`,
+        indicator: `Informalidad laboral`,
+        initial: `27,5%`,
+        actual: `26,4%`,
+        diff: `-1,1 pp`,
+        status: `Mejora`,
+        professions: [`administrador`, `economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `EE. UU.`,
+        indicator: `Inflación proyectada (FMI)`,
+        initial: `2,6%`,
+        actual: `3,2%`,
+        diff: `+0,6 pp`,
+        status: `Deterioro`,
+        professions: [`economista`, `contador`],
+        source: `Javi Linares`
+      },
+      {
+        region: `EE. UU.`,
+        indicator: `Arancel efectivo promedio (tras fallo Supremo)`,
+        initial: `13,7%`,
+        actual: `8,0%`,
+        diff: `-5,7 pp`,
+        status: `Mejora`,
+        professions: [`administrador`, `ingeniero`, `economista`],
+        source: `Javi Linares`
+      },
+      {
+        region: `EE. UU.`,
+        indicator: `Desempleo actual y déficit estructural`,
+        initial: `No consta`,
+        actual: `Desempleo 4,0% · Déficit 7,0%`,
+        diff: `No consta`,
+        status: `No consta`,
+        professions: [`economista`],
+        source: `Javi Linares`
+      },
+      {
+        region: `Eurozona`,
+        indicator: `Crecimiento económico Eurozona (BCE)`,
+        initial: `1,2%`,
+        actual: `0,9%`,
+        diff: `-0,3 pp`,
+        status: `Deterioro`,
+        professions: [`economista`, `administrador`],
+        source: `Javi Linares`
+      },
+      {
+        region: `Eurozona`,
+        indicator: `Inflación energética estimada (escenario Ormuz)`,
+        initial: `No consta`,
+        actual: `4,9% (2022 fue 7,5%)`,
+        diff: `No consta`,
+        status: `No consta`,
+        professions: [`ingeniero`, `economista`],
+        source: `Javi Linares; TonyT2B`
+      },
+      {
+        region: `China`,
+        indicator: `Inflación reciente (borde deflacionario)`,
+        initial: `3%–4% (histórico)`,
+        actual: `-0,1% a +0,2%`,
+        diff: `Cercana a 0%`,
+        status: `Deterioro`,
+        professions: [`ingeniero`, `economista`],
+        source: `Carlos Fajardo`
+      },
+      {
+        region: `China`,
+        indicator: `Tasa exacta de PIB y desempleo`,
+        initial: `No consta`,
+        actual: `No consta`,
+        diff: `No consta`,
+        status: `No consta`,
+        professions: [`economista`],
+        source: `No consta en las fuentes`
+      },
+      {
+        region: `Global y Otros`,
+        indicator: `Mundo (FMI): Inflación global`,
+        initial: `3,8%`,
+        actual: `4,4%`,
+        diff: `+0,6 pp`,
+        status: `Deterioro`,
+        professions: [`economista`, `contador`, `ingeniero`],
+        source: `Javi Linares`
+      },
+      {
+        region: `Global y Otros`,
+        indicator: `Mundo (FMI): Crecimiento global`,
+        initial: `3,3%`,
+        actual: `3,1%`,
+        diff: `-0,2 pp`,
+        status: `Deterioro`,
+        professions: [`economista`, `administrador`],
+        source: `Javi Linares`
+      },
+      {
+        region: `Global y Otros`,
+        indicator: `España: Vivienda nueva vs. salario neto (desde 2018)`,
+        initial: `Base 2018`,
+        actual: `Vivienda +80% · Salario neto +20%`,
+        diff: `Brecha -60 pp`,
+        status: `Deterioro`,
+        professions: [`contador`, `economista`],
+        source: `Javi Linares`
+      },
+      {
+        region: `Global y Otros`,
+        indicator: `México: Inflación oficial · Bolivia · Ecuador`,
+        initial: `No consta`,
+        actual: `MX 7,99% · BO 3,2% · EC ~3%`,
+        diff: `No consta`,
+        status: `No consta`,
+        professions: [`economista`, `contador`],
+        source: `FRANCE 24 Español`
+      }
+    ];
+
+    const GLOSSARY_TERMS = [
+      {
+        term: `Agregado monetario M2`,
+        category: `Política monetaria`,
+        summary: `Medida amplia de la oferta de dinero en circulación. En EE. UU. creció 41% en año y medio durante la pandemia frente a un promedio anual de 16%, anticipando inflación (Greenwood y Hanke).`,
+        source: `FRANCE 24 Español`
+      },
+      {
+        term: `PIB desestacionalizado`,
+        category: `Conceptos base`,
+        summary: `Producto Interno Bruto ajustado estadísticamente para eliminar diferencias de duración entre meses (ej. febrero de 28 días vs. diciembre de 31). Dos trimestres seguidos negativos definen recesión.`,
+        source: `Carlos Fajardo`
+      },
+      {
+        term: `Inflación por oferta vs. demanda`,
+        category: `Sector real`,
+        summary: `La inflación por demanda ocurre cuando la economía alcanza el límite de su capacidad instalada; la de oferta surge por choques en petróleo, clima, fletes, fertilizantes o tasas financieras sin que aumente el consumo.`,
+        source: `Carlos Fajardo; TonyT2B`
+      },
+      {
+        term: `Capacidad instalada no utilizada`,
+        category: `Sector real`,
+        summary: `Margen productivo ocioso de fábricas y empresas. Según los poskeynesianos, mientras exista capacidad disponible no se genera inflación por demanda (ejemplo de China produciendo más rápido que su consumo).`,
+        source: `Carlos Fajardo`
+      },
+      {
+        term: `Curva de Phillips`,
+        category: `Conceptos base`,
+        summary: `Relación inversa tradicional: alta inflación sugiere bajo desempleo y viceversa. La estanflación de los años 70 rompió esta curva al combinar alta inflación y alto desempleo por choque petrolero.`,
+        source: `TonyT2B`
+      },
+      {
+        term: `Estrecho de Ormuz`,
+        category: `Sector real`,
+        summary: `Corredor marítimo estratégico por donde transita ~20% del petróleo mundial y químicos para manufactura. Su disrupción genera choques energéticos, aunque futuros y oferta no-OPEP suelen corregirlos.`,
+        source: `Javi Linares; Daniel Lacalle`
+      },
+      {
+        term: `Pricing power (poder de precios)`,
+        category: `Estrategia y activos`,
+        summary: `Capacidad de una empresa indispensable (ej. Meta, Google, Microsoft, salud o energía) para trasladar aumentos de costos al precio final sin perder demanda.`,
+        source: `Javi Linares`
+      },
+      {
+        term: `Desapalancamiento`,
+        category: `Estrategia y activos`,
+        summary: `Proceso de reducción de deuda en empresas, hogares y mercados cuando suben las tasas de interés. Permite limpiar excesos de crédito tras burbujas (Ray Dalio).`,
+        source: `Emprendo Libre`
+      },
+      {
+        term: `Superdólar y Flight to Safety`,
+        category: `Política monetaria`,
+        summary: `Fuga de capitales desde mercados emergentes hacia bonos del Tesoro y dólares estadounidenses ante volatilidad y tasas más altas, depreciando monedas locales como el peso colombiano y argentino.`,
+        source: `FRANCE 24 Español`
+      },
+      {
+        term: `Efecto empobrecimiento vs. sustitución`,
+        category: `Política monetaria`,
+        summary: `Con monedas locales depreciadas el salario compra menos (empobrecimiento); en economías dolarizadas como Ecuador el dólar fuerte abarata importaciones vecinas (sustitución).`,
+        source: `FRANCE 24 Español`
+      },
+      {
+        term: `Salario real`,
+        category: `Conceptos base`,
+        summary: `Poder de compra efectivo del ingreso nominal una vez descontada la inflación. Puede caer incluso cuando el salario nominal sube, si los precios crecen más rápido.`,
+        source: `Carlos Fajardo; Banxavi`
+      },
+      {
+        term: `Cuentas nacionales (Ingreso = Gasto)`,
+        category: `Conceptos base`,
+        summary: `Identidad contable macroeconómica: todo gasto de hogares, empresas, Estado o exportaciones netas constituye ingreso de otro agente. Recortar gasto público contrae ingresos privados.`,
+        source: `Carlos Fajardo`
+      },
+      {
+        term: `Propensión marginal a consumir`,
+        category: `Conceptos base`,
+        summary: `Fracción de cada peso adicional de ingreso que hogares o empresas destinan al consumo en vez de ahorrarlo, generando efecto multiplicador keynesiano.`,
+        source: `Carlos Fajardo`
+      },
+      {
+        term: `Inflación pegajosa`,
+        category: `Política monetaria`,
+        summary: `Inflación persistente que no converge al 1,5%–2% debido a déficits fiscales estructurales (7% en EE. UU.), alta deuda/PIB o indexación en servicios.`,
+        source: `Javi Linares; El Destape`
+      },
+      {
+        term: `Expectativas intertemporales (Hall y Woodford)`,
+        category: `Conceptos base`,
+        summary: `Las familias gastan según lo que esperan percibir en el futuro, no solo según su ingreso presente; la incertidumbre laboral frena el consumo aunque baje la inflación.`,
+        source: `El Destape (Cande Botto)`
+      },
+      {
+        term: `TIPS y fondos monetarios cortos`,
+        category: `Estrategia y activos`,
+        summary: `Bonos ligados a la inflación oficial y liquidez de muy corto plazo que preservan valor real sin sufrir la caída de precio de los bonos largos cuando suben las tasas.`,
+        source: `Javi Linares`
+      }
+    ];
+
+    const TIMELINE_EVENTS = [
+      {
+        year: `1970–1971`,
+        title: `Fin de Bretton Woods, sistema petrodólar y embargo OPEP`,
+        summary: `Concluye la convertibilidad del dólar en oro y estalla la crisis energética por el embargo petrolero de la OPEP. Se produce la primera gran estanflación moderna en EE. UU. y Reino Unido.`,
+        figures: `Inflación EE. UU. pasó de ~1% (1964) a 14% · PIB cayó de 5,8% a -0,3% · Desempleo superó 7%–10% · Oro +2.300% y S&P GSCI +586% en la década.`,
+        sources: `Dragon Oro Plata; Javi Linares; Banxavi; TonyT2B.`
+      },
+      {
+        year: `1980–1982`,
+        title: `Choque de tasas de la Fed al 13% y corrección de metales`,
+        summary: `Para frenar la inflación heredada de los años 70, la Reserva Federal eleva agresivamente las tasas de interés hasta el 13%, provocando una caída severa de bonos de largo plazo y un retroceso puntual en metales.`,
+        figures: `Tasas Fed suben de 6% a 13% · Único periodo de pérdida fuerte del oro en recesión (nov. 1980–ago. 1982): -46% oro y -66% plata (episodio hermanos Hunt).`,
+        sources: `Javi Linares; Dragon Oro Plata.`
+      },
+      {
+        year: `1991–2001`,
+        title: `Gran expansión de 121 meses y rezago del oro`,
+        summary: `Década de crecimiento económico sostenido sin curvas recesivas. La renta variable y los bienes inmuebles superan ampliamente a los metales preciosos.`,
+        figures: `121 meses continuos de expansión en EE. UU. · El precio del oro cayó entre 20% y 30% frente al dólar.`,
+        sources: `Dragon Oro Plata.`
+      },
+      {
+        year: `2007–2009`,
+        title: `Crisis financiera global de 2008 e hiperinflación en Zimbabue`,
+        summary: `El colapso financiero de 2008 (precedido por 73 meses de expansión inmobiliaria 2001–2007) dispara el oro como activo refugio. En paralelo, Zimbabue vive una hiperinflación extrema.`,
+        figures: `Zimbabue 2007: 79.600 millones % mensual (98% diario) · Tras 2008 el oro repunta de forma casi vertical · Petróleo 2008 corrige tras pico previo.`,
+        sources: `Dragon Oro Plata; TonyT2B; Daniel Lacalle.`
+      },
+      {
+        year: `2018–2020`,
+        title: `Freno monetario de 2018 y expansión M2 por COVID-19`,
+        summary: `En 2018–2019 la Fed sube tasas a 2,5% y corrige las bolsas; en marzo de 2020 recorta a casi 0% e inyecta liquidez histórica ante los confinamientos.`,
+        figures: `M2 de EE. UU. crece 41% en año y medio (vs. 16% promedio anual) · En 2020 Colombia se contrajo ~8% y Chile cayó 6,1% antes del rebote 2021 (+11,3%).`,
+        sources: `FRANCE 24 Español; Emprendo Libre; Carlos Fajardo.`
+      },
+      {
+        year: `2021–2022`,
+        title: `Guerra en Ucrania, crisis energética, superdólar y alza de tasas`,
+        summary: `Cuellos de botella logísticos (buque encallado 2021), invasión en Ucrania y cortes en Nord Stream 1 encarecen energía y alimentos. La Fed endurece tasas mientras el BCE demora el ajuste.`,
+        figures: `Inflación 2022: EE. UU. 8,5%, Europa 7,5%, México 7,99% (máxima en 21 años) · Paridad euro–dólar cercana a 1:1 (1,11 citada) · Inicio alza Fed (+50 pb en marzo 2022).`,
+        sources: `FRANCE 24 Español; TonyT2B; Reflexiones de un Galeno; Emprendo Libre.`
+      },
+      {
+        year: `2025–2026`,
+        title: `Escenario actual: Estanflación regional, Ormuz, FMI e IA`,
+        summary: `Tensión en Estrecho de Ormuz, recortes de crecimiento FMI y divergencia por políticas internas: Colombia entra en estanflación (PIB -0,1% / -0,8% e inflación 6,30%), Chile y Argentina caen en recesión, mientras el auge de IA y energía impulsa expectativas de productividad.`,
+        figures: `FMI Global 2026: inflación 3,8%→4,4% y PIB 3,3%→3,1% · Eurozona 1,2%→0,9% · Aranceles EE. UU. caen 13,7%→8% · Argentina FMI: PIB 2,1%, inflación 32,5%, desempleo 7,9%.`,
+        sources: `Javi Linares; Carlos Fajardo; El Destape; Banxavi.`
+      }
+    ];
+
+    /* 8 preguntas con respuestas correctas repartidas equitativamente:
+       Q1: A | Q2: B | Q3: C | Q4: D | Q5: A | Q6: B | Q7: C | Q8: D */
+    const QUIZ_QUESTIONS = [
+      {
+        id: `q1`,
+        profession: `Economistas`,
+        question: `1. Según la definición técnica explicada en las fuentes, ¿cuándo entra oficialmente una economía en recesión?`,
+        correct: `A`,
+        options: [
+          { key: `A`, text: `Cuando registra dos trimestres consecutivos de crecimiento negativo del PIB en su serie desestacionalizada.`, outside: false },
+          { key: `B`, text: `Cuando la tasa de inflación anual supera el 10% durante un semestre completo.`, outside: false },
+          { key: `C`, text: `Cuando el déficit fiscal nacional supera el 15% del PIB según el protocolo estándar de Basilea IV.`, outside: true },
+          { key: `D`, text: `Cuando la Reserva Federal mantiene los tipos de interés por encima del 5% durante un año.`, outside: true }
+        ],
+        explanation: `Correcta: A. Carlos Fajardo, Emprendo Libre, Dragon Oro Plata y TonyT2B coinciden en que la recesión se define técnicamente por dos trimestres consecutivos de decrecimiento del PIB desestacionalizado.`
+      },
+      {
+        id: `q2`,
+        profession: `Contadores`,
+        question: `2. Para un Contador que analiza costos fijos en Colombia, ¿por qué subir la tasa del Banco de la República (12%) puede agravar la inflación actual según Carlos Fajardo?`,
+        correct: `B`,
+        options: [
+          { key: `A`, text: `Porque obliga a las empresas a pagar impuestos dobles de renta presuntiva sobre inventarios.`, outside: true },
+          { key: `B`, text: `Porque la fórmula de tarifas de servicios públicos incluye el costo financiero atado a la tasa del Banco de la República, trasladando el alza a precios.`, outside: false },
+          { key: `C`, text: `Porque provoca automáticamente una hiperinflación superior al 50% mensual como en la República de Weimar.`, outside: false },
+          { key: `D`, text: `Porque reduce el IVA de los vehículos híbridos del 19% al 5% de forma inmediata.`, outside: false }
+        ],
+        explanation: `Correcta: B. Carlos Fajardo explica que la inflación colombiana actual es de oferta y que las tarifas de servicios públicos tienen una fórmula atada directamente a la tasa de intervención del Banco de la República.`
+      },
+      {
+        id: `q3`,
+        profession: `Ingenieros Industriales`,
+        question: `3. ¿Qué porcentaje aproximado del petróleo mundial transita por el Estrecho de Ormuz y qué efecto adicional cita Javi Linares sobre su interrupción?`,
+        correct: `C`,
+        options: [
+          { key: `A`, text: `Circula el 5% del petróleo mundial y afecta únicamente a las exportaciones de café brasileño.`, outside: false },
+          { key: `B`, text: `Circula el 45% del gas natural europeo y está regulado por el tratado de Nord Stream 2.`, outside: true },
+          { key: `C`, text: `Circula un 20% del petróleo mundial junto con químicos utilizados en manufactura de productos derivados.`, outside: false },
+          { key: `D`, text: `Circula el 80% de las exportaciones manufactureras de México hacia el mercado norteamericano.`, outside: false }
+        ],
+        explanation: `Correcta: C. Javi Linares precisa que por el Estrecho de Ormuz pasa el 20% del petróleo mundial además de químicos empleados en manufactura.`
+      },
+      {
+        id: `q4`,
+        profession: `Administradores de Empresas`,
+        question: `4. En el análisis de Daniel Lacalle sobre Pymes, ¿qué efecto financiero puede producir una subida de 25 puntos básicos en la tasa de la Reserva Federal?`,
+        correct: `D`,
+        options: [
+          { key: `A`, text: `Asegura un crédito subsidiado al 2% fijo para todas las empresas tecnológicas del Nasdaq.`, outside: false },
+          { key: `B`, text: `Elimina por completo las fluctuaciones cambiarias gracias a la dolarización automática.`, outside: false },
+          { key: `C`, text: `Duplica las ventas trimestrales por el efecto multiplicador de la propensión a consumir.`, outside: false },
+          { key: `D`, text: `Se traduce en un costo de deuda de alrededor del 7% para una pequeña o mediana empresa, o en la pérdida total de acceso al crédito.`, outside: false }
+        ],
+        explanation: `Correcta: D. Daniel Lacalle advierte que 25 puntos básicos en la tasa de referencia se convierten en ~7% de costo de deuda para una Pyme, golpeando a las principales creadoras de empleo.`
+      },
+      {
+        id: `q5`,
+        profession: `Economistas`,
+        question: `5. Según el análisis de Gabriela Calderón (FRANCE 24 Español), ¿qué indicador ignorado por la Fed anticipaba la ola inflacionaria pospandemia en EE. UU.?`,
+        correct: `A`,
+        options: [
+          { key: `A`, text: `El crecimiento del agregado monetario M2, que aumentó 41% en año y medio frente a un promedio anual de 16%.`, outside: false },
+          { key: `B`, text: `La caída del sector agropecuario colombiano en un 6,7% durante el tercer trimestre.`, outside: false },
+          { key: `C`, text: `El índice de desempleo juvenil español calculado mensualmente por Eurostat.`, outside: true },
+          { key: `D`, text: `La reducción arancelaria del Tribunal Supremo del 13,7% al 8%.`, outside: false }
+        ],
+        explanation: `Correcta: A. Citando a Greenwood y Hanke (Johns Hopkins / WSJ), Gabriela Calderón destaca el salto del 41% en la oferta monetaria M2 en año y medio.`
+      },
+      {
+        id: `q6`,
+        profession: `Contadores / Administradores`,
+        question: `6. En un entorno de estanflación severa, ¿cuál activo sufrió mayor deterioro histórico al subir las tasas del 6% al 13% en los años 70, según Javi Linares?`,
+        correct: `B`,
+        options: [
+          { key: `A`, text: `El oro físico, que perdió valor en la década de 1970 y no logró cubrir la inflación.`, outside: false },
+          { key: `B`, text: `La renta fija (bonos) a largo plazo de 15, 20 o 30 años, cuyo valor de mercado se hunde ante alzas fuertes de tipos.`, outside: false },
+          { key: `C`, text: `El índice de materias primas S&P GSCI, que cayó en términos nominales durante esa década.`, outside: false },
+          { key: `D`, text: `Las criptomonedas estables respaldadas por deuda soberana europea emitida en 1975.`, outside: true }
+        ],
+        explanation: `Correcta: B. Javi Linares explica que los bonos a largo plazo (15–30 años) son el activo más perjudicado cuando los bancos centrales suben tipos de 6% a 13%, mientras el oro (+2.300%) y materias primas (+586%) brillaron.`
+      },
+      {
+        id: `q7`,
+        profession: `Economistas`,
+        question: `7. En el cuadro comparativo de Chile y Argentina (Carlos Fajardo), ¿cuál afirmación es matemáticamente correcta según las fuentes?`,
+        correct: `C`,
+        options: [
+          { key: `A`, text: `En Colombia el sector agropecuario creció +6,7% y el desempleo bajó al 5,7%.`, outside: false },
+          { key: `B`, text: `En China la inflación anual superó el 14% por exceso de consumo interno sin capacidad instalada.`, outside: false },
+          { key: `C`, text: `En Chile la informalidad laboral mostró una mejora al bajar de 27,5% a 26,4%, mientras el PIB 3T cayó a -1,8% y la minería se contrajo -14,7%.`, outside: false },
+          { key: `D`, text: `En Argentina el salario real subió 22% en 2026 gracias a la reducción del desempleo al 2,1%.`, outside: true }
+        ],
+        explanation: `Correcta: C. En las cifras de Carlos Fajardo, Chile mejoró su informalidad (27,5% → 26,4%), pero entró en recesión con -1,8% en 3T 2026 y caída minera de -14,7%.`
+      },
+      {
+        id: `q8`,
+        profession: `Contadores / Administradores`,
+        question: `8. ¿Qué recomendación práctica concreta dio el Dr. Eduardo Carvajal (FRANCE 24 Español) para que familias y ciudadanos enfrenten un entorno recesivo con tasas altas?`,
+        correct: `D`,
+        options: [
+          { key: `A`, text: `Tomar créditos de consumo a largo plazo con tasa superior a la inflación para aprovechar el superdólar.`, outside: false },
+          { key: `B`, text: `Mantener todo el patrimonio en efectivo sin remunerar dentro de una cuenta corriente bancaria.`, outside: false },
+          { key: `C`, text: `Invertir exclusivamente en bonos del tesoro japonés a 40 años con apalancamiento 10x.`, outside: true },
+          { key: `D`, text: `Evitar créditos largos con tasas superiores a la inflación, abstenerse de gastos superfluos y mantener un fondo de emergencias equivalente al menos a 3 meses de ingresos.`, outside: false }
+        ],
+        explanation: `Correcta: D. El Dr. Eduardo Carvajal recomienda evitar deudas caras a largo plazo, reducir consumo superfluo y contar con un ahorro/fondo de emergencia mínimo de 3 meses de ingresos.`
+      }
+    ];
+
+    const TRACKER_MODULES = [
+      { id: `mod_diag`, title: `01. Diagnóstico inmediato: 5 regímenes macroeconómicos`, detail: `Distinguir inflación, deflación, recesión, estanflación e hiperinflación.` },
+      { id: `mod_prof`, title: `02. Filtro por profesión aplicado`, detail: `Revisar variables, impactos y decisiones de su disciplina en la lista desplegable.` },
+      { id: `mod_comp`, title: `03. Cuadro comparativo geográfico`, detail: `Validar cifras reales de Colombia, Argentina, Chile, EE. UU., Eurozona y China.` },
+      { id: `mod_glos`, title: `04A. Buscador de términos técnicos`, detail: `Consultar definiciones clave (M2, PIB desestacionalizado, Curva de Phillips, Ormuz).` },
+      { id: `mod_calc`, title: `04B. Calculadora de inflación y tasa real`, detail: `Simular poder adquisitivo real, costo real de deuda y fondo de emergencia de 3 meses.` },
+      { id: `mod_chart`, title: `04C–D. Gráfico de activos y línea de tiempo (1970–2026)`, detail: `Comparar oro, materias primas y bonos e inspeccionar los 7 hitos históricos.` },
+      { id: `mod_quiz`, title: `05. Test evaluativo completado`, detail: `Responder las 8 preguntas con trazabilidad estricta a las fuentes.` }
+    ];
+
+    /* =========================================================
+       ESTADO GLOBAL PERSISTIDO CON notebookAppApi
+       ========================================================= */
+    let appState = {
+      profession: `all`,
+      quizAnswers: {},
+      completedModules: {},
+      calc: {
+        income: 3000000,
+        inflation: 6.3,
+        rate: 12.0,
+        wage: 4.0,
+        debtShare: 35
+      },
+      chartMode: `seventies`,
+      timelineIndex: 0
+    };
+
+    let assetsChartInstance = null;
+
+    function getCssToken(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    async function persistState() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+        try {
+          await window.notebookAppApi.setAppState(appState);
+        } catch (err) {
+          /* Tolerante en entornos sin backend activo */
+        }
+      }
+    }
+
+    /* =========================================================
+       SECCIÓN 1 & 2: RENDER DE CONCEPTOS Y PROFESIÓN
+       ========================================================= */
+    function renderConcepts() {
+      const container = document.getElementById(`concepts-grid`);
+      if (!container) return;
+      const activeProf = appState.profession;
+
+      container.innerHTML = CONCEPTS_DATA.map((item) => {
+        const highlighted = activeProf !== `all` && item.professions.includes(activeProf);
+        return `
+          <article class="layer ${highlighted ? `is-highlighted` : ``}">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-xs); margin-bottom: var(--space-xs);">
+              <span class="label-mono">${highlighted ? `Afín a tu perfil` : `Definición base`}</span>
+              <span class="tag ${item.tagClass}">${item.tag}</span>
+            </div>
+            <h3>${item.title}</h3>
+            <p class="compact-copy" style="margin-bottom: var(--space-sm);">${item.definition}</p>
+            <p class="muted-copy" style="margin-bottom: var(--space-xs);"><strong>Mecanismo:</strong> ${item.mechanism}</p>
+            <p class="muted-copy"><strong>Cifras en fuentes:</strong> ${item.evidence}</p>
+            <div class="source-note">Fuentes: ${item.sources}</div>
+          </article>
+        `;
+      }).join(``);
+
+      const noteEl = document.getElementById(`diagnostico-filter-note`);
+      if (noteEl) {
+        noteEl.textContent = activeProf === `all`
+          ? `Vista completa de referencia`
+          : `Resaltando conceptos críticos para: ${PROFESSIONS_DATA[activeProf].badge}`;
+      }
+    }
+
+    function renderProfessionPanel() {
+      const panel = document.getElementById(`profession-detail-panel`);
+      if (!panel) return;
+      const profKey = appState.profession;
+      const data = PROFESSIONS_DATA[profKey] || PROFESSIONS_DATA.all;
+
+      panel.innerHTML = `
+        <div class="layer key-tile" style="display: grid; gap: var(--space-md);">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: var(--space-sm);">
+            <div>
+              <span class="tag">${data.badge}</span>
+              <h3 style="margin-top: var(--space-xs);">${data.title}</h3>
+              <p class="muted-copy">${data.subtitle}</p>
+            </div>
+          </div>
+          <div class="two-col-grid">
+            <div class="layer-nested">
+              <span class="label-mono">Variables y conceptos clave</span>
+              <ul class="clean-list" style="margin-top: var(--space-sm);">
+                ${data.variables.map((v) => `<li>${v}</li>`).join(``)}
+              </ul>
+            </div>
+            <div style="display: grid; gap: var(--space-md);">
+              <div class="layer-nested">
+                <span class="label-mono">Impacto macroeconómico observado</span>
+                <ul class="clean-list" style="margin-top: var(--space-sm);">
+                  ${data.impacts.map((imp) => `<li>${imp}</li>`).join(``)}
+                </ul>
+              </div>
+              <div class="layer-nested">
+                <span class="label-mono">Criterios de acción según las fuentes</span>
+                <ul class="clean-list" style="margin-top: var(--space-sm);">
+                  ${data.decisions.map((d) => `<li>${d}</li>`).join(``)}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="source-note">${data.metrics}</div>
+        </div>
+      `;
+
+      const indicator = document.getElementById(`active-profile-indicator`);
+      if (indicator) {
+        indicator.textContent = profKey === `all` ? `Todas las disciplinas` : data.badge;
+      }
+
+      const selectEl = document.getElementById(`profession-select`);
+      if (selectEl && selectEl.value !== profKey) {
+        selectEl.value = profKey;
+      }
+
+      const buttons = document.querySelectorAll(`[data-prof-btn]`);
+      buttons.forEach((btn) => {
+        if (btn.dataset.profBtn === profKey) {
+          btn.classList.remove(`btn-ghost`);
+          btn.classList.add(`btn-primary`);
+        } else {
+          btn.classList.remove(`btn-primary`);
+          btn.classList.add(`btn-ghost`);
+        }
+      });
+    }
+
+    function selectProfession(profKey) {
+      appState.profession = PROFESSIONS_DATA[profKey] ? profKey : `all`;
+      renderProfessionPanel();
+      renderConcepts();
+      renderCountryTable();
+      persistState();
+    }
+
+    /* =========================================================
+       SECCIÓN 3: TABLA COMPARATIVA GEOGRÁFICA
+       ========================================================= */
+    function getStatusBadgeHtml(status) {
+      if (status === `Mejora`) return `<span class="tag tag-pos">Mejora</span>`;
+      if (status === `Deterioro`) return `<span class="tag tag-neg">Deterioro</span>`;
+      if (status === `Igual`) return `<span class="tag tag-neutral">Igual</span>`;
+      return `<span class="tag tag-neutral">No consta</span>`;
+    }
+
+    function renderCountryTable() {
+      const tbody = document.getElementById(`country-table-body`);
+      const regionSel = document.getElementById(`region-filter`);
+      const statusSel = document.getElementById(`status-filter`);
+      if (!tbody || !regionSel || !statusSel) return;
+
+      const regionVal = regionSel.value;
+      const statusVal = statusSel.value;
+      const activeProf = appState.profession;
+
+      const rows = COUNTRY_METRICS.filter((r) => {
+        const matchRegion = regionVal === `all` || r.region === regionVal;
+        const matchStatus = statusVal === `all` || r.status === statusVal;
+        return matchRegion && matchStatus;
+      });
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7">No hay registros que coincidan con los filtros seleccionados.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = rows.map((r) => {
+        const isProfMatch = activeProf !== `all` && r.professions.includes(activeProf);
+        return `
+          <tr class="${isProfMatch ? `row-highlight` : ``}">
+            <td><strong>${r.region}</strong></td>
+            <td>${r.indicator}</td>
+            <td class="num-cell">${r.initial}</td>
+            <td class="num-cell">${r.actual}</td>
+            <td class="num-cell">${r.diff}</td>
+            <td>${getStatusBadgeHtml(r.status)}</td>
+            <td>${r.source}</td>
+          </tr>
+        `;
+      }).join(``);
+    }
+
+    /* =========================================================
+       SECCIÓN 4A: BUSCADOR EN TIEMPO REAL
+       ========================================================= */
+    function filterGlossary() {
+      const searchEl = document.getElementById(`glossary-search`);
+      const catEl = document.getElementById(`glossary-category`);
+      const resultsEl = document.getElementById(`glossary-results`);
+      const countEl = document.getElementById(`glossary-count`);
+      if (!searchEl || !catEl || !resultsEl || !countEl) return;
+
+      const query = searchEl.value.trim().toLowerCase();
+      const cat = catEl.value;
+
+      const filtered = GLOSSARY_TERMS.filter((item) => {
+        const matchCat = cat === `all` || item.category === cat;
+        const text = `${item.term} ${item.summary} ${item.source} ${item.category}`.toLowerCase();
+        const matchQuery = query === `` || text.includes(query);
+        return matchCat && matchQuery;
+      });
+
+      countEl.textContent = `${filtered.length} término${filtered.length === 1 ? `` : `s`} visible${filtered.length === 1 ? `` : `s`}`;
+
+      if (filtered.length === 0) {
+        resultsEl.innerHTML = `
+          <div class="layer-nested" style="grid-column: 1 / -1;">
+            <p class="compact-copy"><strong>Sin coincidencias</strong> para «${searchEl.value}» en la categoría seleccionada.</p>
+            <button type="button" class="btn-secondary" style="margin-top: var(--space-sm);" onclick="clearGlossarySearch()">Restablecer búsqueda</button>
+          </div>
+        `;
+        return;
+      }
+
+      resultsEl.innerHTML = filtered.map((item) => `
+        <div class="layer-nested">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-xs); margin-bottom: var(--space-xs);">
+            <span class="label-mono">${item.category}</span>
+          </div>
+          <h3>${item.term}</h3>
+          <p class="compact-copy">${item.summary}</p>
+          <div class="source-note">Fuente: ${item.source}</div>
+        </div>
+      `).join(``);
+    }
+
+    function clearGlossarySearch() {
+      const searchEl = document.getElementById(`glossary-search`);
+      const catEl = document.getElementById(`glossary-category`);
+      if (searchEl) searchEl.value = ``;
+      if (catEl) catEl.value = `all`;
+      filterGlossary();
+    }
+
+    /* =========================================================
+       SECCIÓN 4B: CALCULADORA REAL (SLIDER + NUMBER DEDICADOS)
+       ========================================================= */
+    function syncInflationFromSlider(val) {
+      const num = document.getElementById(`input-inflation`);
+      if (num) num.value = val;
+      updateCalculator();
+    }
+    function syncInflationFromNumber(val) {
+      const slider = document.getElementById(`slider-inflation`);
+      if (slider) slider.value = Math.min(50, Math.max(0, Number(val) || 0));
+      updateCalculator();
+    }
+
+    function syncRateFromSlider(val) {
+      const num = document.getElementById(`input-rate`);
+      if (num) num.value = val;
+      updateCalculator();
+    }
+    function syncRateFromNumber(val) {
+      const slider = document.getElementById(`slider-rate`);
+      if (slider) slider.value = Math.min(40, Math.max(0, Number(val) || 0));
+      updateCalculator();
+    }
+
+    function syncWageFromSlider(val) {
+      const num = document.getElementById(`input-wage`);
+      if (num) num.value = val;
+      updateCalculator();
+    }
+    function syncWageFromNumber(val) {
+      const slider = document.getElementById(`slider-wage`);
+      if (slider) slider.value = Math.min(40, Math.max(0, Number(val) || 0));
+      updateCalculator();
+    }
+
+    function syncShareFromSlider(val) {
+      const num = document.getElementById(`input-debt-share`);
+      if (num) num.value = val;
+      updateCalculator();
+    }
+    function syncShareFromNumber(val) {
+      const slider = document.getElementById(`slider-debt-share`);
+      if (slider) slider.value = Math.min(90, Math.max(0, Number(val) || 0));
+      updateCalculator();
+    }
+
+    function applyCalcPreset(preset) {
+      const presets = {
+        colombia: { income: 3000000, inflation: 6.3, rate: 12.0, wage: 4.0, debtShare: 35 },
+        argentina: { income: 1200000, inflation: 33.0, rate: 35.0, wage: 25.0, debtShare: 45 },
+        mexico: { income: 25000, inflation: 7.99, rate: 11.0, wage: 5.0, debtShare: 30 },
+        hipoteca: { income: 4000000, inflation: 7.0, rate: 2.0, wage: 6.0, debtShare: 30 }
+      };
+      const chosen = presets[preset];
+      if (!chosen) return;
+
+      const incEl = document.getElementById(`calc-income`);
+      const infEl = document.getElementById(`input-inflation`);
+      const infSl = document.getElementById(`slider-inflation`);
+      const ratEl = document.getElementById(`input-rate`);
+      const ratSl = document.getElementById(`slider-rate`);
+      const wagEl = document.getElementById(`input-wage`);
+      const wagSl = document.getElementById(`slider-wage`);
+      const shrEl = document.getElementById(`input-debt-share`);
+      const shrSl = document.getElementById(`slider-debt-share`);
+
+      if (incEl) incEl.value = chosen.income;
+      if (infEl) infEl.value = chosen.inflation;
+      if (infSl) infSl.value = Math.min(50, chosen.inflation);
+      if (ratEl) ratEl.value = chosen.rate;
+      if (ratSl) ratSl.value = Math.min(40, chosen.rate);
+      if (wagEl) wagEl.value = chosen.wage;
+      if (wagSl) wagSl.value = Math.min(40, chosen.wage);
+      if (shrEl) shrEl.value = chosen.debtShare;
+      if (shrSl) shrSl.value = Math.min(90, chosen.debtShare);
+
+      updateCalculator();
+    }
+
+    function formatMoney(num) {
+      const sign = num < 0 ? `-` : ``;
+      const abs = Math.round(Math.abs(num));
+      return `${sign}$${abs.toLocaleString(`es-CO`)}`;
+    }
+
+    function updateCalculator() {
+      const incEl = document.getElementById(`calc-income`);
+      const infEl = document.getElementById(`input-inflation`);
+      const ratEl = document.getElementById(`input-rate`);
+      const wagEl = document.getElementById(`input-wage`);
+      const shrEl = document.getElementById(`input-debt-share`);
+
+      const income = Math.max(0, Number(incEl ? incEl.value : 3000000) || 0);
+      const infl = Math.max(0, Number(infEl ? infEl.value : 6.3) || 0);
+      const rate = Math.max(0, Number(ratEl ? ratEl.value : 12.0) || 0);
+      const wage = Math.max(0, Number(wagEl ? wagEl.value : 4.0) || 0);
+      const share = Math.min(100, Math.max(0, Number(shrEl ? shrEl.value : 35) || 0));
+
+      appState.calc = { income, inflation: infl, rate, wage, debtShare: share };
+
+      const realWagePct = (((1 + wage / 100) / (1 + infl / 100)) - 1) * 100;
+      const realRatePct = (((1 + rate / 100) / (1 + infl / 100)) - 1) * 100;
+      const monthlyGap = income * (realWagePct / 100);
+      const emergencyFund = income * 3;
+      const fixedCommitment = income * (share / 100);
+
+      const outWageEl = document.getElementById(`out-real-wage`);
+      const outWageNoteEl = document.getElementById(`out-real-wage-note`);
+      const outRateEl = document.getElementById(`out-real-rate`);
+      const outRateNoteEl = document.getElementById(`out-real-rate-note`);
+      const outGapEl = document.getElementById(`out-monthly-gap`);
+      const outFundEl = document.getElementById(`out-emergency-fund`);
+      const verdictEl = document.getElementById(`calc-verdict`);
+
+      if (outWageEl) outWageEl.textContent = `${realWagePct >= 0 ? `+` : ``}${realWagePct.toFixed(2).replace(`.`, `,`)}%`;
+      if (outWageNoteEl) {
+        outWageNoteEl.textContent = realWagePct < 0
+          ? `Pérdida real de compra (Banxavi; Carlos Fajardo)`
+          : `Poder adquisitivo preservado`;
+      }
+
+      if (outRateEl) outRateEl.textContent = `${realRatePct >= 0 ? `+` : ``}${realRatePct.toFixed(2).replace(`.`, `,`)}%`;
+      if (outRateNoteEl) {
+        outRateNoteEl.textContent = realRatePct > 0
+          ? `Tasa > inflación: evitar deuda larga (Dr. Carvajal)`
+          : `Deuda fija < inflación (ventaja en activo real, Javi Linares)`;
+      }
+
+      if (outGapEl) outGapEl.textContent = formatMoney(monthlyGap);
+      if (outFundEl) outFundEl.textContent = formatMoney(emergencyFund);
+
+      if (verdictEl) {
+        verdictEl.className = `callout-strip`;
+        if (realWagePct < 0 && realRatePct > 0) {
+          verdictEl.classList.add(`is-err`);
+          verdictEl.innerHTML = `<strong>Alerta doble (erosión + crédito caro):</strong> Con inflación del ${infl.toFixed(1).replace(`.`, `,`)}% y reajuste del ${wage.toFixed(1).replace(`.`, `,`)}%, el poder adquisitivo real cae ${Math.abs(realWagePct).toFixed(2).replace(`.`, `,`)}% mientras el crédito tiene un costo real de +${realRatePct.toFixed(2).replace(`.`, `,`)}%. Con ${formatMoney(fixedCommitment)} mensuales comprometidos en deuda/fijos (${share}%), la recomendación del Dr. Carvajal y Ray Dalio es desapalancarse y priorizar el fondo de 3 meses (${formatMoney(emergencyFund)}).`;
+        } else if (realRatePct <= 0) {
+          verdictEl.classList.add(`is-pos`);
+          verdictEl.innerHTML = `<strong>Deuda a tasa fija por debajo de la inflación:</strong> La tasa real resulta de ${realRatePct.toFixed(2).replace(`.`, `,`)}%. Tal como ilustra Javi Linares en hipotecas fijas al 2% con inflación al 7%–8%, la deuda pierde peso real si respalda un activo real productivo o vivienda.`;
+        } else {
+          verdictEl.classList.add(`is-warn`);
+          verdictEl.innerHTML = `<strong>Escenario mixto:</strong> Su ingreso cubre la inflación (+${realWagePct.toFixed(2).replace(`.`, `,`)}%), pero el crédito sigue siendo costoso en términos reales (+${realRatePct.toFixed(2).replace(`.`, `,`)}%). Evite apalancamiento innecesario (Emprendo Libre; Reflexiones de un Galeno).`;
+        }
+      }
+
+      persistState();
+    }
+
+    /* =========================================================
+       SECCIÓN 4C: GRÁFICO DE ACTIVOS (CHART.JS)
+       ========================================================= */
+    function setAssetChartMode(mode) {
+      appState.chartMode = mode;
+      const btns = document.querySelectorAll(`[data-chart-mode]`);
+      btns.forEach((b) => {
+        b.classList.toggle(`is-active`, b.dataset.chartMode === mode);
+      });
+      renderAssetsChart();
+      persistState();
+    }
+
+    function renderAssetsChart() {
+      const canvas = document.getElementById(`assets-chart`);
+      const captionEl = document.getElementById(`chart-caption`);
+      if (!canvas || typeof Chart === `undefined`) return;
+
+      const c1 = getCssToken(`--data-1`) || `#0f62fe`;
+      const c2 = getCssToken(`--data-2`) || `#6929c4`;
+      const c3 = getCssToken(`--data-3`) || `#005d5d`;
+      const c4 = getCssToken(`--data-4`) || `#9f1853`;
+      const cErr = getCssToken(`--error`) || `#da1e28`;
+      const cCtx = getCssToken(`--data-context`) || `#8d8d8d`;
+      const cTxt = getCssToken(`--on-surface`) || `#161616`;
+      const cGrid = getCssToken(`--outline-variant`) || `#e0e0e0`;
+
+      let config;
+      if (appState.chartMode === `seventies`) {
+        if (captionEl) {
+          captionEl.textContent = `Fuente: Javi Linares — Rentabilidades en la estanflación de 1970: Oro (+2.300%), Petróleo (+1.000%), Índice S&P GSCI Materias Primas (+586%), Trigo (+300%). Bonos a largo plazo cayeron ante subida de tasas del 6% al 13% (% exacto de caída: No consta).`;
+        }
+        config = {
+          type: `bar`,
+          data: {
+            labels: [`Oro (década 1970)`, `Petróleo (S&P GSCI)`, `Índice Materias Primas S&P GSCI`, `Trigo (multiplicó ×4)`],
+            datasets: [{
+              label: `Rentabilidad acumulada citada (%)`,
+              data: [2300, 1000, 586, 300],
+              backgroundColor: [c1, c2, c3, c4],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              title: {
+                display: true,
+                text: `Estanflación de los años 70: activos reales y materias primas (%)`,
+                color: cTxt,
+                font: { family: `'IBM Plex Sans', sans-serif`, size: 14, weight: `600` }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: cGrid },
+                ticks: { color: cTxt, font: { family: `'IBM Plex Mono', monospace`, size: 11 } }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { color: cTxt, font: { family: `'IBM Plex Mono', monospace`, size: 11 } }
+              }
+            }
+          }
+        };
+      } else if (appState.chartMode === `recessions`) {
+        if (captionEl) {
+          captionEl.textContent = `Fuente: Dragon Oro Plata — En 9 recesiones/depresiones de EE. UU. desde 1970: el Oro logró rendimientos positivos en 6 de 9 (66,7%), la Plata en 2 de 9 (22,2%) y el S&P 500 tuvo caídas de dos cifras en los 9 periodos.`;
+        }
+        config = {
+          type: `bar`,
+          data: {
+            labels: [`Oro (6 de 9 periodos positivos)`, `Plata (2 de 9 periodos positivos)`, `S&P 500 (caída en los 9 periodos)`],
+            datasets: [{
+              label: `% de episodios con rendimiento positivo`,
+              data: [66.7, 22.2, 0],
+              backgroundColor: [c1, cCtx, cErr],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              title: {
+                display: true,
+                text: `9 recesiones en EE. UU. post-1970: frecuencia de rendimiento positivo (%)`,
+                color: cTxt,
+                font: { family: `'IBM Plex Sans', sans-serif`, size: 14, weight: `600` }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                grid: { color: cGrid },
+                ticks: { color: cTxt, font: { family: `'IBM Plex Mono', monospace`, size: 11 } }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { color: cTxt, font: { family: `'IBM Plex Mono', monospace`, size: 11 } }
+              }
+            }
+          }
+        };
+      } else {
+        if (captionEl) {
+          captionEl.textContent = `Fuente: Dragon Oro Plata — Rendimiento promedio de la Plata en las 9 recesiones (-16,4%), caída del Oro en expansión 1991–2001 (-25% rango -20% a -30%) y única caída recesiva fuerte nov. 1980–ago. 1982 (Oro -46%, Plata -66%).`;
+        }
+        config = {
+          type: `bar`,
+          data: {
+            labels: [`Plata (media 9 recesiones)`, `Oro (expansión 1991–2001, punto medio)`, `Oro (nov. 1980–ago. 1982)`, `Plata (nov. 1980–ago. 1982)`],
+            datasets: [{
+              label: `Variación negativa registrada (%)`,
+              data: [-16.4, -25, -46, -66],
+              backgroundColor: [cCtx, c2, c4, cErr],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              title: {
+                display: true,
+                text: `Riesgos y caídas documentadas de metales preciosos (%)`,
+                color: cTxt,
+                font: { family: `'IBM Plex Sans', sans-serif`, size: 14, weight: `600` }
+              }
+            },
+            scales: {
+              y: {
+                min: -80,
+                max: 0,
+                grid: { color: cGrid },
+                ticks: { color: cTxt, font: { family: `'IBM Plex Mono', monospace`, size: 11 } }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { color: cTxt, font: { family: `'IBM Plex Mono', monospace`, size: 11 } }
+              }
+            }
+          }
+        };
+      }
+
+      if (assetsChartInstance) {
+        assetsChartInstance.destroy();
+      }
+      assetsChartInstance = new Chart(canvas, config);
+    }
+
+    /* =========================================================
+       SECCIÓN 4D: LÍNEA DE TIEMPO 1970–2026
+       ========================================================= */
+    function selectTimelineIndex(idx) {
+      appState.timelineIndex = idx;
+      renderTimeline();
+      persistState();
+    }
+
+    function renderTimeline() {
+      const rail = document.getElementById(`timeline-buttons`);
+      const detail = document.getElementById(`timeline-detail`);
+      const counter = document.getElementById(`timeline-step-counter`);
+      if (!rail || !detail || !counter) return;
+
+      const idx = Math.min(TIMELINE_EVENTS.length - 1, Math.max(0, appState.timelineIndex || 0));
+      const ev = TIMELINE_EVENTS[idx];
+
+      counter.textContent = `Hito ${idx + 1} de ${TIMELINE_EVENTS.length}`;
+
+      rail.innerHTML = TIMELINE_EVENTS.map((item, i) => `
+        <button type="button" role="tab" aria-selected="${i === idx ? `true` : `false`}" class="btn-tab ${i === idx ? `is-active` : ``}" onclick="selectTimelineIndex(${i})">${item.year}</button>
+      `).join(``);
+
+      detail.innerHTML = `
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-xs);">
+          <span class="tag">${ev.year}</span>
+          <div style="display: flex; gap: var(--space-xs);">
+            <button type="button" class="btn-ghost" ${idx === 0 ? `disabled` : ``} onclick="selectTimelineIndex(${idx - 1})">Anterior</button>
+            <button type="button" class="btn-ghost" ${idx === TIMELINE_EVENTS.length - 1 ? `disabled` : ``} onclick="selectTimelineIndex(${idx + 1})">Siguiente</button>
+          </div>
+        </div>
+        <h3>${ev.title}</h3>
+        <p class="compact-copy">${ev.summary}</p>
+        <div class="layer-nested">
+          <span class="label-mono">Cifras verificadas en el cuaderno</span>
+          <p class="compact-copy" style="margin-top: var(--space-xs);">${ev.figures}</p>
+        </div>
+        <div class="source-note">Fuentes: ${ev.sources}</div>
+      `;
+    }
+
+    /* =========================================================
+       SECCIÓN 5: TEST EVALUATIVO
+       ========================================================= */
+    function answerQuiz(qId, optionKey) {
+      appState.quizAnswers[qId] = optionKey;
+      renderQuiz();
+      persistState();
+    }
+
+    function resetQuiz(btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Confirmar reinicio del test`;
+        return;
+      }
+      if (btn) {
+        btn.dataset.armed = `false`;
+        btn.textContent = `Reiniciar test`;
+      }
+      appState.quizAnswers = {};
+      renderQuiz();
+      persistState();
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById(`quiz-container`);
+      const scorePill = document.getElementById(`quiz-score-pill`);
+      if (!container || !scorePill) return;
+
+      let correctCount = 0;
+      QUIZ_QUESTIONS.forEach((q) => {
+        if (appState.quizAnswers[q.id] === q.correct) correctCount += 1;
+      });
+      scorePill.textContent = `Puntaje: ${correctCount} / ${QUIZ_QUESTIONS.length}`;
+
+      container.innerHTML = QUIZ_QUESTIONS.map((q) => {
+        const userAns = appState.quizAnswers[q.id];
+        const isAnswered = Boolean(userAns);
+        const isCorrect = userAns === q.correct;
+
+        let cardClass = `quiz-card`;
+        if (isAnswered) {
+          cardClass += isCorrect ? ` answered-correct` : ` answered-wrong`;
+        }
+
+        const optionsHtml = q.options.map((opt) => {
+          let btnClass = `quiz-option-btn`;
+          if (isAnswered) {
+            if (opt.key === q.correct) {
+              btnClass += ` opt-selected-correct`;
+            } else if (opt.key === userAns && userAns !== q.correct) {
+              btnClass += ` opt-selected-wrong`;
+            }
+          }
+          const outsideBadge = opt.outside
+            ? `<span class="tag tag-outside">Fuera de tus fuentes</span>`
+            : ``;
+          return `
+            <button type="button" class="${btnClass}" onclick="answerQuiz('${q.id}', '${opt.key}')">
+              <span><strong>${opt.key}.</strong> ${opt.text}</span>
+              ${outsideBadge}
+            </button>
+          `;
+        }).join(``);
+
+        const feedbackHtml = isAnswered
+          ? `<div class="quiz-feedback"><strong>${isCorrect ? `Correcto.` : `Incorrecto (respuesta: ${q.correct}).`}</strong> ${q.explanation}</div>`
+          : ``;
+
+        return `
+          <article class="${cardClass}">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--space-xs);">
+              <span class="label-mono">Enfoque: ${q.profession}</span>
+              ${isAnswered ? `<span class="tag ${isCorrect ? `tag-pos` : `tag-neg`}">${isCorrect ? `Acertada` : `Revisar`}</span>` : `<span class="tag tag-neutral">Pendiente</span>`}
+            </div>
+            <p class="compact-copy" style="font-weight: 600;">${q.question}</p>
+            <div class="quiz-options">${optionsHtml}</div>
+            ${feedbackHtml}
+          </article>
+        `;
+      }).join(``);
+    }
+
+    /* =========================================================
+       SECCIÓN 6: REGISTRO DE AVANCE Y EXPORTACIÓN
+       ========================================================= */
+    function toggleModuleDone(modId) {
+      appState.completedModules[modId] = !appState.completedModules[modId];
+      renderTracker();
+      persistState();
+    }
+
+    function resetProgress(btn) {
+      if (btn && btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        btn.textContent = `Confirmar reinicio de avance`;
+        return;
+      }
+      if (btn) {
+        btn.dataset.armed = `false`;
+        btn.textContent = `Reiniciar avance`;
+      }
+      appState.completedModules = {};
+      renderTracker();
+      persistState();
+    }
+
+    function renderTracker() {
+      const listEl = document.getElementById(`tracker-list`);
+      const summaryEl = document.getElementById(`progress-summary-text`);
+      const fillEl = document.getElementById(`progress-bar-fill`);
+      const ariaBar = document.getElementById(`progress-bar-aria`);
+      const headerBadge = document.getElementById(`header-progress-badge`);
+      if (!listEl || !summaryEl || !fillEl || !ariaBar) return;
+
+      const total = TRACKER_MODULES.length;
+      let doneCount = 0;
+      TRACKER_MODULES.forEach((m) => {
+        if (appState.completedModules[m.id]) doneCount += 1;
+      });
+      const pct = Math.round((doneCount / total) * 100);
+
+      summaryEl.textContent = `${doneCount} de ${total} módulos completados (${pct}%)`;
+      fillEl.style.width = `${pct}%`;
+      ariaBar.setAttribute(`aria-valuenow`, String(pct));
+      if (headerBadge) {
+        headerBadge.textContent = `Avance: ${doneCount} / ${total} módulos`;
+      }
+
+      listEl.innerHTML = TRACKER_MODULES.map((m) => {
+        const done = Boolean(appState.completedModules[m.id]);
+        return `
+          <div class="tracker-row ${done ? `is-done` : ``}">
+            <div>
+              <div style="font-weight: 600; font-size: var(--compact-size);">${m.title}</div>
+              <div class="muted-copy">${m.detail}</div>
+            </div>
+            <button type="button" class="${done ? `btn-primary` : `btn-secondary`}" aria-pressed="${done ? `true` : `false`}" onclick="toggleModuleDone('${m.id}')">
+              ${done ? `Hecho ✓` : `Marcar como hecho`}
+            </button>
+          </div>
+        `;
+      }).join(``);
+    }
+
+    function exportProgressReport() {
+      const profLabel = PROFESSIONS_DATA[appState.profession] ? PROFESSIONS_DATA[appState.profession].badge : `Todas`;
+      let correctCount = 0;
+      QUIZ_QUESTIONS.forEach((q) => {
+        if (appState.quizAnswers[q.id] === q.correct) correctCount += 1;
+      });
+
+      const lines = [
+        `RESUMEN DE AVANCE — INFLACIÓN, RECESIÓN Y ESTANFLACIÓN`,
+        `Aviso orientativo: Herramienta pedagógica basada exclusivamente en las fuentes del cuaderno.`,
+        `Perfil seleccionado: ${profLabel}`,
+        `Puntaje test evaluativo: ${correctCount} / ${QUIZ_QUESTIONS.length}`,
+        ``,
+        `Simulador financiero actual:`,
+        `- Ingreso mensual base: ${appState.calc.income}`,
+        `- Inflación anual (%): ${appState.calc.inflation}`,
+        `- Tasa nominal deuda (%): ${appState.calc.rate}`,
+        `- Reajuste nominal ingreso (%): ${appState.calc.wage}`,
+        ``,
+        `Módulos completados:`
+      ];
+
+      TRACKER_MODULES.forEach((m) => {
+        const status = appState.completedModules[m.id] ? `[HECHO]` : `[PENDIENTE]`;
+        lines.push(`${status} ${m.title}`);
+      });
+
+      const content = lines.join(`\n`);
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === `function`) {
+        window.notebookAppApi.triggerFileDownload({
+          content: content,
+          contentType: `text/plain`,
+          encoding: `UTF-8`,
+          filename: `avance_estanflacion.txt`
+        });
+      }
+    }
+
+    /* =========================================================
+       INICIALIZACIÓN CON CARGA DE ESTADO Y NOTIFICACIÓN
+       ========================================================= */
+    function restoreCalculatorInputs() {
+      const c = appState.calc || {};
+      const incEl = document.getElementById(`calc-income`);
+      const infEl = document.getElementById(`input-inflation`);
+      const infSl = document.getElementById(`slider-inflation`);
+      const ratEl = document.getElementById(`input-rate`);
+      const ratSl = document.getElementById(`slider-rate`);
+      const wagEl = document.getElementById(`input-wage`);
+      const wagSl = document.getElementById(`slider-wage`);
+      const shrEl = document.getElementById(`input-debt-share`);
+      const shrSl = document.getElementById(`slider-debt-share`);
+
+      if (incEl && c.income !== undefined) incEl.value = c.income;
+      if (infEl && c.inflation !== undefined) infEl.value = c.inflation;
+      if (infSl && c.inflation !== undefined) infSl.value = Math.min(50, c.inflation);
+      if (ratEl && c.rate !== undefined) ratEl.value = c.rate;
+      if (ratSl && c.rate !== undefined) ratSl.value = Math.min(40, c.rate);
+      if (wagEl && c.wage !== undefined) wagEl.value = c.wage;
+      if (wagSl && c.wage !== undefined) wagSl.value = Math.min(40, c.wage);
+      if (shrEl && c.debtShare !== undefined) shrEl.value = c.debtShare;
+      if (shrSl && c.debtShare !== undefined) shrSl.value = Math.min(90, c.debtShare);
+    }
+
+    async function initApp() {
+      if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+        try {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = {
+              profession: saved.profession || `all`,
+              quizAnswers: saved.quizAnswers || {},
+              completedModules: saved.completedModules || {},
+              calc: saved.calc || appState.calc,
+              chartMode: saved.chartMode || `seventies`,
+              timelineIndex: typeof saved.timelineIndex === `number` ? saved.timelineIndex : 0
+            };
+          }
+        } catch (err) {
+          /* Continúa con estado inicial por defecto */
+        }
+      }
+
+      restoreCalculatorInputs();
+      renderProfessionPanel();
+      renderConcepts();
+      renderCountryTable();
+      filterGlossary();
+      updateCalculator();
+      setAssetChartMode(appState.chartMode);
+      renderTimeline();
+      renderQuiz();
+      renderTracker();
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>
